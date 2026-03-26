@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { dictionaryTerms, cryptoProjects, trainingLessons } from "@/data/mockData";
 import { useUserProgress } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
 import StatusTag from "@/components/StatusTag";
+import ScoreBadge from "@/components/ScoreBadge";
+import SortFilter, { type SortField, type SortDirection } from "@/components/SortFilter";
+import DescriptionToggle from "@/components/DescriptionToggle";
+import TermHighlighter from "@/components/TermHighlighter";
 import { Search, BookOpen, Layers, GraduationCap, ChevronRight, CheckCircle, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
 type Tab = "dictionary" | "projects" | "training";
+
+const PROJECT_SORT_FIELDS: { value: SortField; label: string }[] = [
+  { value: "name", label: "A → Z" },
+  { value: "price", label: "Price" },
+  { value: "year", label: "Year" },
+];
 
 export default function LearnPage() {
   const { t, language } = useLanguage();
@@ -19,6 +29,8 @@ export default function LearnPage() {
   const [activeTab, setActiveTab] = useState<Tab>("dictionary");
   const [search, setSearch] = useState("");
   const [expandedTerm, setExpandedTerm] = useState<string | null>(null);
+  const [sortField, setSortField] = useState<SortField>("name");
+  const [sortDir, setSortDir] = useState<SortDirection>("asc");
 
   const tabs = [
     { id: "dictionary" as Tab, label: t("learn.dictionary"), icon: BookOpen },
@@ -30,9 +42,22 @@ export default function LearnPage() {
     term.term[language].toLowerCase().includes(search.toLowerCase())
   );
 
-  const filteredProjects = cryptoProjects.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredProjects = useMemo(() => {
+    let list = cryptoProjects.filter((p) =>
+      p.name.toLowerCase().includes(search.toLowerCase())
+    );
+    list.sort((a, b) => {
+      let cmp = 0;
+      switch (sortField) {
+        case "name": cmp = a.name.localeCompare(b.name); break;
+        case "price": cmp = a.price - b.price; break;
+        case "year": cmp = a.yearCreated - b.yearCreated; break;
+        default: cmp = 0;
+      }
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+    return list;
+  }, [search, sortField, sortDir]);
 
   const handleTermClick = (termId: string) => {
     if (expandedTerm === termId) {
@@ -67,15 +92,25 @@ export default function LearnPage() {
       </div>
 
       {activeTab !== "training" && (
-        <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={activeTab === "dictionary" ? t("learn.searchTerms") : t("learn.searchProjects")}
-            className="w-full pl-9 pr-4 py-2.5 bg-card border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
-          />
+        <div className="flex gap-2 mb-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={activeTab === "dictionary" ? t("learn.searchTerms") : t("learn.searchProjects")}
+              className="w-full pl-9 pr-4 py-2.5 bg-card border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
+            />
+          </div>
+          {activeTab === "projects" && (
+            <SortFilter
+              fields={PROJECT_SORT_FIELDS}
+              current={sortField}
+              direction={sortDir}
+              onChange={(f, d) => { setSortField(f); setSortDir(d); }}
+            />
+          )}
         </div>
       )}
 
@@ -105,14 +140,16 @@ export default function LearnPage() {
                   </div>
                   <AnimatePresence>
                     {expanded && (
-                      <motion.p
+                      <motion.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="text-xs text-muted-foreground leading-relaxed overflow-hidden"
+                        className="overflow-hidden"
                       >
-                        {term.definition[language]}
-                      </motion.p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                          <TermHighlighter text={term.definition[language]} />
+                        </p>
+                      </motion.div>
                     )}
                   </AnimatePresence>
                   {!expanded && (
@@ -145,10 +182,11 @@ export default function LearnPage() {
                   </div>
                   <ChevronRight className="w-4 h-4 text-muted-foreground" />
                 </div>
-                <p className="text-xs text-muted-foreground line-clamp-2 mb-2">{project.description[language]}</p>
-                <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                <p className="text-xs text-muted-foreground line-clamp-2 mb-2">{project.descriptionBro[language]}</p>
+                <div className="flex gap-2 flex-wrap" onClick={(e) => e.stopPropagation()}>
                   <StatusTag type="halal" status={project.halalStatus} />
                   <StatusTag type="safety" status={project.safetyStatus} />
+                  <ScoreBadge score={project.score} />
                 </div>
               </button>
             ))}
