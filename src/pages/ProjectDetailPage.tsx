@@ -100,4 +100,5 @@ export default function ProjectDetailPage() {
         {language === "en" ? "View Live Market Data" : "Voir les données du marché"} →
       </button>
     </motion.div>
+  );
 }
