@@ -61,7 +61,7 @@ export default function QuizPage() {
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [answered, setAnswered] = useState(false);
-  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [questions, setQuestions] = useState<ShuffledQuizQuestion[]>([]);
 
   const dailyCount = getDailyQuizCount();
   const remaining = Math.max(0, DAILY_EXP_LIMIT - dailyCount);
