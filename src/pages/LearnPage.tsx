@@ -21,6 +21,11 @@ const PROJECT_SORT_FIELDS: { value: SortField; label: string }[] = [
   { value: "year", label: "Year" },
 ];
 
+const DICT_SORT_FIELDS: { value: SortField; label: string }[] = [
+  { value: "name", label: "A → Z" },
+  { value: "volume", label: "Category" },
+];
+
 export default function LearnPage() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
@@ -31,6 +36,8 @@ export default function LearnPage() {
   const [expandedTerm, setExpandedTerm] = useState<string | null>(null);
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortDir, setSortDir] = useState<SortDirection>("asc");
+  const [dictSortField, setDictSortField] = useState<SortField>("name");
+  const [dictSortDir, setDictSortDir] = useState<SortDirection>("asc");
 
   const tabs = [
     { id: "dictionary" as Tab, label: t("learn.dictionary"), icon: BookOpen },
@@ -38,9 +45,21 @@ export default function LearnPage() {
     { id: "training" as Tab, label: t("learn.training"), icon: GraduationCap },
   ];
 
-  const filteredTerms = dictionaryTerms.filter((term) =>
-    term.term[language].toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredTerms = useMemo(() => {
+    let list = dictionaryTerms.filter((term) =>
+      term.term[language].toLowerCase().includes(search.toLowerCase())
+    );
+    list.sort((a, b) => {
+      let cmp = 0;
+      switch (dictSortField) {
+        case "name": cmp = a.term[language].localeCompare(b.term[language]); break;
+        case "volume": cmp = a.category.localeCompare(b.category); break;
+        default: cmp = 0;
+      }
+      return dictSortDir === "asc" ? cmp : -cmp;
+    });
+    return list;
+  }, [search, language, dictSortField, dictSortDir]);
 
   const filteredProjects = useMemo(() => {
     let list = cryptoProjects.filter((p) =>
@@ -103,6 +122,14 @@ export default function LearnPage() {
               className="w-full pl-9 pr-4 py-2.5 bg-card border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
             />
           </div>
+          {activeTab === "dictionary" && (
+            <SortFilter
+              fields={DICT_SORT_FIELDS}
+              current={dictSortField}
+              direction={dictSortDir}
+              onChange={(f, d) => { setDictSortField(f); setDictSortDir(d); }}
+            />
+          )}
           {activeTab === "projects" && (
             <SortFilter
               fields={PROJECT_SORT_FIELDS}
