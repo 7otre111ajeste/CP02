@@ -43,11 +43,6 @@ export default function CoinDetailPage() {
   const positive = (md?.price_change_percentage_24h ?? 0) >= 0;
   const chartColor = positive ? "hsl(145, 65%, 45%)" : "hsl(0, 72%, 55%)";
 
-  const halalColor = (s: string) =>
-    s === "halal" ? "text-success bg-success/10 border-success/20" : s === "notHalal" ? "text-danger bg-danger/10 border-danger/20" : "text-warning bg-warning/10 border-warning/20";
-  const safetyColor = (s: string) =>
-    s === "safe" ? "text-success bg-success/10 border-success/20" : s === "scam" ? "text-danger bg-danger/10 border-danger/20" : "text-warning bg-warning/10 border-warning/20";
-
   if (isLoading) {
     return (
       <div className="px-4 pt-6 pb-24 max-w-lg mx-auto space-y-4">
