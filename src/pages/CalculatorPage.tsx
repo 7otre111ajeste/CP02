@@ -1,15 +1,24 @@
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Calculator, TrendingUp, Percent } from "lucide-react";
+import { useDailyQuests } from "@/hooks/useDailyQuests";
+import { ArrowLeft, Calculator, TrendingUp, Percent, Hash, Delete } from "lucide-react";
 import { motion } from "framer-motion";
 
-type CalcMode = "profit" | "percentage";
+type CalcMode = "standard" | "profit" | "percentage";
 
 export default function CalculatorPage() {
   const { language } = useLanguage();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<CalcMode>("profit");
+  const { incrementQuest } = useDailyQuests();
+  const [mode, setMode] = useState<CalcMode>("standard");
+
+  // Standard calculator
+  const [display, setDisplay] = useState("0");
+  const [prevValue, setPrevValue] = useState<number | null>(null);
+  const [operator, setOperator] = useState<string | null>(null);
+  const [waitingForOperand, setWaitingForOperand] = useState(false);
+  const [calcUsed, setCalcUsed] = useState(false);
 
   // Profit calculator
   const [buyPrice, setBuyPrice] = useState("");
@@ -20,6 +29,86 @@ export default function CalculatorPage() {
   const [initialValue, setInitialValue] = useState("");
   const [finalValue, setFinalValue] = useState("");
 
+  const handleDigit = (digit: string) => {
+    if (waitingForOperand) {
+      setDisplay(digit);
+      setWaitingForOperand(false);
+    } else {
+      setDisplay(display === "0" ? digit : display + digit);
+    }
+  };
+
+  const handleDecimal = () => {
+    if (waitingForOperand) {
+      setDisplay("0.");
+      setWaitingForOperand(false);
+      return;
+    }
+    if (!display.includes(".")) setDisplay(display + ".");
+  };
+
+  const handleOperator = (op: string) => {
+    const current = parseFloat(display);
+    if (prevValue !== null && !waitingForOperand) {
+      const result = calculate(prevValue, current, operator!);
+      setDisplay(String(result));
+      setPrevValue(result);
+    } else {
+      setPrevValue(current);
+    }
+    setOperator(op);
+    setWaitingForOperand(true);
+  };
+
+  const calculate = (a: number, b: number, op: string): number => {
+    switch (op) {
+      case "+": return a + b;
+      case "-": return a - b;
+      case "×": return a * b;
+      case "÷": return b !== 0 ? a / b : 0;
+      default: return b;
+    }
+  };
+
+  const handleEquals = () => {
+    if (prevValue === null || operator === null) return;
+    const current = parseFloat(display);
+    const result = calculate(prevValue, current, operator);
+    setDisplay(String(parseFloat(result.toFixed(10))));
+    setPrevValue(null);
+    setOperator(null);
+    setWaitingForOperand(true);
+    if (!calcUsed) {
+      setCalcUsed(true);
+      incrementQuest("calculator");
+    }
+  };
+
+  const handleClear = () => {
+    setDisplay("0");
+    setPrevValue(null);
+    setOperator(null);
+    setWaitingForOperand(false);
+  };
+
+  const handleBackspace = () => {
+    if (display.length > 1) {
+      setDisplay(display.slice(0, -1));
+    } else {
+      setDisplay("0");
+    }
+  };
+
+  const handleToggleSign = () => {
+    const val = parseFloat(display);
+    setDisplay(String(-val));
+  };
+
+  const handlePercent = () => {
+    const val = parseFloat(display);
+    setDisplay(String(val / 100));
+  };
+
   const profitResult = () => {
     const buy = parseFloat(buyPrice);
     const sell = parseFloat(sellPrice);
@@ -29,6 +118,7 @@ export default function CalculatorPage() {
     const current = sell * qty;
     const profit = current - invested;
     const percent = ((sell - buy) / buy) * 100;
+    if (!calcUsed) { setCalcUsed(true); incrementQuest("calculator"); }
     return { invested, current, profit, percent };
   };
 
@@ -38,13 +128,28 @@ export default function CalculatorPage() {
     if (isNaN(init) || isNaN(final_) || init === 0) return null;
     const change = final_ - init;
     const percent = (change / init) * 100;
+    if (!calcUsed) { setCalcUsed(true); incrementQuest("calculator"); }
     return { change, percent };
   };
 
-  const pr = profitResult();
-  const pcr = percentResult();
+  const pr = mode === "profit" ? profitResult() : null;
+  const pcr = mode === "percentage" ? percentResult() : null;
 
   const inputClass = "w-full bg-secondary/50 border border-border rounded-xl px-4 py-3 text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary/50";
+
+  const calcBtn = (label: string, onClick: () => void, variant: "num" | "op" | "special" = "num") => {
+    const base = "flex items-center justify-center rounded-xl text-lg font-semibold transition-all active:scale-95 h-14";
+    const styles = {
+      num: "bg-card border border-border text-foreground",
+      op: "bg-primary/15 text-primary border border-primary/20",
+      special: "bg-secondary text-muted-foreground",
+    };
+    return (
+      <button key={label} onClick={onClick} className={`${base} ${styles[variant]}`}>
+        {label}
+      </button>
+    );
+  };
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-4 pt-4 pb-24 max-w-lg mx-auto">
@@ -60,20 +165,71 @@ export default function CalculatorPage() {
       {/* Mode tabs */}
       <div className="flex gap-1 p-1 bg-card rounded-xl border border-border mb-6">
         <button
+          onClick={() => setMode("standard")}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-medium transition-all ${mode === "standard" ? "bg-gradient-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          <Hash className="w-3.5 h-3.5" />
+          Standard
+        </button>
+        <button
           onClick={() => setMode("profit")}
           className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-medium transition-all ${mode === "profit" ? "bg-gradient-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           <TrendingUp className="w-3.5 h-3.5" />
-          {language === "en" ? "Profit / Loss" : "Gain / Perte"}
+          {language === "en" ? "Profit" : "Gain"}
         </button>
         <button
           onClick={() => setMode("percentage")}
           className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-medium transition-all ${mode === "percentage" ? "bg-gradient-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           <Percent className="w-3.5 h-3.5" />
-          {language === "en" ? "% Change" : "% Variation"}
+          %
         </button>
       </div>
+
+      {mode === "standard" && (
+        <motion.div key="standard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+          {/* Display */}
+          <div className="bg-card rounded-2xl border border-border p-5 text-right">
+            {operator && prevValue !== null && (
+              <p className="text-xs text-muted-foreground mb-1">{prevValue} {operator}</p>
+            )}
+            <p className="text-3xl font-bold text-foreground truncate">{display}</p>
+          </div>
+
+          {/* Keypad */}
+          <div className="grid grid-cols-4 gap-2">
+            {calcBtn("C", handleClear, "special")}
+            {calcBtn("±", handleToggleSign, "special")}
+            {calcBtn("%", handlePercent, "special")}
+            {calcBtn("÷", () => handleOperator("÷"), "op")}
+
+            {calcBtn("7", () => handleDigit("7"))}
+            {calcBtn("8", () => handleDigit("8"))}
+            {calcBtn("9", () => handleDigit("9"))}
+            {calcBtn("×", () => handleOperator("×"), "op")}
+
+            {calcBtn("4", () => handleDigit("4"))}
+            {calcBtn("5", () => handleDigit("5"))}
+            {calcBtn("6", () => handleDigit("6"))}
+            {calcBtn("-", () => handleOperator("-"), "op")}
+
+            {calcBtn("1", () => handleDigit("1"))}
+            {calcBtn("2", () => handleDigit("2"))}
+            {calcBtn("3", () => handleDigit("3"))}
+            {calcBtn("+", () => handleOperator("+"), "op")}
+
+            {calcBtn("0", () => handleDigit("0"))}
+            {calcBtn(".", handleDecimal)}
+            <button onClick={handleBackspace} className="flex items-center justify-center rounded-xl h-14 bg-card border border-border text-foreground">
+              <Delete className="w-5 h-5" />
+            </button>
+            <button onClick={handleEquals} className="flex items-center justify-center rounded-xl h-14 bg-gradient-primary text-primary-foreground text-lg font-bold">
+              =
+            </button>
+          </div>
+        </motion.div>
+      )}
 
       {mode === "profit" && (
         <motion.div key="profit" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">

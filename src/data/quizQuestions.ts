@@ -323,7 +323,31 @@ export function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export function getQuizQuestions(count: number, maxDifficulty: number = 3): QuizQuestion[] {
+/** Returns quiz questions with shuffled answer options so correct answer position is randomized */
+export interface ShuffledQuizQuestion extends Omit<QuizQuestion, 'options' | 'correctIndex'> {
+  options: { en: string[]; fr: string[] };
+  correctIndex: number;
+}
+
+export function getQuizQuestions(count: number, maxDifficulty: number = 3): ShuffledQuizQuestion[] {
   const eligible = allQuizQuestions.filter(q => q.difficulty <= maxDifficulty);
-  return shuffleArray(eligible).slice(0, count);
+  const selected = shuffleArray(eligible).slice(0, count);
+  
+  // Shuffle options for each question
+  return selected.map(q => {
+    // Create index array [0,1,2,3] and shuffle it
+    const indices = [0, 1, 2, 3];
+    const shuffledIndices = shuffleArray(indices);
+    
+    const newCorrectIndex = shuffledIndices.indexOf(q.correctIndex);
+    
+    return {
+      ...q,
+      options: {
+        en: shuffledIndices.map(i => q.options.en[i]),
+        fr: shuffledIndices.map(i => q.options.fr[i]),
+      },
+      correctIndex: newCorrectIndex,
+    };
+  });
 }
