@@ -1,0 +1,171 @@
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useCoinDetail, useCoinChart, formatMarketCap } from "@/hooks/useCryptoMarket";
+import { ArrowLeft, TrendingUp, TrendingDown } from "lucide-react";
+import { motion } from "framer-motion";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
+
+const TIME_RANGES = [
+  { label: "24H", days: 1 },
+  { label: "7D", days: 7 },
+  { label: "30D", days: 30 },
+  { label: "1Y", days: 365 },
+];
+
+function StatCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="bg-card border border-border rounded-xl p-3">
+      <p className="text-[10px] text-muted-foreground uppercase mb-1">{label}</p>
+      <p className="text-sm font-semibold text-foreground">{value}</p>
+    </div>
+  );
+}
+
+export default function CoinDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { t } = useLanguage();
+  const [days, setDays] = useState(7);
+
+  const { data: coin, isLoading, isError } = useCoinDetail(id ?? "");
+  const { data: chart } = useCoinChart(id ?? "", days);
+
+  const chartData = (chart?.prices ?? []).map(([time, price]) => ({ time, price }));
+  const md = coin?.market_data;
+  const positive = (md?.price_change_percentage_24h ?? 0) >= 0;
+  const chartColor = positive ? "hsl(145, 65%, 45%)" : "hsl(0, 72%, 55%)";
+
+  if (isLoading) {
+    return (
+      <div className="px-4 pt-6 pb-24 max-w-lg mx-auto space-y-4">
+        <div className="h-8 w-32 bg-card rounded-lg animate-pulse" />
+        <div className="h-48 bg-card rounded-xl animate-pulse" />
+        <div className="grid grid-cols-2 gap-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-16 bg-card rounded-xl animate-pulse" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !coin) {
+    return (
+      <div className="px-4 pt-6 pb-24 max-w-lg mx-auto text-center">
+        <p className="text-muted-foreground mb-4">Failed to load coin data</p>
+        <button onClick={() => navigate("/market")} className="text-primary underline text-sm">
+          Back to Market
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="px-4 pt-6 pb-24 max-w-lg mx-auto">
+      {/* Header */}
+      <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
+        <button onClick={() => navigate("/market")} className="flex items-center gap-1.5 text-muted-foreground mb-4 hover:text-foreground transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-sm">{t("market.title")}</span>
+        </button>
+
+        <div className="flex items-center gap-3">
+          <img src={coin.image.large} alt={coin.name} className="w-10 h-10 rounded-full" />
+          <div>
+            <h1 className="text-xl font-bold text-foreground">{coin.name}</h1>
+            <p className="text-xs text-muted-foreground uppercase">{coin.symbol} · #{coin.market_cap_rank}</p>
+          </div>
+        </div>
+
+        <div className="flex items-end gap-3 mt-3">
+          <span className="text-3xl font-bold text-foreground tabular-nums">
+            ${md?.current_price.usd.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+          </span>
+          <span className={`flex items-center gap-0.5 text-sm font-medium pb-1 ${positive ? "text-success" : "text-danger"}`}>
+            {positive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+            {Math.abs(md?.price_change_percentage_24h ?? 0).toFixed(2)}%
+          </span>
+        </div>
+      </motion.div>
+
+      {/* Chart */}
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="mb-4">
+        <div className="bg-card border border-border rounded-xl p-3">
+          <div className="flex gap-1 mb-3">
+            {TIME_RANGES.map((r) => (
+              <button
+                key={r.days}
+                onClick={() => setDays(r.days)}
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                  days === r.days
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
+          <ResponsiveContainer width="100%" height={180}>
+            <AreaChart data={chartData}>
+              <defs>
+                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={chartColor} stopOpacity={0.3} />
+                  <stop offset="100%" stopColor={chartColor} stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <YAxis domain={["auto", "auto"]} hide />
+              <Tooltip
+                contentStyle={{
+                  background: "hsl(220, 18%, 11%)",
+                  border: "1px solid hsl(220, 14%, 18%)",
+                  borderRadius: "8px",
+                  fontSize: "12px",
+                  color: "hsl(210, 20%, 95%)",
+                }}
+                formatter={(value: number) => [`$${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}`, "Price"]}
+                labelFormatter={(label: number) => new Date(label).toLocaleDateString()}
+              />
+              <Area
+                type="monotone"
+                dataKey="price"
+                stroke={chartColor}
+                strokeWidth={2}
+                fill="url(#chartGrad)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </motion.div>
+
+      {/* Stats */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="grid grid-cols-2 gap-2.5 mb-5">
+        <StatCard label={t("market.price")} value={`$${md?.current_price.usd.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} />
+        <StatCard label="Market Cap" value={formatMarketCap(md?.market_cap.usd ?? 0)} />
+        <StatCard label="24h Volume" value={formatMarketCap(md?.total_volume.usd ?? 0)} />
+        <StatCard label="24h High" value={`$${md?.high_24h.usd.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} />
+        <StatCard label="24h Low" value={`$${md?.low_24h.usd.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} />
+        <StatCard label="ATH" value={`$${md?.ath.usd.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} />
+        <StatCard label="ATL" value={`$${md?.atl.usd.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} />
+        <StatCard
+          label="Circulating"
+          value={md?.circulating_supply ? `${(md.circulating_supply / 1e6).toFixed(1)}M` : "N/A"}
+        />
+      </motion.div>
+
+      {/* Description */}
+      {coin.description.en && (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-card border border-border rounded-xl p-4">
+          <h2 className="text-sm font-semibold text-foreground mb-2">About {coin.name}</h2>
+          <p
+            className="text-xs text-muted-foreground leading-relaxed line-clamp-6"
+            dangerouslySetInnerHTML={{
+              __html: coin.description.en.replace(/<a /g, '<a class="text-primary underline" '),
+            }}
+          />
+        </motion.div>
+      )}
+    </div>
+  );
+}
