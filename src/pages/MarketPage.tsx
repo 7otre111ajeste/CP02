@@ -33,13 +33,16 @@ export default function MarketPage() {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [category, setCategory] = useState<MarketCategory>("All");
   const { data: coins, isLoading, isError, refetch, isFetching } = useCryptoMarket();
 
-  const filtered = (coins ?? []).filter(
-    (c) =>
+  const filtered = (coins ?? []).filter((c) => {
+    const matchesSearch =
       c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.symbol.toLowerCase().includes(search.toLowerCase())
-  );
+      c.symbol.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = category === "All" || c.category === category;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="px-4 pt-6 pb-24 max-w-lg mx-auto">
