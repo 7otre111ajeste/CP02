@@ -1,9 +1,12 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProgress } from "@/hooks/useUserProgress";
+import { useDailyQuests } from "@/hooks/useDailyQuests";
+import { useWatchlist } from "@/hooks/useWatchlist";
 import { cryptoProjects } from "@/data/mockData";
-import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight } from "lucide-react";
+import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, Flame, CheckCircle, Circle, Gift, Star, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 const container = {
   hidden: { opacity: 0 },
@@ -19,6 +22,8 @@ export default function HomePage() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
   const { level, exp, expInCurrentLevel, expToNextLevel, expPercent, completedLessons, completedQuizzes, readTerms } = useUserProgress();
+  const { quests, progress, completed, streak, allCompleted, canClaimStreak, streakRequired, streakBonusExp, claimStreakBonus } = useDailyQuests();
+  const { watchlist, toggleWatchlist, isWatching } = useWatchlist();
 
   const quickActions = [
     { icon: BookOpen, label: t("home.continue"), path: "/learn", color: "bg-primary/15 text-primary" },
@@ -28,6 +33,16 @@ export default function HomePage() {
     { icon: Calculator, label: language === "en" ? "Calculator" : "Calculatrice", path: "/calculator", color: "bg-success/15 text-success" },
   ];
 
+  // Show watchlist projects first, then popular
+  const watchedProjects = cryptoProjects.filter((p) => watchlist.includes(p.id));
+  const otherProjects = cryptoProjects.filter((p) => !watchlist.includes(p.id));
+  const displayProjects = [...watchedProjects, ...otherProjects].slice(0, 5);
+
+  const handleClaimStreak = () => {
+    claimStreakBonus();
+    toast.success(language === "en" ? `+${streakBonusExp} XP streak bonus!` : `+${streakBonusExp} XP bonus de série !`);
+  };
+
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="px-4 pt-6 pb-24 max-w-lg mx-auto space-y-6">
       <motion.div variants={item}>
@@ -35,6 +50,7 @@ export default function HomePage() {
         <h1 className="text-2xl font-bold text-foreground">Cryptopedia</h1>
       </motion.div>
 
+      {/* Level Card */}
       <motion.div variants={item} className="bg-gradient-card rounded-2xl p-5 border border-border glow-primary">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
@@ -66,6 +82,71 @@ export default function HomePage() {
         </div>
       </motion.div>
 
+      {/* Daily Quests */}
+      <motion.div variants={item}>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-semibold text-muted-foreground flex items-center gap-1.5">
+            <Flame className="w-4 h-4 text-warning" />
+            {language === "en" ? "Daily Quests" : "Quêtes quotidiennes"}
+          </h2>
+          <div className="flex items-center gap-1.5">
+            <Flame className="w-3.5 h-3.5 text-danger" />
+            <span className="text-xs font-bold text-foreground">{streak}</span>
+            <span className="text-[10px] text-muted-foreground">/ {streakRequired}</span>
+          </div>
+        </div>
+        <div className="bg-card rounded-2xl border border-border p-4 space-y-3">
+          {quests.map((quest) => {
+            const isDone = completed.includes(quest.id);
+            const current = progress[quest.id] || 0;
+            const pct = Math.min(100, (current / quest.target) * 100);
+            return (
+              <div key={quest.id} className="flex items-center gap-3">
+                {isDone ? (
+                  <CheckCircle className="w-5 h-5 text-success flex-shrink-0" />
+                ) : (
+                  <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-0.5">
+                    <p className={`text-xs font-medium ${isDone ? "text-success line-through" : "text-foreground"}`}>
+                      {quest.title[language]}
+                    </p>
+                    <span className="text-[10px] text-primary font-semibold">+{quest.expReward} XP</span>
+                  </div>
+                  <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all ${isDone ? "bg-success" : "bg-primary"}`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                  <p className="text-[9px] text-muted-foreground mt-0.5">
+                    {Math.min(current, quest.target)}/{quest.target}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+
+          {canClaimStreak && (
+            <button
+              onClick={handleClaimStreak}
+              className="w-full mt-2 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground font-semibold text-xs flex items-center justify-center gap-2"
+            >
+              <Gift className="w-4 h-4" />
+              {language === "en" ? `Claim ${streakBonusExp} XP Streak Bonus!` : `Réclamez ${streakBonusExp} XP Bonus de série !`}
+            </button>
+          )}
+
+          {allCompleted && !canClaimStreak && (
+            <p className="text-center text-xs text-success font-medium pt-1">
+              {language === "en" ? "✅ All quests completed today!" : "✅ Toutes les quêtes sont complétées !"}
+            </p>
+          )}
+        </div>
+      </motion.div>
+
+      {/* Quick Actions */}
       <motion.div variants={item}>
         <h2 className="text-sm font-semibold text-muted-foreground mb-3">{t("home.quickActions")}</h2>
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
@@ -84,34 +165,52 @@ export default function HomePage() {
         </div>
       </motion.div>
 
+      {/* Watchlist / Popular Projects */}
       <motion.div variants={item}>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-muted-foreground">{t("home.popular")}</h2>
+          <h2 className="text-sm font-semibold text-muted-foreground flex items-center gap-1.5">
+            {watchedProjects.length > 0 && <Eye className="w-3.5 h-3.5 text-primary" />}
+            {watchedProjects.length > 0
+              ? (language === "en" ? "My Watchlist" : "Ma Watchlist")
+              : t("home.popular")}
+          </h2>
           <button onClick={() => navigate("/learn")} className="text-xs text-primary flex items-center gap-1">
             {t("common.readMore")} <ChevronRight className="w-3 h-3" />
           </button>
         </div>
         <div className="space-y-2">
-          {cryptoProjects.slice(0, 3).map((project) => (
-            <button
+          {displayProjects.map((project) => (
+            <div
               key={project.id}
-              onClick={() => navigate(`/learn/project/${project.id}`)}
               className="w-full flex items-center gap-3 p-3 rounded-xl bg-card border border-border hover:border-primary/30 transition-all text-left"
             >
-              <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-lg font-bold">
-                {project.icon}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-sm text-foreground">{project.name}</p>
-                <p className="text-xs text-muted-foreground truncate">{project.description[language]}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-sm font-semibold text-foreground">${project.price.toLocaleString()}</p>
-                <p className={`text-xs font-medium ${project.change24h >= 0 ? "text-success" : "text-danger"}`}>
-                  {project.change24h >= 0 ? "+" : ""}{project.change24h}%
-                </p>
-              </div>
-            </button>
+              <button
+                onClick={() => toggleWatchlist(project.id)}
+                className="flex-shrink-0"
+              >
+                <Star
+                  className={`w-4 h-4 transition-colors ${isWatching(project.id) ? "text-warning fill-warning" : "text-muted-foreground"}`}
+                />
+              </button>
+              <button
+                onClick={() => navigate(`/learn/project/${project.id}`)}
+                className="flex-1 flex items-center gap-3 min-w-0"
+              >
+                <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-lg font-bold">
+                  {project.icon}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-sm text-foreground">{project.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{project.description[language]}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-semibold text-foreground">${project.price.toLocaleString()}</p>
+                  <p className={`text-xs font-medium ${project.change24h >= 0 ? "text-success" : "text-danger"}`}>
+                    {project.change24h >= 0 ? "+" : ""}{project.change24h}%
+                  </p>
+                </div>
+              </button>
+            </div>
           ))}
         </div>
       </motion.div>

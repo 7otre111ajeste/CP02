@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { trainingLessons } from "@/data/mockData";
 import { useUserProgress } from "@/hooks/useUserProgress";
+import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { ArrowLeft, CheckCircle, Lock } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
@@ -11,6 +12,7 @@ export default function LessonPage() {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
   const { completeLesson, isLessonCompleted } = useUserProgress();
+  const { incrementQuest } = useDailyQuests();
 
   const lesson = trainingLessons.find((l) => l.id === id);
   if (!lesson) return <div className="p-4 text-foreground">Lesson not found</div>;
@@ -20,6 +22,7 @@ export default function LessonPage() {
   const handleComplete = () => {
     if (completed) return;
     completeLesson(lesson.id, lesson.expReward);
+    incrementQuest("lesson");
     toast.success(
       language === "en"
         ? `+${lesson.expReward} XP earned!`

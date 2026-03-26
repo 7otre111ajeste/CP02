@@ -3,6 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { dictionaryTerms, cryptoProjects, trainingLessons } from "@/data/mockData";
 import { useUserProgress } from "@/hooks/useUserProgress";
+import { useDailyQuests } from "@/hooks/useDailyQuests";
 import StatusTag from "@/components/StatusTag";
 import { Search, BookOpen, Layers, GraduationCap, ChevronRight, CheckCircle, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,6 +15,7 @@ export default function LearnPage() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
   const { readTerm, isTermRead, isLessonCompleted } = useUserProgress();
+  const { incrementQuest } = useDailyQuests();
   const [activeTab, setActiveTab] = useState<Tab>("dictionary");
   const [search, setSearch] = useState("");
   const [expandedTerm, setExpandedTerm] = useState<string | null>(null);
@@ -40,6 +42,7 @@ export default function LearnPage() {
     setExpandedTerm(termId);
     if (!isTermRead(termId)) {
       readTerm(termId);
+      incrementQuest("term");
       toast.success(language === "en" ? "+5 XP earned!" : "+5 XP gagnés !");
     }
   };

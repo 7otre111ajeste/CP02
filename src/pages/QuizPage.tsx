@@ -1,8 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { useUserProgress } from "@/hooks/useUserProgress";
-import { getQuizQuestions, QuizQuestion } from "@/data/quizQuestions";
+import { useDailyQuests } from "@/hooks/useDailyQuests";
+import { getQuizQuestions, ShuffledQuizQuestion } from "@/data/quizQuestions";
 import { ArrowLeft, CheckCircle, XCircle, Trophy, Zap, Dumbbell, Lock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -54,13 +55,14 @@ export default function QuizPage() {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const { completeQuiz } = useUserProgress();
+  const { incrementQuest } = useDailyQuests();
   const [mode, setMode] = useState<QuizMode>(null);
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [answered, setAnswered] = useState(false);
-  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [questions, setQuestions] = useState<ShuffledQuizQuestion[]>([]);
 
   const dailyCount = getDailyQuizCount();
   const remaining = Math.max(0, DAILY_EXP_LIMIT - dailyCount);
@@ -94,6 +96,7 @@ export default function QuizPage() {
         const quizId = `quiz-${Date.now()}`;
         completeQuiz(quizId, expEarned);
         incrementDailyQuiz();
+        incrementQuest("quiz");
         toast.success(
           language === "en" ? `+${expEarned} XP earned!` : `+${expEarned} XP gagnés !`
         );
