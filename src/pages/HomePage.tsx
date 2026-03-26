@@ -1,7 +1,7 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProgress } from "@/hooks/useUserProgress";
 import { cryptoProjects } from "@/data/mockData";
-import { BookOpen, Brain, Sparkles, TrendingUp, ChevronRight } from "lucide-react";
+import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -24,6 +24,8 @@ export default function HomePage() {
     { icon: BookOpen, label: t("home.continue"), path: "/learn", color: "bg-primary/15 text-primary" },
     { icon: Brain, label: t("home.quiz"), path: "/quiz", color: "bg-accent/15 text-accent" },
     { icon: Sparkles, label: t("home.scanner"), path: "/ai", color: "bg-warning/15 text-warning" },
+    { icon: StickyNote, label: language === "en" ? "Notes" : "Notes", path: "/notes", color: "bg-secondary text-foreground" },
+    { icon: Calculator, label: language === "en" ? "Calculator" : "Calculatrice", path: "/calculator", color: "bg-success/15 text-success" },
   ];
 
   return (
@@ -66,7 +68,7 @@ export default function HomePage() {
 
       <motion.div variants={item}>
         <h2 className="text-sm font-semibold text-muted-foreground mb-3">{t("home.quickActions")}</h2>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
           {quickActions.map((action) => (
             <button
               key={action.path}
