@@ -136,6 +136,14 @@ export const cryptoProjects: CryptoProject[] = [
       en: "Solana is a fast blockchain that can handle thousands of transactions per second at very low cost.",
       fr: "Solana est une blockchain rapide capable de traiter des milliers de transactions par seconde à très faible coût.",
     },
+    descriptionPro: {
+      en: "Solana is a high-performance Layer 1 blockchain utilizing Proof of History (PoH) combined with Tower BFT consensus. It achieves ~65,000 TPS with 400ms block times and sub-cent transaction fees via parallel transaction processing (Sealevel runtime).",
+      fr: "Solana est une blockchain Layer 1 haute performance utilisant le Proof of History (PoH) combiné au consensus Tower BFT. Elle atteint ~65 000 TPS avec des blocs de 400ms et des frais inférieurs au centime.",
+    },
+    descriptionBro: {
+      en: "Solana is like the fast lane on the crypto highway. While other blockchains are stuck in traffic, Solana zooms past — super fast and super cheap. It's great for games, apps, and sending money in seconds!",
+      fr: "Solana c'est comme la voie rapide sur l'autoroute crypto. Pendant que les autres blockchains sont dans les bouchons, Solana fonce — ultra rapide et pas cher. Parfait pour les jeux, les apps et envoyer de l'argent en secondes !",
+    },
     purpose: {
       en: "To provide a fast and cheap alternative for building decentralized apps.",
       fr: "Fournir une alternative rapide et peu coûteuse pour construire des applications décentralisées.",
