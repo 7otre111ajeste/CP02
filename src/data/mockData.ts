@@ -252,6 +252,7 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "Réductions sur les frais, DeFi sur BNB Chain, lancements de tokens.",
     },
     icon: "◆",
+    logo: "https://assets.coingecko.com/coins/images/825/large/bnb-icon2_2x.png",
     website: "https://www.bnbchain.org",
     whitepaper: "https://github.com/bnb-chain/whitepaper",
   },
