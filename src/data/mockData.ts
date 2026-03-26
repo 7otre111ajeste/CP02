@@ -176,6 +176,14 @@ export const cryptoProjects: CryptoProject[] = [
       en: "Cardano is a blockchain built on scientific research. It focuses on security and sustainability.",
       fr: "Cardano est une blockchain construite sur la recherche scientifique. Elle se concentre sur la sécurité et la durabilité.",
     },
+    descriptionPro: {
+      en: "Cardano is a third-generation blockchain using Ouroboros, a provably secure Proof-of-Stake protocol. Built on Haskell with formal verification methods, it features a UTXO-based extended model (eUTXO) and native multi-asset support via Plutus smart contracts.",
+      fr: "Cardano est une blockchain de troisième génération utilisant Ouroboros, un protocole Proof-of-Stake prouvablement sûr. Construit en Haskell avec vérification formelle, il utilise un modèle eUTXO et le support natif multi-actifs via les smart contracts Plutus.",
+    },
+    descriptionBro: {
+      en: "Cardano is the 'nerdy' blockchain — built by scientists and professors who wanted to do things properly. It's slower to build new features, but everything is triple-checked. Think of it as the most careful kid in class!",
+      fr: "Cardano c'est la blockchain 'intello' — construite par des scientifiques qui voulaient bien faire les choses. C'est plus lent à développer, mais tout est vérifié trois fois. C'est le premier de la classe !",
+    },
     purpose: {
       en: "To build a more secure and sustainable blockchain using academic research.",
       fr: "Construire une blockchain plus sûre et durable en utilisant la recherche académique.",
