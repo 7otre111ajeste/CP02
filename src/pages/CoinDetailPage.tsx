@@ -4,6 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useCoinDetail, useCoinChart, formatMarketCap } from "@/hooks/useCryptoMarket";
 import { useWatchlist } from "@/hooks/useWatchlist";
 import { cryptoProjects } from "@/data/mockData";
+import { projectExchanges } from "@/data/platformsData";
 import StatusTag from "@/components/StatusTag";
 import ScoreBadge from "@/components/ScoreBadge";
 import DescriptionToggle from "@/components/DescriptionToggle";
