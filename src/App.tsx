@@ -27,31 +27,31 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
       <DailyQuestsProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <div className="min-h-screen bg-background">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/learn" element={<LearnPage />} />
-              <Route path="/learn/project/:id" element={<ProjectDetailPage />} />
-              <Route path="/learn/lesson/:id" element={<LessonPage />} />
-              <Route path="/market" element={<MarketPage />} />
-              <Route path="/market/:id" element={<CoinDetailPage />} />
-              <Route path="/ai" element={<AIPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/quiz" element={<QuizPage />} />
-              <Route path="/notes" element={<NotesPage />} />
-              <Route path="/calculator" element={<CalculatorPage />} />
-              <Route path="/methodology/halal" element={<HalalMethodologyPage />} />
-              <Route path="/methodology/safety" element={<SafetyMethodologyPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <BottomNav />
-          </div>
-        </BrowserRouter>
-      </TooltipProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <div className="min-h-screen bg-background">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/learn" element={<LearnPage />} />
+                <Route path="/learn/project/:id" element={<ProjectDetailPage />} />
+                <Route path="/learn/lesson/:id" element={<LessonPage />} />
+                <Route path="/market" element={<MarketPage />} />
+                <Route path="/market/:id" element={<CoinDetailPage />} />
+                <Route path="/ai" element={<AIPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/quiz" element={<QuizPage />} />
+                <Route path="/notes" element={<NotesPage />} />
+                <Route path="/calculator" element={<CalculatorPage />} />
+                <Route path="/methodology/halal" element={<HalalMethodologyPage />} />
+                <Route path="/methodology/safety" element={<SafetyMethodologyPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <BottomNav />
+            </div>
+          </BrowserRouter>
+        </TooltipProvider>
       </DailyQuestsProvider>
     </LanguageProvider>
   </QueryClientProvider>
