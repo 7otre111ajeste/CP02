@@ -24,6 +24,8 @@ export default function HomePage() {
     { icon: BookOpen, label: t("home.continue"), path: "/learn", color: "bg-primary/15 text-primary" },
     { icon: Brain, label: t("home.quiz"), path: "/quiz", color: "bg-accent/15 text-accent" },
     { icon: Sparkles, label: t("home.scanner"), path: "/ai", color: "bg-warning/15 text-warning" },
+    { icon: StickyNote, label: language === "en" ? "Notes" : "Notes", path: "/notes", color: "bg-secondary text-foreground" },
+    { icon: Calculator, label: language === "en" ? "Calculator" : "Calculatrice", path: "/calculator", color: "bg-success/15 text-success" },
   ];
 
   return (
