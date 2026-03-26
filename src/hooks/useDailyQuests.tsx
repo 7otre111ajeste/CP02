@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from "react";
 
 export interface DailyQuest {
   id: string;
@@ -30,7 +30,7 @@ const DAILY_QUESTS: DailyQuest[] = [
   {
     id: "daily-quiz",
     title: { en: "Quiz Master", fr: "Maître du Quiz" },
-    description: { en: "Complete 2 quizzes", fr: "Complétez 2 quiz" },
+    description: { en: "Complete 2 quizzes (EXP or Practice)", fr: "Complétez 2 quiz (EXP ou Entraînement)" },
     target: 2,
     expReward: 20,
     type: "quiz",
@@ -38,7 +38,7 @@ const DAILY_QUESTS: DailyQuest[] = [
   {
     id: "daily-lesson",
     title: { en: "Knowledge Seeker", fr: "Chercheur de savoir" },
-    description: { en: "Read 5 lessons or articles", fr: "Lire 5 leçons ou articles" },
+    description: { en: "Complete 5 lessons or read project pages", fr: "Complétez 5 leçons ou lisez des pages projets" },
     target: 5,
     expReward: 25,
     type: "lesson",
@@ -46,7 +46,7 @@ const DAILY_QUESTS: DailyQuest[] = [
   {
     id: "daily-term",
     title: { en: "Word Explorer", fr: "Explorateur de mots" },
-    description: { en: "Read 3 dictionary terms", fr: "Lire 3 termes du dictionnaire" },
+    description: { en: "Read 3 dictionary terms to learn new words", fr: "Lisez 3 termes du dictionnaire pour apprendre" },
     target: 3,
     expReward: 15,
     type: "term",
@@ -54,7 +54,7 @@ const DAILY_QUESTS: DailyQuest[] = [
   {
     id: "daily-calculator",
     title: { en: "Number Cruncher", fr: "Calculateur" },
-    description: { en: "Use the calculator once", fr: "Utiliser la calculatrice une fois" },
+    description: { en: "Use the calculator at least once", fr: "Utilisez la calculatrice au moins une fois" },
     target: 1,
     expReward: 5,
     type: "calculator",
@@ -79,7 +79,6 @@ function loadQuestProgress(): QuestProgress {
     const saved = JSON.parse(localStorage.getItem("cryptopedia-quests") || "{}");
     const today = getToday();
     if (saved.date === today) return saved;
-    // New day — calculate streak
     const yesterday = getYesterday();
     const wasAllComplete = DAILY_QUESTS.every((q) => saved.completed?.includes(q.id));
     let streak = 0;
@@ -105,7 +104,22 @@ function saveQuestProgress(p: QuestProgress) {
   localStorage.setItem("cryptopedia-quests", JSON.stringify(p));
 }
 
-export function useDailyQuests() {
+interface DailyQuestsContextType {
+  quests: DailyQuest[];
+  progress: Record<string, number>;
+  completed: string[];
+  streak: number;
+  allCompleted: boolean;
+  canClaimStreak: boolean;
+  streakRequired: number;
+  streakBonusExp: number;
+  incrementQuest: (type: DailyQuest["type"], amount?: number) => void;
+  claimStreakBonus: () => void;
+}
+
+const DailyQuestsContext = createContext<DailyQuestsContextType | undefined>(undefined);
+
+export function DailyQuestsProvider({ children }: { children: ReactNode }) {
   const [questProgress, setQuestProgress] = useState<QuestProgress>(loadQuestProgress);
 
   // Auto-complete login quest on mount
@@ -137,14 +151,12 @@ export function useDailyQuests() {
 
       updated.completed = newCompleted;
 
-      // Check if all quests completed for streak
       const allDone = DAILY_QUESTS.every((q) => newCompleted.includes(q.id));
       if (allDone && updated.lastStreakDate !== getToday()) {
         updated.lastStreakDate = getToday();
         updated.streak = (prev.streak || 0) + 1;
       }
 
-      // Add EXP via localStorage directly (to avoid circular deps with useUserProgress)
       if (expToAdd > 0) {
         try {
           const p = JSON.parse(localStorage.getItem("cryptopedia-progress") || '{"exp":0,"level":1,"completedLessons":[],"completedQuizzes":[],"readTerms":[]}');
@@ -174,7 +186,7 @@ export function useDailyQuests() {
   const allCompleted = DAILY_QUESTS.every((q) => questProgress.completed.includes(q.id));
   const canClaimStreak = questProgress.streak >= STREAK_REQUIRED && !questProgress.streakBonusClaimed;
 
-  return {
+  const value: DailyQuestsContextType = {
     quests: DAILY_QUESTS,
     progress: questProgress.progress,
     completed: questProgress.completed,
@@ -186,4 +198,16 @@ export function useDailyQuests() {
     incrementQuest,
     claimStreakBonus,
   };
+
+  return (
+    <DailyQuestsContext.Provider value={value}>
+      {children}
+    </DailyQuestsContext.Provider>
+  );
+}
+
+export function useDailyQuests() {
+  const context = useContext(DailyQuestsContext);
+  if (!context) throw new Error("useDailyQuests must be used within DailyQuestsProvider");
+  return context;
 }
