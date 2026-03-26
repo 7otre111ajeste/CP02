@@ -1,7 +1,7 @@
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProgress } from "@/hooks/useUserProgress";
 import { cryptoProjects } from "@/data/mockData";
-import { BookOpen, Brain, Sparkles, TrendingUp, ChevronRight } from "lucide-react";
+import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
