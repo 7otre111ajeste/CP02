@@ -216,6 +216,14 @@ export const cryptoProjects: CryptoProject[] = [
       en: "BNB is the native token of the Binance ecosystem, one of the largest crypto exchanges in the world.",
       fr: "BNB est le jeton natif de l'écosystème Binance, l'une des plus grandes plateformes d'échange de crypto au monde.",
     },
+    descriptionPro: {
+      en: "BNB is the native utility token of the Binance ecosystem, powering BNB Chain (formerly BSC), a Proof-of-Staked-Authority (PoSA) EVM-compatible blockchain. It features quarterly token burns, cross-chain bridges, and supports the BEP-20 token standard.",
+      fr: "BNB est le jeton utilitaire natif de l'écosystème Binance, alimentant BNB Chain, une blockchain EVM-compatible en Proof-of-Staked-Authority (PoSA). Il inclut des burns trimestriels de tokens et supporte le standard BEP-20.",
+    },
+    descriptionBro: {
+      en: "BNB is like a VIP card for the biggest crypto store in the world (Binance). If you hold BNB, you get discounts when you trade. It's also used to run apps and games on Binance's own blockchain!",
+      fr: "BNB c'est comme une carte VIP pour le plus grand magasin crypto au monde (Binance). Si tu as du BNB, tu as des réductions quand tu trades. C'est aussi utilisé pour faire tourner des apps sur la blockchain de Binance !",
+    },
     purpose: {
       en: "To power the Binance ecosystem and provide discounts on trading fees.",
       fr: "Alimenter l'écosystème Binance et offrir des réductions sur les frais de trading.",
