@@ -80,7 +80,7 @@ export default function StatusTag({ type, status }: StatusTagProps) {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 40 }}
-              className="fixed bottom-0 left-0 right-0 z-50 p-4 max-w-lg mx-auto"
+              className="fixed bottom-0 left-0 right-0 z-50 p-4 pb-24 max-w-lg mx-auto"
             >
               <div className="bg-card border border-border rounded-2xl p-5 shadow-xl">
                 <div className="flex items-center justify-between mb-3">
