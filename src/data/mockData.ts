@@ -166,6 +166,7 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "DeFi, NFTs, jeux, paiements.",
     },
     icon: "◎",
+    logo: "https://assets.coingecko.com/coins/images/4128/large/solana.png",
     website: "https://solana.com",
     whitepaper: "https://solana.com/solana-whitepaper.pdf",
   },
