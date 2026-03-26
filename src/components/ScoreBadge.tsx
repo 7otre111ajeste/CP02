@@ -55,7 +55,7 @@ export default function ScoreBadge({ score }: ScoreBadgeProps) {
     <>
       <button
         onClick={(e) => { e.stopPropagation(); setOpen(true); }}
-        className={`text-[10px] px-2 py-0.5 rounded-full font-medium flex items-center gap-1 border transition-all hover:opacity-80 ${colorClass}`}
+        className={`text-[10px] px-2 py-0.5 rounded-full font-medium flex items-center gap-1 border transition-all hover:opacity-80 animate-scale-in hover-scale ${colorClass}`}
       >
         <Star className="w-2.5 h-2.5" />
         {score}/10
