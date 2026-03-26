@@ -217,6 +217,11 @@ export default function HomePage() {
         </div>
       </motion.div>
 
+      {/* Market Sentiment */}
+      <motion.div variants={item}>
+        <MarketSentiment />
+      </motion.div>
+
       {/* Watchlist / Popular Projects */}
       <motion.div variants={item}>
         <div className="flex items-center justify-between mb-3">
