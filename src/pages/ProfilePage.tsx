@@ -263,8 +263,8 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Language Toggle */}
-      <div className="bg-card rounded-xl border border-border overflow-hidden">
+      {/* Settings */}
+      <div className="bg-card rounded-xl border border-border overflow-hidden divide-y divide-border">
         <button
           onClick={() => setLanguage(language === "en" ? "fr" : "en")}
           className="w-full flex items-center gap-3 p-4"
@@ -273,6 +273,28 @@ export default function ProfilePage() {
           <div className="flex-1 text-left">
             <p className="text-sm font-medium text-foreground">{t("profile.language")}</p>
             <p className="text-xs text-muted-foreground">{language === "en" ? "English" : "Français"}</p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+        </button>
+        <button
+          onClick={toggleTheme}
+          className="w-full flex items-center gap-3 p-4"
+        >
+          {theme === "dark" ? <Sun className="w-5 h-5 text-warning" /> : <Moon className="w-5 h-5 text-accent" />}
+          <div className="flex-1 text-left">
+            <p className="text-sm font-medium text-foreground">{en ? "Theme" : "Thème"}</p>
+            <p className="text-xs text-muted-foreground">{theme === "dark" ? (en ? "Dark Mode" : "Mode sombre") : (en ? "Light Mode" : "Mode clair")}</p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+        </button>
+        <button
+          onClick={() => navigate("/platforms")}
+          className="w-full flex items-center gap-3 p-4"
+        >
+          <Shield className="w-5 h-5 text-primary" />
+          <div className="flex-1 text-left">
+            <p className="text-sm font-medium text-foreground">{en ? "Trusted Platforms" : "Plateformes de confiance"}</p>
+            <p className="text-xs text-muted-foreground">{en ? "Exchanges & Wallets" : "Exchanges & Portefeuilles"}</p>
           </div>
           <ChevronRight className="w-4 h-4 text-muted-foreground" />
         </button>
