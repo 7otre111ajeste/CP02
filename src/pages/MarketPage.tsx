@@ -183,6 +183,28 @@ export default function MarketPage() {
                 )}
               </div>
 
+              {/* Category Filter */}
+              <div>
+                <span className="text-[10px] font-medium text-muted-foreground uppercase mb-1.5 block">
+                  {language === "fr" ? "Catégorie" : "Category"}
+                </span>
+                <div className="flex gap-1.5 flex-wrap">
+                  {MARKET_CATEGORIES.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setCategory(cat)}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-colors ${
+                        category === cat
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-secondary text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Halal Filter */}
               <div>
                 <span className="text-[10px] font-medium text-muted-foreground uppercase mb-1.5 block">
