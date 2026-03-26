@@ -331,6 +331,267 @@ export const dictionaryTerms: DictionaryTerm[] = [
     },
     category: "Basics",
   },
+  {
+    id: "proof-of-work",
+    term: { en: "Proof of Work", fr: "Preuve de travail" },
+    definition: {
+      en: "A system where computers compete to solve math puzzles to validate transactions. The first to solve it earns crypto. Bitcoin uses this method — it's secure but uses a lot of energy.",
+      fr: "Un système où des ordinateurs rivalisent pour résoudre des énigmes mathématiques afin de valider les transactions. Le premier à résoudre gagne des cryptos. Bitcoin utilise cette méthode — c'est sécurisé mais énergivore.",
+    },
+    category: "Technology",
+  },
+  {
+    id: "proof-of-stake",
+    term: { en: "Proof of Stake", fr: "Preuve d'enjeu" },
+    definition: {
+      en: "A system where you lock (stake) your crypto to help validate transactions. The more you stake, the more chances you have to validate and earn rewards. Uses much less energy than Proof of Work.",
+      fr: "Un système où vous verrouillez (stakez) vos cryptos pour aider à valider les transactions. Plus vous stakez, plus vous avez de chances de valider et gagner des récompenses. Utilise beaucoup moins d'énergie que la Preuve de travail.",
+    },
+    category: "Technology",
+  },
+  {
+    id: "peer-to-peer",
+    term: { en: "Peer-to-Peer", fr: "Pair-à-pair" },
+    definition: {
+      en: "A direct connection between two people without a middleman. In crypto, it means sending money directly to someone without needing a bank or company in between.",
+      fr: "Une connexion directe entre deux personnes sans intermédiaire. En crypto, ça veut dire envoyer de l'argent directement à quelqu'un sans besoin d'une banque ou entreprise entre les deux.",
+    },
+    category: "Technology",
+  },
+  {
+    id: "hodl",
+    term: { en: "HODL", fr: "HODL" },
+    definition: {
+      en: "Crypto slang for 'Hold On for Dear Life'. It means keeping your crypto instead of selling, even when prices drop. It started from a typo of 'hold' that became famous!",
+      fr: "Argot crypto pour 'Hold On for Dear Life'. Ça veut dire garder ses cryptos au lieu de vendre, même quand les prix baissent. C'est parti d'une faute de frappe de 'hold' devenue célèbre !",
+    },
+    category: "Culture",
+  },
+  {
+    id: "fomo",
+    term: { en: "FOMO", fr: "FOMO" },
+    definition: {
+      en: "Fear Of Missing Out. The feeling of panic when you see a crypto going up and you're afraid you'll miss the opportunity. It often leads to buying at the wrong time!",
+      fr: "Fear Of Missing Out (peur de rater). Le sentiment de panique quand tu vois une crypto monter et que tu as peur de rater l'opportunité. Ça mène souvent à acheter au mauvais moment !",
+    },
+    category: "Culture",
+  },
+  {
+    id: "fud",
+    term: { en: "FUD", fr: "FUD" },
+    definition: {
+      en: "Fear, Uncertainty, and Doubt. Negative news or rumors spread to scare people into selling their crypto. Always do your own research before reacting!",
+      fr: "Fear, Uncertainty and Doubt (peur, incertitude et doute). Des nouvelles négatives ou rumeurs répandues pour pousser les gens à vendre. Fais toujours tes propres recherches avant de réagir !",
+    },
+    category: "Culture",
+  },
+  {
+    id: "smart-contract",
+    term: { en: "Smart Contract", fr: "Contrat intelligent" },
+    definition: {
+      en: "A self-executing program on a blockchain that automatically does something when certain conditions are met. Like a vending machine — put in money, get your item, no human needed.",
+      fr: "Un programme auto-exécutable sur une blockchain qui fait automatiquement quelque chose quand certaines conditions sont remplies. Comme un distributeur — mets de l'argent, récupère ton article, pas besoin d'humain.",
+    },
+    category: "Technology",
+  },
+  {
+    id: "dapp",
+    term: { en: "dApp", fr: "dApp" },
+    definition: {
+      en: "Decentralized Application. An app that runs on a blockchain instead of a company's servers. Nobody can shut it down or control it alone.",
+      fr: "Application décentralisée. Une appli qui tourne sur une blockchain au lieu des serveurs d'une entreprise. Personne ne peut la fermer ou la contrôler seul.",
+    },
+    category: "Technology",
+  },
+  {
+    id: "whale",
+    term: { en: "Whale", fr: "Baleine" },
+    definition: {
+      en: "Someone who owns a huge amount of crypto. When a whale buys or sells, it can move the entire market price significantly.",
+      fr: "Quelqu'un qui possède une énorme quantité de crypto. Quand une baleine achète ou vend, ça peut faire bouger le prix du marché de manière significative.",
+    },
+    category: "Culture",
+  },
+  {
+    id: "bull-market",
+    term: { en: "Bull Market", fr: "Marché haussier" },
+    definition: {
+      en: "A period when prices are rising and investors are optimistic. Like a bull charging upward with its horns! People feel confident and buy more.",
+      fr: "Une période où les prix montent et les investisseurs sont optimistes. Comme un taureau qui charge vers le haut ! Les gens ont confiance et achètent plus.",
+    },
+    category: "Market",
+  },
+  {
+    id: "bear-market",
+    term: { en: "Bear Market", fr: "Marché baissier" },
+    definition: {
+      en: "A period when prices are falling and investors are pessimistic. Like a bear swiping downward! People are scared and tend to sell.",
+      fr: "Une période où les prix baissent et les investisseurs sont pessimistes. Comme un ours qui frappe vers le bas ! Les gens ont peur et vendent.",
+    },
+    category: "Market",
+  },
+  {
+    id: "halving",
+    term: { en: "Halving", fr: "Halving" },
+    definition: {
+      en: "An event where the reward for mining Bitcoin is cut in half. It happens roughly every 4 years and usually leads to price increases because less new Bitcoin is created.",
+      fr: "Un événement où la récompense pour le minage de Bitcoin est divisée par deux. Ça arrive environ tous les 4 ans et mène souvent à des hausses de prix car moins de nouveaux Bitcoins sont créés.",
+    },
+    category: "Technology",
+  },
+  {
+    id: "market-cap",
+    term: { en: "Market Cap", fr: "Capitalisation boursière" },
+    definition: {
+      en: "The total value of all coins of a cryptocurrency. Calculated by multiplying the price by the number of coins in circulation. Higher market cap = generally more established project.",
+      fr: "La valeur totale de toutes les pièces d'une cryptomonnaie. Calculée en multipliant le prix par le nombre de pièces en circulation. Plus la capitalisation est haute = projet généralement plus établi.",
+    },
+    category: "Market",
+  },
+  {
+    id: "seed-phrase",
+    term: { en: "Seed Phrase", fr: "Phrase de récupération" },
+    definition: {
+      en: "A list of 12 or 24 words that acts as the master key to your crypto wallet. If you lose access to your wallet, these words let you recover everything. NEVER share them!",
+      fr: "Une liste de 12 ou 24 mots qui sert de clé maître pour ton portefeuille crypto. Si tu perds l'accès à ton portefeuille, ces mots te permettent de tout récupérer. Ne les partage JAMAIS !",
+    },
+    category: "Security",
+  },
+  {
+    id: "dex",
+    term: { en: "DEX", fr: "DEX" },
+    definition: {
+      en: "Decentralized Exchange. A platform to trade crypto directly with other people, without a company in the middle. Examples: Uniswap, PancakeSwap.",
+      fr: "Exchange décentralisé. Une plateforme pour échanger des cryptos directement avec d'autres personnes, sans entreprise au milieu. Exemples : Uniswap, PancakeSwap.",
+    },
+    category: "DeFi",
+  },
+  {
+    id: "cex",
+    term: { en: "CEX", fr: "CEX" },
+    definition: {
+      en: "Centralized Exchange. A company that lets you buy and sell crypto, like Binance or Coinbase. Easy to use but you trust the company with your funds.",
+      fr: "Exchange centralisé. Une entreprise qui te permet d'acheter et vendre des cryptos, comme Binance ou Coinbase. Facile à utiliser mais tu confies tes fonds à l'entreprise.",
+    },
+    category: "DeFi",
+  },
+  {
+    id: "airdrop",
+    term: { en: "Airdrop", fr: "Airdrop" },
+    definition: {
+      en: "Free crypto tokens sent to your wallet, usually as a promotion or reward for using a new project. Like free samples at a store!",
+      fr: "Des tokens crypto gratuits envoyés dans ton portefeuille, généralement comme promotion ou récompense pour utiliser un nouveau projet. Comme des échantillons gratuits dans un magasin !",
+    },
+    category: "Culture",
+  },
+  {
+    id: "rug-pull",
+    term: { en: "Rug Pull", fr: "Rug Pull" },
+    definition: {
+      en: "A scam where developers create a crypto project, attract investors, then suddenly disappear with all the money. Always research a project before investing!",
+      fr: "Une arnaque où les développeurs créent un projet crypto, attirent des investisseurs, puis disparaissent soudainement avec tout l'argent. Fais toujours tes recherches avant d'investir !",
+    },
+    category: "Security",
+  },
+  {
+    id: "yield-farming",
+    term: { en: "Yield Farming", fr: "Yield Farming" },
+    definition: {
+      en: "Lending or staking your crypto on DeFi platforms to earn rewards. Like planting seeds (your crypto) to harvest returns — but with risks!",
+      fr: "Prêter ou staker tes cryptos sur des plateformes DeFi pour gagner des récompenses. Comme planter des graines (tes cryptos) pour récolter des rendements — mais avec des risques !",
+    },
+    category: "DeFi",
+  },
+  {
+    id: "layer-1",
+    term: { en: "Layer 1", fr: "Layer 1" },
+    definition: {
+      en: "The base blockchain network itself, like Bitcoin or Ethereum. It's the foundation on which everything else is built.",
+      fr: "Le réseau blockchain de base lui-même, comme Bitcoin ou Ethereum. C'est la fondation sur laquelle tout le reste est construit.",
+    },
+    category: "Technology",
+  },
+  {
+    id: "layer-2",
+    term: { en: "Layer 2", fr: "Layer 2" },
+    definition: {
+      en: "A secondary network built on top of a Layer 1 to make it faster and cheaper. Like adding express lanes to a highway. Examples: Lightning Network, Polygon.",
+      fr: "Un réseau secondaire construit par-dessus un Layer 1 pour le rendre plus rapide et moins cher. Comme ajouter des voies express à une autoroute. Exemples : Lightning Network, Polygon.",
+    },
+    category: "Technology",
+  },
+  {
+    id: "dao",
+    term: { en: "DAO", fr: "DAO" },
+    definition: {
+      en: "Decentralized Autonomous Organization. A group managed by code and community votes instead of a CEO. Members vote on decisions using tokens.",
+      fr: "Organisation Autonome Décentralisée. Un groupe géré par du code et des votes communautaires au lieu d'un PDG. Les membres votent sur les décisions en utilisant des tokens.",
+    },
+    category: "DeFi",
+  },
+  {
+    id: "private-key",
+    term: { en: "Private Key", fr: "Clé privée" },
+    definition: {
+      en: "A secret code that proves you own your crypto and lets you send it. Like your bank PIN but even more important — if someone gets it, they can steal all your crypto!",
+      fr: "Un code secret qui prouve que tu possèdes tes cryptos et te permet de les envoyer. Comme ton code bancaire mais encore plus important — si quelqu'un l'obtient, il peut voler toutes tes cryptos !",
+    },
+    category: "Security",
+  },
+  {
+    id: "public-key",
+    term: { en: "Public Key", fr: "Clé publique" },
+    definition: {
+      en: "Your crypto address that you can share with others to receive payments. Like your email address — safe to share, but only you can access what's inside.",
+      fr: "Ton adresse crypto que tu peux partager avec d'autres pour recevoir des paiements. Comme ton adresse email — sûr à partager, mais toi seul peux accéder à ce qu'il y a dedans.",
+    },
+    category: "Security",
+  },
+  {
+    id: "stablecoin",
+    term: { en: "Stablecoin", fr: "Stablecoin" },
+    definition: {
+      en: "A cryptocurrency designed to keep a stable price, usually pegged to $1 USD. Examples: USDT, USDC. Useful for avoiding price swings while staying in crypto.",
+      fr: "Une cryptomonnaie conçue pour garder un prix stable, généralement indexée à 1$ USD. Exemples : USDT, USDC. Utile pour éviter les variations de prix tout en restant dans la crypto.",
+    },
+    category: "Basics",
+  },
+  {
+    id: "fear-and-greed",
+    term: { en: "Fear & Greed Index", fr: "Indice de Peur et Avidité" },
+    definition: {
+      en: "A score from 0 to 100 that measures market emotions. 0 = Extreme Fear (people are scared), 100 = Extreme Greed (people are too excited). Helps you understand the mood of the market.",
+      fr: "Un score de 0 à 100 qui mesure les émotions du marché. 0 = Peur extrême (les gens ont peur), 100 = Avidité extrême (les gens sont trop excités). Aide à comprendre l'humeur du marché.",
+    },
+    category: "Market",
+  },
+  {
+    id: "volume",
+    term: { en: "Volume", fr: "Volume" },
+    definition: {
+      en: "The total amount of a crypto traded in a period (usually 24 hours). High volume means lots of activity. Low volume means less interest.",
+      fr: "Le montant total d'une crypto échangée sur une période (généralement 24h). Un volume élevé signifie beaucoup d'activité. Un faible volume signifie moins d'intérêt.",
+    },
+    category: "Market",
+  },
+  {
+    id: "ath",
+    term: { en: "ATH", fr: "ATH" },
+    definition: {
+      en: "All-Time High. The highest price a cryptocurrency has ever reached. When a coin hits a new ATH, it means it's at its most expensive ever!",
+      fr: "All-Time High (plus haut historique). Le prix le plus élevé qu'une cryptomonnaie ait jamais atteint. Quand une crypto atteint un nouvel ATH, ça veut dire qu'elle est à son prix le plus cher de tous les temps !",
+    },
+    category: "Market",
+  },
+  {
+    id: "atl",
+    term: { en: "ATL", fr: "ATL" },
+    definition: {
+      en: "All-Time Low. The lowest price a cryptocurrency has ever reached. Can represent a buying opportunity — or a warning sign.",
+      fr: "All-Time Low (plus bas historique). Le prix le plus bas qu'une cryptomonnaie ait jamais atteint. Peut représenter une opportunité d'achat — ou un signal d'alarme.",
+    },
+    category: "Market",
+  },
 ];
 
 export const trainingLessons: TrainingLesson[] = [
