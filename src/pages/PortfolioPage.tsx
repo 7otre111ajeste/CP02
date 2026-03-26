@@ -303,6 +303,58 @@ export default function PortfolioPage() {
                 {selectedEntry === e.coinId && (
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                     <div className="px-4 pb-4 space-y-3 border-t border-border pt-3">
+                      {/* Project badges & link */}
+                      {(() => {
+                        const proj = getProjectData(e.coinId);
+                        if (!proj) return null;
+                        return (
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <StatusTag type="halal" status={proj.halalStatus} />
+                            <StatusTag type="safety" status={proj.safetyStatus} />
+                            <button
+                              onClick={() => navigate(`/project/${proj.id}`)}
+                              className="text-[10px] text-primary flex items-center gap-1 hover:underline ml-auto"
+                            >
+                              <ExternalLink className="w-3 h-3" />
+                              {language === "en" ? "Details" : "Détails"}
+                            </button>
+                          </div>
+                        );
+                      })()}
+
+                      {/* Mini PnL Sparkline Chart */}
+                      <AnimatePresence>
+                        {showPnlChart === e.coinId && liveCoin?.sparkline_in_7d?.price && (
+                          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
+                            <div className="bg-secondary/50 rounded-xl p-3">
+                              <p className="text-[10px] text-muted-foreground mb-2">{language === "en" ? "7-Day Price Chart" : "Graphique 7 jours"}</p>
+                              <div className="h-20 flex items-end gap-[1px]">
+                                {(() => {
+                                  const prices = liveCoin.sparkline_in_7d.price;
+                                  const sampled = prices.filter((_, i) => i % Math.max(1, Math.floor(prices.length / 60)) === 0);
+                                  const min = Math.min(...sampled);
+                                  const max = Math.max(...sampled);
+                                  const range = max - min || 1;
+                                  const isUp = sampled[sampled.length - 1] >= sampled[0];
+                                  return sampled.map((p, i) => (
+                                    <div
+                                      key={i}
+                                      className={`flex-1 rounded-t-sm ${isUp ? "bg-success/60" : "bg-danger/60"}`}
+                                      style={{ height: `${((p - min) / range) * 100}%`, minHeight: "2px" }}
+                                      title={`$${p.toFixed(2)}`}
+                                    />
+                                  ));
+                                })()}
+                              </div>
+                              <div className="flex justify-between mt-1">
+                                <span className="text-[9px] text-muted-foreground">{language === "en" ? "7 days ago" : "Il y a 7 jours"}</span>
+                                <span className="text-[9px] text-muted-foreground">{language === "en" ? "Now" : "Maintenant"}</span>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
                       {/* PnL details */}
                       <div className="grid grid-cols-2 gap-2">
                         <div className="bg-secondary/50 rounded-xl p-2.5">
