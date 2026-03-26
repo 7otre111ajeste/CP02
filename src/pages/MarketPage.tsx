@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useCryptoMarket, formatMarketCap } from "@/hooks/useCryptoMarket";
+import { useCryptoMarket, MARKET_CATEGORIES, type MarketCategory } from "@/hooks/useCryptoMarket";
 import { Search, TrendingUp, TrendingDown, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -33,13 +33,16 @@ export default function MarketPage() {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
+  const [category, setCategory] = useState<MarketCategory>("All");
   const { data: coins, isLoading, isError, refetch, isFetching } = useCryptoMarket();
 
-  const filtered = (coins ?? []).filter(
-    (c) =>
+  const filtered = (coins ?? []).filter((c) => {
+    const matchesSearch =
       c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.symbol.toLowerCase().includes(search.toLowerCase())
-  );
+      c.symbol.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = category === "All" || c.category === category;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="px-4 pt-6 pb-24 max-w-lg mx-auto">
@@ -63,6 +66,23 @@ export default function MarketPage() {
           placeholder={t("market.search")}
           className="w-full pl-9 pr-4 py-2.5 bg-card border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
         />
+      </div>
+
+      {/* Category filters */}
+      <div className="flex gap-1.5 mb-4 overflow-x-auto scrollbar-hide pb-1">
+        {MARKET_CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setCategory(cat)}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+              category === cat
+                ? "bg-primary text-primary-foreground"
+                : "bg-card border border-border text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
       </div>
 
       {/* Table header */}
