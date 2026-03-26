@@ -10,6 +10,7 @@ import LearnPage from "./pages/LearnPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
 import LessonPage from "./pages/LessonPage";
 import MarketPage from "./pages/MarketPage";
+import CoinDetailPage from "./pages/CoinDetailPage";
 import AIPage from "./pages/AIPage";
 import ProfilePage from "./pages/ProfilePage";
 import QuizPage from "./pages/QuizPage";
