@@ -55,6 +55,7 @@ export default function QuizPage() {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const { completeQuiz } = useUserProgress();
+  const { incrementQuest } = useDailyQuests();
   const [mode, setMode] = useState<QuizMode>(null);
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
