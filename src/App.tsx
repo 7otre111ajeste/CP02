@@ -14,6 +14,8 @@ import CoinDetailPage from "./pages/CoinDetailPage";
 import AIPage from "./pages/AIPage";
 import ProfilePage from "./pages/ProfilePage";
 import QuizPage from "./pages/QuizPage";
+import NotesPage from "./pages/NotesPage";
+import CalculatorPage from "./pages/CalculatorPage";
 import HalalMethodologyPage from "./pages/HalalMethodologyPage";
 import SafetyMethodologyPage from "./pages/SafetyMethodologyPage";
 import NotFound from "./pages/NotFound";
