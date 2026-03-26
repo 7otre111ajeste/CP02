@@ -62,7 +62,7 @@ export default function MarketPage() {
   const { data: coins, isLoading, isError, refetch, isFetching } = useCryptoMarket();
   const { toggleWatchlist, isWatching } = useWatchlist();
 
-  const activeFilterCount = (halalFilter !== "all" ? 1 : 0) + (safetyFilter !== "all" ? 1 : 0) + (scoreRange[0] > 0 || scoreRange[1] < 10 ? 1 : 0);
+  const activeFilterCount = (category !== "All" ? 1 : 0) + (halalFilter !== "all" ? 1 : 0) + (safetyFilter !== "all" ? 1 : 0) + (scoreRange[0] > 0 || scoreRange[1] < 10 ? 1 : 0);
 
   const clearFilters = () => {
     setHalalFilter("all");
