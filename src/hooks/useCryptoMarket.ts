@@ -3,14 +3,28 @@ import { useQuery } from "@tanstack/react-query";
 // Category mappings for well-known coins (CoinGecko IDs)
 const CATEGORY_MAP: Record<string, string> = {
   bitcoin: "Layer 1", ethereum: "Layer 1", solana: "Layer 1", cardano: "Layer 1",
-  avalanche: "Layer 1", polkadot: "Layer 1", near: "Layer 1", sui: "Layer 1",
+  "avalanche-2": "Layer 1", polkadot: "Layer 1", near: "Layer 1", sui: "Layer 1",
   aptos: "Layer 1", cosmos: "Layer 1", algorand: "Layer 1", tron: "Layer 1",
+  fantom: "Layer 1", "elrond-erd-2": "Layer 1", flow: "Layer 1", "sei-network": "Layer 1",
+  kaspa: "Layer 1", eos: "Layer 1", astar: "Layer 1",
+  "hedera-hashgraph": "Layer 1", "internet-computer": "Layer 1",
   tether: "Stablecoins", "usd-coin": "Stablecoins", dai: "Stablecoins",
-  "first-digital-usd": "Stablecoins", "true-usd": "Stablecoins", "ethena-usde": "Stablecoins",
+  "first-digital-usd": "Stablecoins", "ethena-usde": "Stablecoins",
   uniswap: "DeFi", aave: "DeFi", "lido-dao": "DeFi", maker: "DeFi",
   chainlink: "DeFi", jupiter: "DeFi", "the-graph": "DeFi", "pancakeswap-token": "DeFi",
-  dogecoin: "Meme", shiba: "Meme", pepe: "Meme", "floki-inu": "Meme",
-  bonk: "Meme", "dogwifcoin": "Meme", "brett-based": "Meme",
+  "injective-protocol": "DeFi", thorchain: "DeFi", "ondo-finance": "DeFi",
+  dogecoin: "Meme", "shiba-inu": "Meme", pepe: "Meme", floki: "Meme",
+  bonk: "Meme", dogwifcoin: "Meme",
+  ripple: "Payments", litecoin: "Payments", stellar: "Payments", "bitcoin-cash": "Payments",
+  binancecoin: "Exchange", okb: "Exchange", cronos: "Exchange",
+  "matic-network": "Layer 2", arbitrum: "Layer 2", optimism: "Layer 2",
+  stacks: "Layer 2", mantle: "Layer 2",
+  "render-token": "Infrastructure", filecoin: "Infrastructure",
+  "quant-network": "Infrastructure", vechain: "Infrastructure", "theta-token": "Infrastructure",
+  celestia: "Infrastructure",
+  "fetch-ai": "AI", "worldcoin-wld": "AI",
+  "immutable-x": "Gaming", "the-sandbox": "Gaming", "axi-infinity": "Gaming", gala: "Gaming",
+  monero: "Privacy",
 };
 
 export type MarketCategory = "All" | "Layer 1" | "DeFi" | "Stablecoins" | "Meme";
