@@ -26,7 +26,7 @@ function StatCard({ label, value }: { label: string; value: string }) {
 export default function CoinDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [days, setDays] = useState(7);
 
   const { data: coin, isLoading, isError } = useCoinDetail(id ?? "");
