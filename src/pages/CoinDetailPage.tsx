@@ -32,10 +32,20 @@ export default function CoinDetailPage() {
   const { data: coin, isLoading, isError } = useCoinDetail(id ?? "");
   const { data: chart } = useCoinChart(id ?? "", days);
 
+  // Cross-link to Learn project
+  const learnProject = cryptoProjects.find(
+    (p) => p.id === id || p.symbol.toLowerCase() === coin?.symbol
+  );
+
   const chartData = (chart?.prices ?? []).map(([time, price]) => ({ time, price }));
   const md = coin?.market_data;
   const positive = (md?.price_change_percentage_24h ?? 0) >= 0;
   const chartColor = positive ? "hsl(145, 65%, 45%)" : "hsl(0, 72%, 55%)";
+
+  const halalColor = (s: string) =>
+    s === "halal" ? "text-success bg-success/10 border-success/20" : s === "notHalal" ? "text-danger bg-danger/10 border-danger/20" : "text-warning bg-warning/10 border-warning/20";
+  const safetyColor = (s: string) =>
+    s === "safe" ? "text-success bg-success/10 border-success/20" : s === "scam" ? "text-danger bg-danger/10 border-danger/20" : "text-warning bg-warning/10 border-warning/20";
 
   if (isLoading) {
     return (
