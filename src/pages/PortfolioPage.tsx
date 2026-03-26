@@ -467,8 +467,8 @@ export default function PortfolioPage() {
         {showAddCoin && (
           <>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => { setShowAddCoin(false); setSearchQ(""); }} className="fixed inset-0 bg-background/60 backdrop-blur-sm z-50" />
-            <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} className="fixed bottom-0 left-0 right-0 z-50 p-4 pb-8 max-w-lg mx-auto">
-              <div className="bg-card border border-border rounded-2xl p-4 shadow-xl max-h-[60vh] flex flex-col">
+            <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 40 }} className="fixed bottom-0 left-0 right-0 z-50 p-4 pb-24 max-w-lg mx-auto">
+              <div className="bg-card border border-border rounded-2xl p-4 shadow-xl max-h-[50vh] flex flex-col">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-semibold text-foreground">{language === "en" ? "Add Crypto" : "Ajouter une crypto"}</h3>
                   <button onClick={() => { setShowAddCoin(false); setSearchQ(""); }} className="text-muted-foreground"><X className="w-4 h-4" /></button>
