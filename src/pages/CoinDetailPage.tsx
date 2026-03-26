@@ -4,6 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useCoinDetail, useCoinChart, formatMarketCap } from "@/hooks/useCryptoMarket";
 import { cryptoProjects } from "@/data/mockData";
 import StatusTag from "@/components/StatusTag";
+import ScoreBadge from "@/components/ScoreBadge";
 import { ArrowLeft, TrendingUp, TrendingDown, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
