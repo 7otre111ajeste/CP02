@@ -103,7 +103,8 @@ export default function MarketPage() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.02 }}
-              className="flex items-center px-3 py-3 bg-card rounded-xl border border-border"
+              onClick={() => navigate(`/market/${coin.id}`)}
+              className="flex items-center px-3 py-3 bg-card rounded-xl border border-border cursor-pointer hover:border-primary/30 transition-colors"
             >
               <span className="w-8 text-xs text-muted-foreground">{coin.market_cap_rank}</span>
               <div className="flex-1 flex items-center gap-2.5 min-w-0">
