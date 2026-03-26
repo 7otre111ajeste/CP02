@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import { toast } from "sonner";
 import StatusTag from "@/components/StatusTag";
 import ScoreBadge from "@/components/ScoreBadge";
+import DescriptionToggle from "@/components/DescriptionToggle";
+import TermHighlighter from "@/components/TermHighlighter";
 
 export default function ProjectDetailPage() {
   const { id } = useParams();
@@ -82,15 +84,29 @@ export default function ProjectDetailPage() {
         </div>
       </div>
 
+      {/* Pro/Bro Description */}
+      <div className="bg-card rounded-xl p-4 border border-border mb-3">
+        <h3 className="text-sm font-semibold text-foreground mb-2">
+          {language === "en" ? "What is it?" : "Qu'est-ce que c'est ?"}
+        </h3>
+        <DescriptionToggle
+          proBro={{
+            pro: project.descriptionPro[language],
+            bro: project.descriptionBro[language],
+          }}
+        />
+      </div>
+
       {[
-        { title: language === "en" ? "What is it?" : "Qu'est-ce que c'est ?", content: project.description[language] },
         { title: language === "en" ? "Purpose" : "Objectif", content: project.purpose[language] },
         { title: language === "en" ? "How it works" : "Comment ça marche", content: project.howItWorks[language] },
         { title: language === "en" ? "Use Cases" : "Cas d'utilisation", content: project.useCases[language] },
       ].map((section) => (
         <div key={section.title} className="bg-card rounded-xl p-4 border border-border mb-3">
           <h3 className="text-sm font-semibold text-foreground mb-1">{section.title}</h3>
-          <p className="text-xs text-muted-foreground leading-relaxed">{section.content}</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            <TermHighlighter text={section.content} />
+          </p>
         </div>
       ))}
 

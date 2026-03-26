@@ -13,6 +13,8 @@ export interface CryptoProject {
   safetyStatus: "safe" | "risky" | "scam";
   score: number; // 0-10 quality score
   description: { en: string; fr: string };
+  descriptionPro: { en: string; fr: string };
+  descriptionBro: { en: string; fr: string };
   purpose: { en: string; fr: string };
   howItWorks: { en: string; fr: string };
   useCases: { en: string; fr: string };
@@ -54,6 +56,14 @@ export const cryptoProjects: CryptoProject[] = [
       en: "Bitcoin is the first and most well-known cryptocurrency. It's digital money that works without any bank or government.",
       fr: "Bitcoin est la première et la plus connue des cryptomonnaies. C'est de l'argent numérique qui fonctionne sans banque ni gouvernement.",
     },
+    descriptionPro: {
+      en: "Bitcoin is a decentralized peer-to-peer electronic cash system utilizing a SHA-256 Proof-of-Work consensus mechanism. It operates on a UTXO model with a fixed supply cap of 21 million coins, with block rewards halving approximately every 210,000 blocks.",
+      fr: "Bitcoin est un système de paiement électronique pair-à-pair décentralisé utilisant un mécanisme de consensus Proof-of-Work SHA-256. Il fonctionne sur un modèle UTXO avec une offre maximale fixe de 21 millions de coins.",
+    },
+    descriptionBro: {
+      en: "Imagine digital gold that lives on the internet. Nobody controls it — no bank, no government. You can send it to anyone, anywhere, like sending a text message but with money. There will only ever be 21 million Bitcoin, so it's rare like gold!",
+      fr: "Imagine de l'or numérique qui vit sur internet. Personne ne le contrôle — ni banque, ni gouvernement. Tu peux l'envoyer à n'importe qui, comme un SMS mais avec de l'argent. Il n'y aura jamais que 21 millions de Bitcoin, c'est rare comme de l'or !",
+    },
     purpose: {
       en: "To allow people to send money to each other directly, without needing a bank.",
       fr: "Permettre aux gens de s'envoyer de l'argent directement, sans avoir besoin d'une banque.",
@@ -85,6 +95,14 @@ export const cryptoProjects: CryptoProject[] = [
     description: {
       en: "Ethereum is a platform that lets developers build apps (dApps) on the blockchain. It introduced smart contracts.",
       fr: "Ethereum est une plateforme qui permet aux développeurs de créer des applications (dApps) sur la blockchain. Elle a introduit les contrats intelligents.",
+    },
+    descriptionPro: {
+      en: "Ethereum is a Turing-complete programmable blockchain utilizing an account-based model with EVM execution. Post-Merge, it operates on Proof-of-Stake (Casper FFG + LMD-GHOST). It supports ERC-20 tokens, ERC-721 NFTs, and complex DeFi protocols via Solidity smart contracts.",
+      fr: "Ethereum est une blockchain programmable Turing-complète utilisant un modèle basé sur les comptes avec exécution EVM. Après le Merge, elle fonctionne en Proof-of-Stake. Elle supporte les tokens ERC-20, les NFTs ERC-721 et les protocoles DeFi complexes.",
+    },
+    descriptionBro: {
+      en: "Think of Ethereum like a giant computer that everyone shares. People can build apps on it — games, banks, stores — but without any company owning them. It's like the app store, but nobody can shut it down or change the rules!",
+      fr: "Pense à Ethereum comme un ordinateur géant que tout le monde partage. Les gens peuvent y créer des apps — jeux, banques, boutiques — sans qu'aucune entreprise ne les contrôle. C'est comme l'App Store, mais personne ne peut le fermer !",
     },
     purpose: {
       en: "To create a world computer where anyone can build decentralized applications.",
@@ -118,6 +136,14 @@ export const cryptoProjects: CryptoProject[] = [
       en: "Solana is a fast blockchain that can handle thousands of transactions per second at very low cost.",
       fr: "Solana est une blockchain rapide capable de traiter des milliers de transactions par seconde à très faible coût.",
     },
+    descriptionPro: {
+      en: "Solana is a high-performance Layer 1 blockchain utilizing Proof of History (PoH) combined with Tower BFT consensus. It achieves ~65,000 TPS with 400ms block times and sub-cent transaction fees via parallel transaction processing (Sealevel runtime).",
+      fr: "Solana est une blockchain Layer 1 haute performance utilisant le Proof of History (PoH) combiné au consensus Tower BFT. Elle atteint ~65 000 TPS avec des blocs de 400ms et des frais inférieurs au centime.",
+    },
+    descriptionBro: {
+      en: "Solana is like the fast lane on the crypto highway. While other blockchains are stuck in traffic, Solana zooms past — super fast and super cheap. It's great for games, apps, and sending money in seconds!",
+      fr: "Solana c'est comme la voie rapide sur l'autoroute crypto. Pendant que les autres blockchains sont dans les bouchons, Solana fonce — ultra rapide et pas cher. Parfait pour les jeux, les apps et envoyer de l'argent en secondes !",
+    },
     purpose: {
       en: "To provide a fast and cheap alternative for building decentralized apps.",
       fr: "Fournir une alternative rapide et peu coûteuse pour construire des applications décentralisées.",
@@ -150,6 +176,14 @@ export const cryptoProjects: CryptoProject[] = [
       en: "Cardano is a blockchain built on scientific research. It focuses on security and sustainability.",
       fr: "Cardano est une blockchain construite sur la recherche scientifique. Elle se concentre sur la sécurité et la durabilité.",
     },
+    descriptionPro: {
+      en: "Cardano is a third-generation blockchain using Ouroboros, a provably secure Proof-of-Stake protocol. Built on Haskell with formal verification methods, it features a UTXO-based extended model (eUTXO) and native multi-asset support via Plutus smart contracts.",
+      fr: "Cardano est une blockchain de troisième génération utilisant Ouroboros, un protocole Proof-of-Stake prouvablement sûr. Construit en Haskell avec vérification formelle, il utilise un modèle eUTXO et le support natif multi-actifs via les smart contracts Plutus.",
+    },
+    descriptionBro: {
+      en: "Cardano is the 'nerdy' blockchain — built by scientists and professors who wanted to do things properly. It's slower to build new features, but everything is triple-checked. Think of it as the most careful kid in class!",
+      fr: "Cardano c'est la blockchain 'intello' — construite par des scientifiques qui voulaient bien faire les choses. C'est plus lent à développer, mais tout est vérifié trois fois. C'est le premier de la classe !",
+    },
     purpose: {
       en: "To build a more secure and sustainable blockchain using academic research.",
       fr: "Construire une blockchain plus sûre et durable en utilisant la recherche académique.",
@@ -181,6 +215,14 @@ export const cryptoProjects: CryptoProject[] = [
     description: {
       en: "BNB is the native token of the Binance ecosystem, one of the largest crypto exchanges in the world.",
       fr: "BNB est le jeton natif de l'écosystème Binance, l'une des plus grandes plateformes d'échange de crypto au monde.",
+    },
+    descriptionPro: {
+      en: "BNB is the native utility token of the Binance ecosystem, powering BNB Chain (formerly BSC), a Proof-of-Staked-Authority (PoSA) EVM-compatible blockchain. It features quarterly token burns, cross-chain bridges, and supports the BEP-20 token standard.",
+      fr: "BNB est le jeton utilitaire natif de l'écosystème Binance, alimentant BNB Chain, une blockchain EVM-compatible en Proof-of-Staked-Authority (PoSA). Il inclut des burns trimestriels de tokens et supporte le standard BEP-20.",
+    },
+    descriptionBro: {
+      en: "BNB is like a VIP card for the biggest crypto store in the world (Binance). If you hold BNB, you get discounts when you trade. It's also used to run apps and games on Binance's own blockchain!",
+      fr: "BNB c'est comme une carte VIP pour le plus grand magasin crypto au monde (Binance). Si tu as du BNB, tu as des réductions quand tu trades. C'est aussi utilisé pour faire tourner des apps sur la blockchain de Binance !",
     },
     purpose: {
       en: "To power the Binance ecosystem and provide discounts on trading fees.",
