@@ -163,6 +163,8 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "DeFi, NFTs, jeux, paiements.",
     },
     icon: "◎",
+    website: "https://solana.com",
+    whitepaper: "https://solana.com/solana-whitepaper.pdf",
   },
   {
     id: "cardano",
