@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cryptoProjects } from "@/data/mockData";
+import { projectExchanges } from "@/data/platformsData";
 import { useUserProgress } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { ArrowLeft, TrendingUp, TrendingDown, Sparkles, BarChart3, CheckCircle, ExternalLink, FileText } from "lucide-react";
