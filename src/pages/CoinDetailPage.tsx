@@ -211,6 +211,29 @@ export default function CoinDetailPage() {
         </motion.div>
       )}
 
+      {/* Where to buy */}
+      {learnProject && projectExchanges[learnProject.id] && (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.27 }} className="bg-card border border-border rounded-xl p-4 mb-4">
+          <h2 className="text-sm font-semibold text-foreground mb-2">
+            {language === "en" ? `Where to buy ${learnProject.symbol}` : `Où acheter ${learnProject.symbol}`}
+          </h2>
+          <div className="space-y-1.5">
+            {projectExchanges[learnProject.id].map((ex) => (
+              <a
+                key={ex.exchangeId}
+                href={ex.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between p-2 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors"
+              >
+                <span className="text-xs font-medium text-foreground">{ex.name}</span>
+                <ExternalLink className="w-3 h-3 text-primary" />
+              </a>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
       {/* CoinGecko description fallback */}
       {!learnProject && coin.description.en && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-card border border-border rounded-xl p-4 mb-4">
