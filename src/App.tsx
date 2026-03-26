@@ -3,24 +3,44 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import { LanguageProvider } from "@/contexts/LanguageContext";
+import BottomNav from "@/components/BottomNav";
+import HomePage from "./pages/HomePage";
+import LearnPage from "./pages/LearnPage";
+import ProjectDetailPage from "./pages/ProjectDetailPage";
+import LessonPage from "./pages/LessonPage";
+import MarketPage from "./pages/MarketPage";
+import AIPage from "./pages/AIPage";
+import ProfilePage from "./pages/ProfilePage";
+import QuizPage from "./pages/QuizPage";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <LanguageProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <div className="min-h-screen bg-background">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/learn" element={<LearnPage />} />
+              <Route path="/learn/project/:id" element={<ProjectDetailPage />} />
+              <Route path="/learn/lesson/:id" element={<LessonPage />} />
+              <Route path="/market" element={<MarketPage />} />
+              <Route path="/ai" element={<AIPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/quiz" element={<QuizPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <BottomNav />
+          </div>
+        </BrowserRouter>
+      </TooltipProvider>
+    </LanguageProvider>
   </QueryClientProvider>
 );
 
