@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCoinDetail, useCoinChart, formatMarketCap } from "@/hooks/useCryptoMarket";
-import { ArrowLeft, TrendingUp, TrendingDown } from "lucide-react";
+import { cryptoProjects } from "@/data/mockData";
+import { ArrowLeft, TrendingUp, TrendingDown, BookOpen, Shield, AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 
@@ -25,16 +26,26 @@ function StatCard({ label, value }: { label: string; value: string }) {
 export default function CoinDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [days, setDays] = useState(7);
 
   const { data: coin, isLoading, isError } = useCoinDetail(id ?? "");
   const { data: chart } = useCoinChart(id ?? "", days);
 
+  // Cross-link to Learn project
+  const learnProject = cryptoProjects.find(
+    (p) => p.id === id || p.symbol.toLowerCase() === coin?.symbol
+  );
+
   const chartData = (chart?.prices ?? []).map(([time, price]) => ({ time, price }));
   const md = coin?.market_data;
   const positive = (md?.price_change_percentage_24h ?? 0) >= 0;
   const chartColor = positive ? "hsl(145, 65%, 45%)" : "hsl(0, 72%, 55%)";
+
+  const halalColor = (s: string) =>
+    s === "halal" ? "text-success bg-success/10 border-success/20" : s === "notHalal" ? "text-danger bg-danger/10 border-danger/20" : "text-warning bg-warning/10 border-warning/20";
+  const safetyColor = (s: string) =>
+    s === "safe" ? "text-success bg-success/10 border-success/20" : s === "scam" ? "text-danger bg-danger/10 border-danger/20" : "text-warning bg-warning/10 border-warning/20";
 
   if (isLoading) {
     return (
@@ -156,7 +167,7 @@ export default function CoinDetailPage() {
 
       {/* Description */}
       {coin.description.en && (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-card border border-border rounded-xl p-4">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-card border border-border rounded-xl p-4 mb-4">
           <h2 className="text-sm font-semibold text-foreground mb-2">About {coin.name}</h2>
           <p
             className="text-xs text-muted-foreground leading-relaxed line-clamp-6"
@@ -164,6 +175,41 @@ export default function CoinDetailPage() {
               __html: coin.description.en.replace(/<a /g, '<a class="text-primary underline" '),
             }}
           />
+        </motion.div>
+      )}
+
+      {/* Learn cross-link */}
+      {learnProject && (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
+          <div className="bg-card border border-border rounded-xl p-4 mb-3">
+            <div className="flex items-center gap-2 mb-3">
+              <BookOpen className="w-4 h-4 text-primary" />
+              <h2 className="text-sm font-semibold text-foreground">
+                {language === "en" ? "Learn about" : "En savoir plus sur"} {learnProject.name}
+              </h2>
+            </div>
+
+            {/* Halal & Safety tags */}
+            <div className="flex gap-2 mb-3">
+              <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium flex items-center gap-1 border ${halalColor(learnProject.halalStatus)}`}>
+                <Shield className="w-3 h-3" />{t(`tag.${learnProject.halalStatus}`)}
+              </span>
+              <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium flex items-center gap-1 border ${safetyColor(learnProject.safetyStatus)}`}>
+                <AlertTriangle className="w-3 h-3" />{t(`tag.${learnProject.safetyStatus}`)}
+              </span>
+            </div>
+
+            <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+              {learnProject.description[language]}
+            </p>
+
+            <button
+              onClick={() => navigate(`/learn/project/${learnProject.id}`)}
+              className="w-full py-2.5 rounded-xl text-xs font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
+            >
+              {language === "en" ? "View Full Analysis" : "Voir l'analyse complète"} →
+            </button>
+          </div>
         </motion.div>
       )}
     </div>
