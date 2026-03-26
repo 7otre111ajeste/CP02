@@ -177,6 +177,7 @@ export const cryptoProjects: CryptoProject[] = [
     yearCreated: 2017,
     halalStatus: "uncertain",
     safetyStatus: "safe",
+    score: 6,
     description: {
       en: "BNB is the native token of the Binance ecosystem, one of the largest crypto exchanges in the world.",
       fr: "BNB est le jeton natif de l'écosystème Binance, l'une des plus grandes plateformes d'échange de crypto au monde.",
