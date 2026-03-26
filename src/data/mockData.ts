@@ -145,6 +145,7 @@ export const cryptoProjects: CryptoProject[] = [
     yearCreated: 2017,
     halalStatus: "halal",
     safetyStatus: "safe",
+    score: 7,
     description: {
       en: "Cardano is a blockchain built on scientific research. It focuses on security and sustainability.",
       fr: "Cardano est une blockchain construite sur la recherche scientifique. Elle se concentre sur la sécurité et la durabilité.",
