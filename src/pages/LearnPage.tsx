@@ -15,6 +15,7 @@ export default function LearnPage() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
   const { readTerm, isTermRead, isLessonCompleted } = useUserProgress();
+  const { incrementQuest } = useDailyQuests();
   const [activeTab, setActiveTab] = useState<Tab>("dictionary");
   const [search, setSearch] = useState("");
   const [expandedTerm, setExpandedTerm] = useState<string | null>(null);
