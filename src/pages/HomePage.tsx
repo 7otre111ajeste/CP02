@@ -5,7 +5,9 @@ import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { useWatchlist } from "@/hooks/useWatchlist";
 import { useCryptoMarket } from "@/hooks/useCryptoMarket";
 import { cryptoProjects } from "@/data/mockData";
-import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, ChevronDown, Flame, CheckCircle, Circle, Gift, Star, Eye, Info } from "lucide-react";
+import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, ChevronDown, Flame, CheckCircle, Circle, Gift, Star, Eye, Info, Shield } from "lucide-react";
+import StatusTag from "@/components/StatusTag";
+import ScoreBadge from "@/components/ScoreBadge";
 import MarketSentiment from "@/components/MarketSentiment";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -45,6 +47,7 @@ export default function HomePage() {
     { icon: Sparkles, label: t("home.scanner"), path: "/ai", color: "bg-warning/15 text-warning" },
     { icon: StickyNote, label: language === "en" ? "Notes" : "Notes", path: "/notes", color: "bg-secondary text-foreground" },
     { icon: Calculator, label: language === "en" ? "Calculator" : "Calculatrice", path: "/calculator", color: "bg-success/15 text-success" },
+    { icon: Shield, label: language === "en" ? "Platforms" : "Plateformes", path: "/platforms", color: "bg-accent/15 text-accent" },
   ];
 
   const getProjectWithLivePrice = (project: typeof cryptoProjects[0]) => {
@@ -260,8 +263,14 @@ export default function HomePage() {
                   {project.icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm text-foreground">{project.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">{project.description[language]}</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="font-semibold text-sm text-foreground">{project.name}</p>
+                    <ScoreBadge score={project.score} />
+                  </div>
+                  <div className="flex items-center gap-1 mt-0.5">
+                    <StatusTag type="halal" status={project.halalStatus} />
+                    <StatusTag type="safety" status={project.safetyStatus} />
+                  </div>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-semibold text-foreground">${project.price.toLocaleString()}</p>

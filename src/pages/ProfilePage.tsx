@@ -3,7 +3,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProgress, TIME_BADGES } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { useNavigate } from "react-router-dom";
-import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar } from "lucide-react";
+import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar, Sun, Moon, Shield } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
+import UserTierBadge from "@/components/UserTierBadge";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -43,6 +45,8 @@ export default function ProfilePage() {
     registrationDate, daysSinceRegistration, claimedTimeBadges, claimTimeBadge,
   } = useUserProgress();
   const { streak } = useDailyQuests();
+  const { theme, toggleTheme } = useTheme();
+  const userTier: "free" | "premium" | "vip" = "free"; // Will be dynamic with auth
 
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState(username);
@@ -143,10 +147,11 @@ export default function ProfilePage() {
           </button>
         )}
 
-        <div className="flex items-center justify-center gap-2 mb-2">
+        <div className="flex items-center justify-center gap-2 mb-2 flex-wrap">
           <span className={`text-xs px-2.5 py-1 rounded-full border font-medium ${currentTier.color}`}>
             {currentTier.emoji} {currentTier.name[language]}
           </span>
+          <UserTierBadge tier={userTier} />
           <span className="text-xs text-muted-foreground flex items-center gap-1">
             <Flame className="w-3 h-3 text-danger" /> {streak}
           </span>
@@ -258,8 +263,8 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Language Toggle */}
-      <div className="bg-card rounded-xl border border-border overflow-hidden">
+      {/* Settings */}
+      <div className="bg-card rounded-xl border border-border overflow-hidden divide-y divide-border">
         <button
           onClick={() => setLanguage(language === "en" ? "fr" : "en")}
           className="w-full flex items-center gap-3 p-4"
@@ -268,6 +273,28 @@ export default function ProfilePage() {
           <div className="flex-1 text-left">
             <p className="text-sm font-medium text-foreground">{t("profile.language")}</p>
             <p className="text-xs text-muted-foreground">{language === "en" ? "English" : "Français"}</p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+        </button>
+        <button
+          onClick={toggleTheme}
+          className="w-full flex items-center gap-3 p-4"
+        >
+          {theme === "dark" ? <Sun className="w-5 h-5 text-warning" /> : <Moon className="w-5 h-5 text-accent" />}
+          <div className="flex-1 text-left">
+            <p className="text-sm font-medium text-foreground">{en ? "Theme" : "Thème"}</p>
+            <p className="text-xs text-muted-foreground">{theme === "dark" ? (en ? "Dark Mode" : "Mode sombre") : (en ? "Light Mode" : "Mode clair")}</p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-muted-foreground" />
+        </button>
+        <button
+          onClick={() => navigate("/platforms")}
+          className="w-full flex items-center gap-3 p-4"
+        >
+          <Shield className="w-5 h-5 text-primary" />
+          <div className="flex-1 text-left">
+            <p className="text-sm font-medium text-foreground">{en ? "Trusted Platforms" : "Plateformes de confiance"}</p>
+            <p className="text-xs text-muted-foreground">{en ? "Exchanges & Wallets" : "Exchanges & Portefeuilles"}</p>
           </div>
           <ChevronRight className="w-4 h-4 text-muted-foreground" />
         </button>

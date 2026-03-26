@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cryptoProjects } from "@/data/mockData";
+import { projectExchanges } from "@/data/platformsData";
 import { useUserProgress } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { ArrowLeft, TrendingUp, TrendingDown, Sparkles, BarChart3, CheckCircle, ExternalLink, FileText } from "lucide-react";
@@ -131,6 +132,29 @@ export default function ProjectDetailPage() {
           </p>
         </div>
       ))}
+
+      {/* Where to buy */}
+      {projectExchanges[project.id] && (
+        <div className="bg-card rounded-xl p-4 border border-border mb-3">
+          <h3 className="text-sm font-semibold text-foreground mb-2">
+            {language === "en" ? `Where to buy ${project.symbol}` : `Où acheter ${project.symbol}`}
+          </h3>
+          <div className="space-y-1.5">
+            {projectExchanges[project.id].map((ex) => (
+              <a
+                key={ex.exchangeId}
+                href={ex.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between p-2 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors"
+              >
+                <span className="text-xs font-medium text-foreground">{ex.name}</span>
+                <ExternalLink className="w-3 h-3 text-primary" />
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
       <button
         onClick={handleMarkRead}
