@@ -19,6 +19,8 @@ import NotesPage from "./pages/NotesPage";
 import CalculatorPage from "./pages/CalculatorPage";
 import HalalMethodologyPage from "./pages/HalalMethodologyPage";
 import SafetyMethodologyPage from "./pages/SafetyMethodologyPage";
+import AboutPage from "./pages/AboutPage";
+import ShopPage from "./pages/ShopPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +48,8 @@ const App = () => (
                 <Route path="/calculator" element={<CalculatorPage />} />
                 <Route path="/methodology/halal" element={<HalalMethodologyPage />} />
                 <Route path="/methodology/safety" element={<SafetyMethodologyPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/shop" element={<ShopPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <BottomNav />

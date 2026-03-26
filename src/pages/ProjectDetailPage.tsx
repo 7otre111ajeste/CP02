@@ -1,20 +1,35 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cryptoProjects } from "@/data/mockData";
-import { ArrowLeft, TrendingUp, TrendingDown, Sparkles, BarChart3 } from "lucide-react";
+import { useUserProgress } from "@/hooks/useUserProgress";
+import { useDailyQuests } from "@/hooks/useDailyQuests";
+import { ArrowLeft, TrendingUp, TrendingDown, Sparkles, BarChart3, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import StatusTag from "@/components/StatusTag";
+import ScoreBadge from "@/components/ScoreBadge";
 
 export default function ProjectDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t, language } = useLanguage();
+  const { readProject, isProjectRead } = useUserProgress();
+  const { incrementQuest } = useDailyQuests();
 
   const project = cryptoProjects.find((p) => p.id === id);
   if (!project) return <div className="p-4 text-foreground">Project not found</div>;
 
+  const alreadyRead = isProjectRead(project.id);
+
+  const handleMarkRead = () => {
+    if (alreadyRead) return;
+    readProject(project.id);
+    incrementQuest("lesson");
+    toast.success(language === "en" ? "+15 XP & +10 Points earned!" : "+15 XP & +10 Points gagnés !");
+  };
+
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-4 pt-4 pb-24 max-w-lg mx-auto">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-4 pt-4 pb-28 max-w-lg mx-auto">
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
         <ArrowLeft className="w-4 h-4" /> {t("common.back")}
       </button>
@@ -29,9 +44,10 @@ export default function ProjectDetailPage() {
         </div>
       </div>
 
-      <div className="flex gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-6">
         <StatusTag type="halal" status={project.halalStatus} />
         <StatusTag type="safety" status={project.safetyStatus} />
+        <ScoreBadge score={project.score} />
         <button
           onClick={() => navigate("/ai")}
           className="text-xs px-3 py-1.5 rounded-full font-medium flex items-center gap-1.5 border border-accent/30 bg-accent/10 text-accent"
@@ -79,8 +95,23 @@ export default function ProjectDetailPage() {
       ))}
 
       <button
+        onClick={handleMarkRead}
+        disabled={alreadyRead}
+        className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all mb-3 ${
+          alreadyRead
+            ? "bg-success/15 text-success border border-success/20"
+            : "bg-gradient-primary text-primary-foreground hover:opacity-90"
+        }`}
+      >
+        <CheckCircle className="w-4 h-4" />
+        {alreadyRead
+          ? (language === "en" ? "Read ✓" : "Lu ✓")
+          : (language === "en" ? "Mark as Read (+15 XP)" : "Marquer comme lu (+15 XP)")}
+      </button>
+
+      <button
         onClick={() => navigate(`/market/${project.id}`)}
-        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors mb-3"
+        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
       >
         <BarChart3 className="w-4 h-4" />
         {language === "en" ? "View Live Market Data" : "Voir les données du marché"} →
