@@ -4,6 +4,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useCoinDetail, useCoinChart, formatMarketCap } from "@/hooks/useCryptoMarket";
 import { cryptoProjects } from "@/data/mockData";
 import StatusTag from "@/components/StatusTag";
+import ScoreBadge from "@/components/ScoreBadge";
 import { ArrowLeft, TrendingUp, TrendingDown, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
@@ -79,11 +80,19 @@ export default function CoinDetailPage() {
 
         <div className="flex items-center gap-3">
           <img src={coin.image.large} alt={coin.name} className="w-10 h-10 rounded-full" />
-          <div>
+          <div className="flex-1 min-w-0">
             <h1 className="text-xl font-bold text-foreground">{coin.name}</h1>
             <p className="text-xs text-muted-foreground uppercase">{coin.symbol} · #{coin.market_cap_rank}</p>
           </div>
+          {learnProject && <ScoreBadge score={learnProject.score} />}
         </div>
+
+        {learnProject && (
+          <div className="flex gap-2 mt-3">
+            <StatusTag type="halal" status={learnProject.halalStatus} />
+            <StatusTag type="safety" status={learnProject.safetyStatus} />
+          </div>
+        )}
 
         <div className="flex items-end gap-3 mt-3">
           <span className="text-3xl font-bold text-foreground tabular-nums">
