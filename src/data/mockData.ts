@@ -247,6 +247,8 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "Réductions sur les frais, DeFi sur BNB Chain, lancements de tokens.",
     },
     icon: "◆",
+    website: "https://www.bnbchain.org",
+    whitepaper: "https://github.com/bnb-chain/whitepaper",
   },
 ];
 
