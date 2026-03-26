@@ -167,7 +167,7 @@ export default function CoinDetailPage() {
 
       {/* Description */}
       {coin.description.en && (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-card border border-border rounded-xl p-4">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-card border border-border rounded-xl p-4 mb-4">
           <h2 className="text-sm font-semibold text-foreground mb-2">About {coin.name}</h2>
           <p
             className="text-xs text-muted-foreground leading-relaxed line-clamp-6"
@@ -175,6 +175,41 @@ export default function CoinDetailPage() {
               __html: coin.description.en.replace(/<a /g, '<a class="text-primary underline" '),
             }}
           />
+        </motion.div>
+      )}
+
+      {/* Learn cross-link */}
+      {learnProject && (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
+          <div className="bg-card border border-border rounded-xl p-4 mb-3">
+            <div className="flex items-center gap-2 mb-3">
+              <BookOpen className="w-4 h-4 text-primary" />
+              <h2 className="text-sm font-semibold text-foreground">
+                {language === "en" ? "Learn about" : "En savoir plus sur"} {learnProject.name}
+              </h2>
+            </div>
+
+            {/* Halal & Safety tags */}
+            <div className="flex gap-2 mb-3">
+              <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium flex items-center gap-1 border ${halalColor(learnProject.halalStatus)}`}>
+                <Shield className="w-3 h-3" />{t(`tag.${learnProject.halalStatus}`)}
+              </span>
+              <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium flex items-center gap-1 border ${safetyColor(learnProject.safetyStatus)}`}>
+                <AlertTriangle className="w-3 h-3" />{t(`tag.${learnProject.safetyStatus}`)}
+              </span>
+            </div>
+
+            <p className="text-xs text-muted-foreground leading-relaxed mb-3">
+              {learnProject.description[language]}
+            </p>
+
+            <button
+              onClick={() => navigate(`/learn/project/${learnProject.id}`)}
+              className="w-full py-2.5 rounded-xl text-xs font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
+            >
+              {language === "en" ? "View Full Analysis" : "Voir l'analyse complète"} →
+            </button>
+          </div>
         </motion.div>
       )}
     </div>
