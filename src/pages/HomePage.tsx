@@ -6,6 +6,7 @@ import { useWatchlist } from "@/hooks/useWatchlist";
 import { useCryptoMarket } from "@/hooks/useCryptoMarket";
 import { cryptoProjects } from "@/data/mockData";
 import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, Flame, CheckCircle, Circle, Gift, Star, Eye, Info } from "lucide-react";
+import MarketSentiment from "@/components/MarketSentiment";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
