@@ -2,9 +2,12 @@ import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCryptoMarket, MarketCoin } from "@/hooks/useCryptoMarket";
-import { ArrowLeft, Plus, Trash2, Target, TrendingUp, TrendingDown, ChevronDown, Search, X } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Target, TrendingUp, TrendingDown, ChevronDown, Search, X, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import ScoreBadge from "@/components/ScoreBadge";
+import StatusTag from "@/components/StatusTag";
+import { cryptoProjects } from "@/data/mockData";
 
 interface Transaction {
   id: string;
