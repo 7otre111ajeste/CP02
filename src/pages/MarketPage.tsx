@@ -31,6 +31,7 @@ function MiniSparkline({ data, positive }: { data: number[]; positive: boolean }
 
 export default function MarketPage() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const { data: coins, isLoading, isError, refetch, isFetching } = useCryptoMarket();
 
