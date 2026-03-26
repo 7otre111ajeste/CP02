@@ -205,6 +205,8 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "Vérification d'identité, chaîne d'approvisionnement, éducation, DeFi.",
     },
     icon: "₳",
+    website: "https://cardano.org",
+    whitepaper: "https://why.cardano.org/en/introduction/motivation/",
   },
   {
     id: "bnb",
