@@ -11,6 +11,7 @@ export interface CryptoProject {
   yearCreated: number;
   halalStatus: "halal" | "notHalal" | "uncertain";
   safetyStatus: "safe" | "risky" | "scam";
+  score: number; // 0-10 quality score
   description: { en: string; fr: string };
   purpose: { en: string; fr: string };
   howItWorks: { en: string; fr: string };
