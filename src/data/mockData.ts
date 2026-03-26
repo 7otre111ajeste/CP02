@@ -121,6 +121,8 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "DeFi, NFTs, DAOs, applications décentralisées.",
     },
     icon: "Ξ",
+    website: "https://ethereum.org",
+    whitepaper: "https://ethereum.org/en/whitepaper/",
   },
   {
     id: "solana",
