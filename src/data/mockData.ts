@@ -19,6 +19,8 @@ export interface CryptoProject {
   howItWorks: { en: string; fr: string };
   useCases: { en: string; fr: string };
   icon: string;
+  website: string;
+  whitepaper: string;
 }
 
 export interface DictionaryTerm {
@@ -77,6 +79,8 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "Réserve de valeur, paiements pair-à-pair, protection contre l'inflation.",
     },
     icon: "₿",
+    website: "https://bitcoin.org",
+    whitepaper: "https://bitcoin.org/bitcoin.pdf",
   },
   {
     id: "ethereum",
@@ -117,6 +121,8 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "DeFi, NFTs, DAOs, applications décentralisées.",
     },
     icon: "Ξ",
+    website: "https://ethereum.org",
+    whitepaper: "https://ethereum.org/en/whitepaper/",
   },
   {
     id: "solana",
@@ -157,6 +163,8 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "DeFi, NFTs, jeux, paiements.",
     },
     icon: "◎",
+    website: "https://solana.com",
+    whitepaper: "https://solana.com/solana-whitepaper.pdf",
   },
   {
     id: "cardano",
@@ -197,6 +205,8 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "Vérification d'identité, chaîne d'approvisionnement, éducation, DeFi.",
     },
     icon: "₳",
+    website: "https://cardano.org",
+    whitepaper: "https://why.cardano.org/en/introduction/motivation/",
   },
   {
     id: "bnb",
@@ -237,6 +247,8 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "Réductions sur les frais, DeFi sur BNB Chain, lancements de tokens.",
     },
     icon: "◆",
+    website: "https://www.bnbchain.org",
+    whitepaper: "https://github.com/bnb-chain/whitepaper",
   },
 ];
 

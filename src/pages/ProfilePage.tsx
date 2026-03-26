@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useUserProgress } from "@/hooks/useUserProgress";
+import { useUserProgress, TIME_BADGES } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { useNavigate } from "react-router-dom";
-import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, Award, Flame, Coins, ShoppingBag, Info, Edit2 } from "lucide-react";
+import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -40,6 +40,7 @@ export default function ProfilePage() {
     points, username, avatarEmoji,
     setUsername, setAvatarEmoji,
     canChangeUsernameFree, canChangeAvatarFree, unlimitedProfileChanges,
+    registrationDate, daysSinceRegistration, claimedTimeBadges, claimTimeBadge,
   } = useUserProgress();
   const { streak } = useDailyQuests();
 
@@ -78,6 +79,20 @@ export default function ProfilePage() {
       setShowAvatarPicker(false);
     }
   };
+
+  const handleClaimTimeBadge = (badgeId: string) => {
+    const badge = TIME_BADGES.find((b) => b.id === badgeId);
+    if (!badge) return;
+    const success = claimTimeBadge(badgeId);
+    if (success) {
+      toast.success(en ? `${badge.emoji} +${badge.exp} XP & +${badge.points} Points!` : `${badge.emoji} +${badge.exp} XP & +${badge.points} Points !`);
+    }
+  };
+
+  const regDate = new Date(registrationDate);
+  const formattedRegDate = regDate.toLocaleDateString(language === "en" ? "en-US" : "fr-FR", {
+    year: "numeric", month: "long", day: "numeric",
+  });
 
   const stats = [
     { icon: BookOpen, label: t("profile.lessons"), value: String(completedLessons.length) },
@@ -137,7 +152,7 @@ export default function ProfilePage() {
           </span>
         </div>
         <p className="text-xs text-muted-foreground mb-1">{t("home.level")} {level} • {exp} {t("home.exp")}</p>
-        <div className="flex items-center justify-center gap-2 mb-3">
+        <div className="flex items-center justify-center gap-2 mb-2">
           <Coins className="w-3.5 h-3.5 text-warning" />
           <span className="text-sm font-bold text-foreground">{points}</span>
           <span className="text-xs text-muted-foreground">points</span>
@@ -146,6 +161,13 @@ export default function ProfilePage() {
           <div className="h-full bg-gradient-primary rounded-full transition-all" style={{ width: `${expPercent}%` }} />
         </div>
         <p className="text-[10px] text-muted-foreground">{expInCurrentLevel} / {expToNextLevel} {t("home.exp")}</p>
+
+        {/* Registration date */}
+        <div className="flex items-center justify-center gap-1.5 mt-3 text-[10px] text-muted-foreground">
+          <Calendar className="w-3 h-3" />
+          {en ? `Member since ${formattedRegDate}` : `Membre depuis le ${formattedRegDate}`}
+          <span className="text-primary font-medium">({daysSinceRegistration} {en ? "days" : "jours"})</span>
+        </div>
       </div>
 
       {/* Stats */}
@@ -157,6 +179,43 @@ export default function ProfilePage() {
             <p className="text-[10px] text-muted-foreground">{stat.label}</p>
           </div>
         ))}
+      </div>
+
+      {/* Time Badges */}
+      <div>
+        <h2 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-1.5">
+          <Clock className="w-4 h-4 text-primary" />
+          {en ? "Loyalty Badges" : "Badges de fidélité"}
+        </h2>
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+          {TIME_BADGES.map((badge) => {
+            const unlocked = daysSinceRegistration >= badge.days;
+            const claimed = claimedTimeBadges.includes(badge.id);
+            return (
+              <button
+                key={badge.id}
+                onClick={() => unlocked && !claimed && handleClaimTimeBadge(badge.id)}
+                disabled={!unlocked || claimed}
+                className={`rounded-xl border p-3 text-center transition-all ${
+                  claimed
+                    ? "bg-success/10 border-success/20 text-success"
+                    : unlocked
+                    ? "bg-primary/10 border-primary/20 text-primary animate-pulse"
+                    : "bg-secondary/30 border-border opacity-40"
+                }`}
+              >
+                <p className="text-2xl mb-1">{unlocked ? badge.emoji : "🔒"}</p>
+                <p className="text-[10px] font-medium text-foreground">{badge.label[language]}</p>
+                {unlocked && !claimed && (
+                  <p className="text-[9px] text-primary font-semibold mt-0.5">+{badge.exp} XP</p>
+                )}
+                {claimed && (
+                  <p className="text-[9px] text-success font-semibold mt-0.5">✓</p>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Quick Links */}
@@ -172,11 +231,11 @@ export default function ProfilePage() {
         </button>
       </div>
 
-      {/* Badges */}
+      {/* Level Badges */}
       <div>
         <h2 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-1.5">
           <Award className="w-4 h-4 text-primary" />
-          {en ? "Badges" : "Badges"}
+          {en ? "Level Badges" : "Badges de niveau"}
         </h2>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
           {LEVEL_TIERS.map((tier) => {

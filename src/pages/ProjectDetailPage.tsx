@@ -3,7 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { cryptoProjects } from "@/data/mockData";
 import { useUserProgress } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
-import { ArrowLeft, TrendingUp, TrendingDown, Sparkles, BarChart3, CheckCircle } from "lucide-react";
+import { ArrowLeft, TrendingUp, TrendingDown, Sparkles, BarChart3, CheckCircle, ExternalLink, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import StatusTag from "@/components/StatusTag";
@@ -51,7 +51,7 @@ export default function ProjectDetailPage() {
         <StatusTag type="safety" status={project.safetyStatus} />
         <ScoreBadge score={project.score} />
         <button
-          onClick={() => navigate("/ai")}
+          onClick={() => navigate("/ai", { state: { projectName: project.name } })}
           className="text-xs px-3 py-1.5 rounded-full font-medium flex items-center gap-1.5 border border-accent/30 bg-accent/10 text-accent"
         >
           <Sparkles className="w-3 h-3" /> AI Analysis
@@ -82,6 +82,28 @@ export default function ProjectDetailPage() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Official Links */}
+      <div className="flex gap-2 mb-4">
+        <a
+          href={project.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-medium bg-card border border-border text-foreground hover:border-primary/30 transition-colors"
+        >
+          <ExternalLink className="w-3.5 h-3.5 text-primary" />
+          {language === "en" ? "Official Website" : "Site officiel"}
+        </a>
+        <a
+          href={project.whitepaper}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-medium bg-card border border-border text-foreground hover:border-primary/30 transition-colors"
+        >
+          <FileText className="w-3.5 h-3.5 text-primary" />
+          Whitepaper
+        </a>
       </div>
 
       {/* Pro/Bro Description */}
