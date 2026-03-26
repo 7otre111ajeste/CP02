@@ -113,6 +113,7 @@ export const cryptoProjects: CryptoProject[] = [
     yearCreated: 2020,
     halalStatus: "uncertain",
     safetyStatus: "safe",
+    score: 7,
     description: {
       en: "Solana is a fast blockchain that can handle thousands of transactions per second at very low cost.",
       fr: "Solana est une blockchain rapide capable de traiter des milliers de transactions par seconde à très faible coût.",
