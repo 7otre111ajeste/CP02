@@ -52,6 +52,7 @@ const App = () => (
           </div>
         </BrowserRouter>
       </TooltipProvider>
+      </DailyQuestsProvider>
     </LanguageProvider>
   </QueryClientProvider>
 );
