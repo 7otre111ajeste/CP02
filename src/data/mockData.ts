@@ -123,6 +123,7 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "DeFi, NFTs, DAOs, applications décentralisées.",
     },
     icon: "Ξ",
+    logo: "https://assets.coingecko.com/coins/images/279/large/ethereum.png",
     website: "https://ethereum.org",
     whitepaper: "https://ethereum.org/en/whitepaper/",
   },
