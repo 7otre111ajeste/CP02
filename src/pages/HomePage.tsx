@@ -5,7 +5,7 @@ import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { useWatchlist } from "@/hooks/useWatchlist";
 import { useCryptoMarket } from "@/hooks/useCryptoMarket";
 import { cryptoProjects } from "@/data/mockData";
-import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, ChevronDown, Flame, CheckCircle, Circle, Gift, Star, Eye, Info, Shield } from "lucide-react";
+import { BookOpen, Brain, Sparkles as SparklesIcon, StickyNote, Calculator, ChevronRight, ChevronDown, Flame, CheckCircle, Circle, Gift, Star, Eye, Info, Shield, Sparkles } from "lucide-react";
 import StatusTag from "@/components/StatusTag";
 import ScoreBadge from "@/components/ScoreBadge";
 import MarketSentiment from "@/components/MarketSentiment";
