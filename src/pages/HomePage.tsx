@@ -270,6 +270,15 @@ export default function HomePage() {
                   <div className="flex items-center gap-1 mt-0.5">
                     <StatusTag type="halal" status={project.halalStatus} />
                     <StatusTag type="safety" status={project.safetyStatus} />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate("/ai", { state: { projectName: project.name } });
+                      }}
+                      className="text-[10px] px-2 py-0.5 rounded-full font-medium flex items-center gap-1 border border-accent/30 bg-accent/10 text-accent"
+                    >
+                      <Sparkles className="w-2.5 h-2.5" /> AI
+                    </button>
                   </div>
                 </div>
                 <div className="text-right">
