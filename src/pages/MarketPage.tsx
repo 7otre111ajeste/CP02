@@ -65,6 +65,7 @@ export default function MarketPage() {
   const activeFilterCount = (category !== "All" ? 1 : 0) + (halalFilter !== "all" ? 1 : 0) + (safetyFilter !== "all" ? 1 : 0) + (scoreRange[0] > 0 || scoreRange[1] < 10 ? 1 : 0);
 
   const clearFilters = () => {
+    setCategory("All");
     setHalalFilter("all");
     setSafetyFilter("all");
     setScoreRange([0, 10]);
