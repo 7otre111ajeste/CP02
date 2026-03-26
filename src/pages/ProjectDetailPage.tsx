@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cryptoProjects } from "@/data/mockData";
-import { ArrowLeft, Shield, AlertTriangle, TrendingUp, TrendingDown, Sparkles } from "lucide-react";
+import { ArrowLeft, Shield, AlertTriangle, TrendingUp, TrendingDown, Sparkles, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function ProjectDetailPage() {
