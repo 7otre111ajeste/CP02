@@ -48,6 +48,7 @@ export default function HomePage() {
     { icon: StickyNote, label: language === "en" ? "Notes" : "Notes", path: "/notes", color: "bg-secondary text-foreground" },
     { icon: Calculator, label: language === "en" ? "Calculator" : "Calculatrice", path: "/calculator", color: "bg-success/15 text-success" },
     { icon: Shield, label: language === "en" ? "Platforms" : "Plateformes", path: "/platforms", color: "bg-accent/15 text-accent" },
+    { icon: PieChart, label: "Portfolio", path: "/portfolio", color: "bg-primary/15 text-primary" },
   ];
 
   const getProjectWithLivePrice = (project: typeof cryptoProjects[0]) => {
