@@ -34,7 +34,11 @@ async function fetchMarketData(): Promise<MarketCoin[]> {
     "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=true&price_change_percentage=24h"
   );
   if (!res.ok) throw new Error("Failed to fetch market data");
-  return res.json();
+  const data: MarketCoin[] = await res.json();
+  return data.map((coin) => ({
+    ...coin,
+    category: CATEGORY_MAP[coin.id] ?? "Other",
+  }));
 }
 
 export function useCryptoMarket() {
