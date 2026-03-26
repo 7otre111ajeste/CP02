@@ -38,9 +38,7 @@ export default function ProjectDetailPage() {
       </button>
 
       <div className="flex items-center gap-4 mb-6">
-        <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center text-2xl font-bold">
-          {project.icon}
-        </div>
+        <img src={project.logo} alt={project.name} className="w-14 h-14 rounded-2xl shrink-0" loading="lazy" />
         <div>
           <h1 className="text-xl font-bold text-foreground">{project.name}</h1>
           <p className="text-sm text-muted-foreground">{project.symbol} • {project.category}</p>

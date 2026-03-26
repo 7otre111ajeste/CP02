@@ -259,9 +259,7 @@ export default function HomePage() {
                 onClick={() => navigate(`/learn/project/${project.id}`)}
                 className="flex-1 flex items-center gap-3 min-w-0"
               >
-                <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-lg font-bold">
-                  {project.icon}
-                </div>
+                <img src={project.logo} alt={project.name} className="w-10 h-10 rounded-xl shrink-0" loading="lazy" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
                     <p className="font-semibold text-sm text-foreground">{project.name}</p>

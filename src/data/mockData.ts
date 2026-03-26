@@ -19,6 +19,7 @@ export interface CryptoProject {
   howItWorks: { en: string; fr: string };
   useCases: { en: string; fr: string };
   icon: string;
+  logo: string;
   website: string;
   whitepaper: string;
 }
@@ -79,6 +80,7 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "Réserve de valeur, paiements pair-à-pair, protection contre l'inflation.",
     },
     icon: "₿",
+    logo: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png",
     website: "https://bitcoin.org",
     whitepaper: "https://bitcoin.org/bitcoin.pdf",
   },
@@ -121,6 +123,7 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "DeFi, NFTs, DAOs, applications décentralisées.",
     },
     icon: "Ξ",
+    logo: "https://assets.coingecko.com/coins/images/279/large/ethereum.png",
     website: "https://ethereum.org",
     whitepaper: "https://ethereum.org/en/whitepaper/",
   },
@@ -163,6 +166,7 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "DeFi, NFTs, jeux, paiements.",
     },
     icon: "◎",
+    logo: "https://assets.coingecko.com/coins/images/4128/large/solana.png",
     website: "https://solana.com",
     whitepaper: "https://solana.com/solana-whitepaper.pdf",
   },
@@ -205,6 +209,7 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "Vérification d'identité, chaîne d'approvisionnement, éducation, DeFi.",
     },
     icon: "₳",
+    logo: "https://assets.coingecko.com/coins/images/975/large/cardano.png",
     website: "https://cardano.org",
     whitepaper: "https://why.cardano.org/en/introduction/motivation/",
   },
@@ -247,6 +252,7 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "Réductions sur les frais, DeFi sur BNB Chain, lancements de tokens.",
     },
     icon: "◆",
+    logo: "https://assets.coingecko.com/coins/images/825/large/bnb-icon2_2x.png",
     website: "https://www.bnbchain.org",
     whitepaper: "https://github.com/bnb-chain/whitepaper",
   },
