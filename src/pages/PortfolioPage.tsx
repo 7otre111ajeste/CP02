@@ -264,6 +264,10 @@ export default function PortfolioPage() {
                   <div className="flex items-center gap-1.5">
                     <p className="font-semibold text-sm text-foreground">{e.coinName}</p>
                     <span className="text-[10px] text-muted-foreground">{e.coinSymbol}</span>
+                    {(() => {
+                      const proj = getProjectData(e.coinId);
+                      return proj ? <ScoreBadge score={proj.score} /> : null;
+                    })()}
                   </div>
                   <p className="text-[10px] text-muted-foreground">
                     {pnl.totalTokens.toFixed(4)} {e.coinSymbol} • {language === "en" ? "Avg" : "Moy"}: {formatUsd(pnl.avgBuyPrice)}
@@ -271,9 +275,12 @@ export default function PortfolioPage() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-semibold text-foreground">{formatUsd(pnl.currentValue)}</p>
-                  <p className={`text-[10px] font-medium ${pnl.pnl >= 0 ? "text-success" : "text-danger"}`}>
+                  <button
+                    onClick={(ev) => { ev.stopPropagation(); setShowPnlChart(showPnlChart === e.coinId ? null : e.coinId); }}
+                    className={`text-[10px] font-medium ${pnl.pnl >= 0 ? "text-success" : "text-danger"} hover:underline`}
+                  >
                     {formatPct(pnl.pnlPct)}
-                  </p>
+                  </button>
                 </div>
                 <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${selectedEntry === e.coinId ? "rotate-180" : ""}`} />
               </button>
