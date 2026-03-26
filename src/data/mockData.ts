@@ -81,6 +81,7 @@ export const cryptoProjects: CryptoProject[] = [
     yearCreated: 2015,
     halalStatus: "uncertain",
     safetyStatus: "safe",
+    score: 8,
     description: {
       en: "Ethereum is a platform that lets developers build apps (dApps) on the blockchain. It introduced smart contracts.",
       fr: "Ethereum est une plateforme qui permet aux développeurs de créer des applications (dApps) sur la blockchain. Elle a introduit les contrats intelligents.",
