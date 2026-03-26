@@ -122,6 +122,14 @@ export default function LearnPage() {
               className="w-full pl-9 pr-4 py-2.5 bg-card border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
             />
           </div>
+          {activeTab === "dictionary" && (
+            <SortFilter
+              fields={DICT_SORT_FIELDS}
+              current={dictSortField}
+              direction={dictSortDir}
+              onChange={(f, d) => { setDictSortField(f); setDictSortDir(d); }}
+            />
+          )}
           {activeTab === "projects" && (
             <SortFilter
               fields={PROJECT_SORT_FIELDS}
