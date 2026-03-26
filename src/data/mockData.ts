@@ -19,6 +19,8 @@ export interface CryptoProject {
   howItWorks: { en: string; fr: string };
   useCases: { en: string; fr: string };
   icon: string;
+  website: string;
+  whitepaper: string;
 }
 
 export interface DictionaryTerm {
