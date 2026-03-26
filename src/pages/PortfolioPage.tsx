@@ -322,34 +322,87 @@ export default function PortfolioPage() {
                         );
                       })()}
 
-                      {/* Mini PnL Sparkline Chart */}
+                      {/* Mini PnL Chart with period tabs */}
                       <AnimatePresence>
                         {showPnlChart === e.coinId && liveCoin?.sparkline_in_7d?.price && (
                           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
                             <div className="bg-secondary/50 rounded-xl p-3">
-                              <p className="text-[10px] text-muted-foreground mb-2">{language === "en" ? "7-Day Price Chart" : "Graphique 7 jours"}</p>
-                              <div className="h-20 flex items-end gap-[1px]">
-                                {(() => {
-                                  const prices = liveCoin.sparkline_in_7d.price;
-                                  const sampled = prices.filter((_, i) => i % Math.max(1, Math.floor(prices.length / 60)) === 0);
-                                  const min = Math.min(...sampled);
-                                  const max = Math.max(...sampled);
-                                  const range = max - min || 1;
-                                  const isUp = sampled[sampled.length - 1] >= sampled[0];
-                                  return sampled.map((p, i) => (
-                                    <div
-                                      key={i}
-                                      className={`flex-1 rounded-t-sm ${isUp ? "bg-success/60" : "bg-danger/60"}`}
-                                      style={{ height: `${((p - min) / range) * 100}%`, minHeight: "2px" }}
-                                      title={`$${p.toFixed(2)}`}
-                                    />
-                                  ));
-                                })()}
+                              {/* Period tabs */}
+                              <div className="flex gap-1 mb-2">
+                                {(["daily", "weekly", "monthly", "all"] as const).map((period) => (
+                                  <button
+                                    key={period}
+                                    onClick={() => setPnlPeriod(period)}
+                                    className={`text-[9px] px-2 py-1 rounded-lg font-semibold transition-colors ${
+                                      pnlPeriod === period
+                                        ? "bg-primary text-primary-foreground"
+                                        : "bg-secondary text-muted-foreground hover:text-foreground"
+                                    }`}
+                                  >
+                                    {period === "daily" ? "24h"
+                                      : period === "weekly" ? (language === "en" ? "7D" : "7J")
+                                      : period === "monthly" ? (language === "en" ? "30D" : "30J")
+                                      : (language === "en" ? "All" : "Tout")}
+                                  </button>
+                                ))}
                               </div>
-                              <div className="flex justify-between mt-1">
-                                <span className="text-[9px] text-muted-foreground">{language === "en" ? "7 days ago" : "Il y a 7 jours"}</span>
-                                <span className="text-[9px] text-muted-foreground">{language === "en" ? "Now" : "Maintenant"}</span>
-                              </div>
+                              {(() => {
+                                const prices = liveCoin.sparkline_in_7d.price;
+                                const sliceCount = pnlPeriod === "daily" ? Math.floor(prices.length / 7) : prices.length;
+                                const sliced = prices.slice(-sliceCount);
+                                const sampled = sliced.filter((_, i) => i % Math.max(1, Math.floor(sliced.length / 60)) === 0);
+                                const avgBuy = pnl.avgBuyPrice;
+                                const pnlData = sampled.map(p => ((p - avgBuy) / Math.max(avgBuy, 0.01)) * pnl.totalTokens * avgBuy);
+                                const pnlMin = Math.min(...pnlData, 0);
+                                const pnlMax = Math.max(...pnlData, 0);
+                                const pnlRange = pnlMax - pnlMin || 1;
+                                const periodPnl = pnlData.length > 1 ? pnlData[pnlData.length - 1] - pnlData[0] : 0;
+                                const periodPct = pnl.totalInvested > 0 ? (periodPnl / pnl.totalInvested) * 100 : 0;
+                                const zeroPos = pnlMin < 0 ? ((0 - pnlMin) / pnlRange) * 100 : 0;
+                                return (
+                                  <>
+                                    <div className="flex items-center justify-between mb-1">
+                                      <p className="text-[10px] text-muted-foreground">
+                                        {language === "en" ? "PnL Evolution" : "Évolution PnL"}
+                                      </p>
+                                      <span className={`text-[10px] font-semibold ${periodPnl >= 0 ? "text-success" : "text-danger"}`}>
+                                        {formatUsd(periodPnl)} ({formatPct(periodPct)})
+                                      </span>
+                                    </div>
+                                    <div className="h-24 flex items-end gap-[1px] relative">
+                                      {pnlMin < 0 && (
+                                        <div
+                                          className="absolute w-full border-t border-dashed border-muted-foreground/30 z-10"
+                                          style={{ bottom: `${zeroPos}%` }}
+                                        />
+                                      )}
+                                      {pnlData.map((val, i) => {
+                                        const barHeight = (Math.abs(val) / pnlRange) * 100;
+                                        return (
+                                          <div key={i} className="flex-1 relative h-full" title={`PnL: ${formatUsd(val)}`}>
+                                            <div
+                                              className={`absolute w-full rounded-sm ${val >= 0 ? "bg-success/60" : "bg-danger/60"}`}
+                                              style={val >= 0
+                                                ? { bottom: `${zeroPos}%`, height: `${Math.max(barHeight, 1)}%` }
+                                                : { bottom: `${zeroPos - barHeight}%`, height: `${Math.max(barHeight, 1)}%` }
+                                              }
+                                            />
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                    <div className="flex justify-between mt-1">
+                                      <span className="text-[9px] text-muted-foreground">
+                                        {pnlPeriod === "daily" ? (language === "en" ? "24h ago" : "Il y a 24h")
+                                          : pnlPeriod === "weekly" ? (language === "en" ? "7 days ago" : "Il y a 7j")
+                                          : pnlPeriod === "monthly" ? (language === "en" ? "30 days ago" : "Il y a 30j")
+                                          : (language === "en" ? "First buy" : "Premier achat")}
+                                      </span>
+                                      <span className="text-[9px] text-muted-foreground">{language === "en" ? "Now" : "Maintenant"}</span>
+                                    </div>
+                                  </>
+                                );
+                              })()}
                             </div>
                           </motion.div>
                         )}
@@ -365,10 +418,16 @@ export default function PortfolioPage() {
                           <p className="text-[10px] text-muted-foreground">{language === "en" ? "Current Value" : "Valeur actuelle"}</p>
                           <p className="text-xs font-semibold text-foreground">{formatUsd(pnl.currentValue)}</p>
                         </div>
-                        <div className="bg-secondary/50 rounded-xl p-2.5">
-                          <p className="text-[10px] text-muted-foreground">PnL</p>
+                        <button
+                          onClick={() => setShowPnlChart(showPnlChart === e.coinId ? null : e.coinId)}
+                          className="bg-secondary/50 rounded-xl p-2.5 text-left hover:bg-secondary/70 transition-colors cursor-pointer ring-1 ring-primary/20"
+                        >
+                          <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+                            PnL <TrendingUp className="w-2.5 h-2.5 text-primary" />
+                            <span className="text-[8px] text-primary">{language === "en" ? "tap for chart" : "voir graphique"}</span>
+                          </p>
                           <p className={`text-xs font-semibold ${pnl.pnl >= 0 ? "text-success" : "text-danger"}`}>{formatUsd(pnl.pnl)}</p>
-                        </div>
+                        </button>
                         <div className="bg-secondary/50 rounded-xl p-2.5">
                           <p className="text-[10px] text-muted-foreground">{language === "en" ? "Live Price" : "Prix actuel"}</p>
                           <p className="text-xs font-semibold text-foreground">{formatUsd(pnl.livePrice)}</p>
