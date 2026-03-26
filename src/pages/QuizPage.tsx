@@ -2,12 +2,15 @@ import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { quizQuestions } from "@/data/mockData";
+import { useUserProgress } from "@/hooks/useUserProgress";
 import { ArrowLeft, CheckCircle, XCircle, Trophy } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 
 export default function QuizPage() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
+  const { completeQuiz } = useUserProgress();
   const [currentQ, setCurrentQ] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [score, setScore] = useState(0);
@@ -26,6 +29,14 @@ export default function QuizPage() {
 
   const handleNext = () => {
     if (currentQ + 1 >= questions.length) {
+      const expEarned = score * 10;
+      const quizId = `quiz-${Date.now()}`;
+      completeQuiz(quizId, expEarned);
+      toast.success(
+        language === "en"
+          ? `+${expEarned} XP earned!`
+          : `+${expEarned} XP gagnés !`
+      );
       setFinished(true);
     } else {
       setCurrentQ((c) => c + 1);
@@ -55,7 +66,6 @@ export default function QuizPage() {
         <ArrowLeft className="w-4 h-4" /> {t("common.back")}
       </button>
 
-      {/* Progress */}
       <div className="flex items-center gap-2 mb-6">
         <span className="text-xs text-muted-foreground">{currentQ + 1}/{questions.length}</span>
         <div className="flex-1 h-1.5 bg-secondary rounded-full overflow-hidden">

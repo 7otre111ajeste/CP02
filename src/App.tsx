@@ -14,6 +14,8 @@ import CoinDetailPage from "./pages/CoinDetailPage";
 import AIPage from "./pages/AIPage";
 import ProfilePage from "./pages/ProfilePage";
 import QuizPage from "./pages/QuizPage";
+import HalalMethodologyPage from "./pages/HalalMethodologyPage";
+import SafetyMethodologyPage from "./pages/SafetyMethodologyPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +38,8 @@ const App = () => (
               <Route path="/ai" element={<AIPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/quiz" element={<QuizPage />} />
+              <Route path="/methodology/halal" element={<HalalMethodologyPage />} />
+              <Route path="/methodology/safety" element={<SafetyMethodologyPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />

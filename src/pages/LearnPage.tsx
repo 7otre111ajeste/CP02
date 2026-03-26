@@ -2,16 +2,21 @@ import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { dictionaryTerms, cryptoProjects, trainingLessons } from "@/data/mockData";
-import { Search, BookOpen, Layers, GraduationCap, ChevronRight, Shield, AlertTriangle } from "lucide-react";
+import { useUserProgress } from "@/hooks/useUserProgress";
+import StatusTag from "@/components/StatusTag";
+import { Search, BookOpen, Layers, GraduationCap, ChevronRight, CheckCircle, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 
 type Tab = "dictionary" | "projects" | "training";
 
 export default function LearnPage() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
+  const { readTerm, isTermRead, isLessonCompleted } = useUserProgress();
   const [activeTab, setActiveTab] = useState<Tab>("dictionary");
   const [search, setSearch] = useState("");
+  const [expandedTerm, setExpandedTerm] = useState<string | null>(null);
 
   const tabs = [
     { id: "dictionary" as Tab, label: t("learn.dictionary"), icon: BookOpen },
@@ -27,22 +32,27 @@ export default function LearnPage() {
     p.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const halalColor = (s: string) =>
-    s === "halal" ? "text-success bg-success/10" : s === "notHalal" ? "text-danger bg-danger/10" : "text-warning bg-warning/10";
-
-  const safetyColor = (s: string) =>
-    s === "safe" ? "text-success bg-success/10" : s === "scam" ? "text-danger bg-danger/10" : "text-warning bg-warning/10";
+  const handleTermClick = (termId: string) => {
+    if (expandedTerm === termId) {
+      setExpandedTerm(null);
+      return;
+    }
+    setExpandedTerm(termId);
+    if (!isTermRead(termId)) {
+      readTerm(termId);
+      toast.success(language === "en" ? "+5 XP earned!" : "+5 XP gagnés !");
+    }
+  };
 
   return (
     <div className="px-4 pt-6 pb-24 max-w-lg mx-auto">
       <h1 className="text-2xl font-bold text-foreground mb-4">{t("learn.title")}</h1>
 
-      {/* Tabs */}
       <div className="flex gap-1 p-1 bg-card rounded-xl border border-border mb-4">
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => { setActiveTab(tab.id); setSearch(""); }}
+            onClick={() => { setActiveTab(tab.id); setSearch(""); setExpandedTerm(null); }}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === tab.id ? "bg-gradient-primary text-primary-foreground" : "text-muted-foreground"
             }`}
@@ -53,7 +63,6 @@ export default function LearnPage() {
         ))}
       </div>
 
-      {/* Search */}
       {activeTab !== "training" && (
         <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -70,15 +79,45 @@ export default function LearnPage() {
       <AnimatePresence mode="wait">
         {activeTab === "dictionary" && (
           <motion.div key="dict" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-2">
-            {filteredTerms.map((term) => (
-              <div key={term.id} className="p-4 bg-card rounded-xl border border-border">
-                <div className="flex items-center justify-between mb-1">
-                  <h3 className="font-semibold text-sm text-foreground">{term.term[language]}</h3>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{term.category}</span>
-                </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">{term.definition[language]}</p>
-              </div>
-            ))}
+            {filteredTerms.map((term) => {
+              const read = isTermRead(term.id);
+              const expanded = expandedTerm === term.id;
+              return (
+                <button
+                  key={term.id}
+                  onClick={() => handleTermClick(term.id)}
+                  className={`w-full text-left p-4 bg-card rounded-xl border transition-all ${expanded ? "border-primary/30" : "border-border"}`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-semibold text-sm text-foreground">{term.term[language]}</h3>
+                      {read && <CheckCircle className="w-3 h-3 text-success" />}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {!read && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/15 text-primary font-medium">+5 XP</span>
+                      )}
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground">{term.category}</span>
+                    </div>
+                  </div>
+                  <AnimatePresence>
+                    {expanded && (
+                      <motion.p
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="text-xs text-muted-foreground leading-relaxed overflow-hidden"
+                      >
+                        {term.definition[language]}
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+                  {!expanded && (
+                    <p className="text-xs text-muted-foreground leading-relaxed line-clamp-1">{term.definition[language]}</p>
+                  )}
+                </button>
+              );
+            })}
           </motion.div>
         )}
 
@@ -104,13 +143,9 @@ export default function LearnPage() {
                   <ChevronRight className="w-4 h-4 text-muted-foreground" />
                 </div>
                 <p className="text-xs text-muted-foreground line-clamp-2 mb-2">{project.description[language]}</p>
-                <div className="flex gap-2">
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium flex items-center gap-1 ${halalColor(project.halalStatus)}`}>
-                    <Shield className="w-2.5 h-2.5" />{t(`tag.${project.halalStatus}`)}
-                  </span>
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium flex items-center gap-1 ${safetyColor(project.safetyStatus)}`}>
-                    <AlertTriangle className="w-2.5 h-2.5" />{t(`tag.${project.safetyStatus}`)}
-                  </span>
+                <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                  <StatusTag type="halal" status={project.halalStatus} />
+                  <StatusTag type="safety" status={project.safetyStatus} />
                 </div>
               </button>
             ))}
@@ -119,27 +154,36 @@ export default function LearnPage() {
 
         {activeTab === "training" && (
           <motion.div key="train" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-2">
-            {trainingLessons.map((lesson, i) => (
-              <button
-                key={lesson.id}
-                onClick={() => navigate(`/learn/lesson/${lesson.id}`)}
-                className="w-full text-left p-4 bg-card rounded-xl border border-border hover:border-primary/30 transition-all"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-gradient-primary flex items-center justify-center text-primary-foreground text-sm font-bold">
-                    {i + 1}
+            {trainingLessons.map((lesson, i) => {
+              const completed = isLessonCompleted(lesson.id);
+              return (
+                <button
+                  key={lesson.id}
+                  onClick={() => navigate(`/learn/lesson/${lesson.id}`)}
+                  className="w-full text-left p-4 bg-card rounded-xl border border-border hover:border-primary/30 transition-all"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold ${
+                      completed ? "bg-success/15 text-success" : "bg-gradient-primary text-primary-foreground"
+                    }`}>
+                      {completed ? <CheckCircle className="w-4 h-4" /> : i + 1}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-sm text-foreground">{lesson.title[language]}</h3>
+                      <p className="text-xs text-muted-foreground">{lesson.description[language]}</p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {completed ? (
+                        <span className="text-[10px] text-success font-medium">✓</span>
+                      ) : (
+                        <span className="text-xs font-medium text-primary">+{lesson.expReward} XP</span>
+                      )}
+                      <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-sm text-foreground">{lesson.title[language]}</h3>
-                    <p className="text-xs text-muted-foreground">{lesson.description[language]}</p>
-                  </div>
-                  <div className="flex items-center gap-1 text-primary">
-                    <span className="text-xs font-medium">+{lesson.expReward} XP</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </div>
-                </div>
-              </button>
-            ))}
+                </button>
+              );
+            })}
           </motion.div>
         )}
       </AnimatePresence>

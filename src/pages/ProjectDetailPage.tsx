@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cryptoProjects } from "@/data/mockData";
-import { ArrowLeft, Shield, AlertTriangle, TrendingUp, TrendingDown, Sparkles, BarChart3 } from "lucide-react";
+import { ArrowLeft, TrendingUp, TrendingDown, Sparkles, BarChart3 } from "lucide-react";
 import { motion } from "framer-motion";
+import StatusTag from "@/components/StatusTag";
 
 export default function ProjectDetailPage() {
   const { id } = useParams();
@@ -12,19 +13,12 @@ export default function ProjectDetailPage() {
   const project = cryptoProjects.find((p) => p.id === id);
   if (!project) return <div className="p-4 text-foreground">Project not found</div>;
 
-  const halalColor = (s: string) =>
-    s === "halal" ? "text-success bg-success/10 border-success/20" : s === "notHalal" ? "text-danger bg-danger/10 border-danger/20" : "text-warning bg-warning/10 border-warning/20";
-
-  const safetyColor = (s: string) =>
-    s === "safe" ? "text-success bg-success/10 border-success/20" : s === "scam" ? "text-danger bg-danger/10 border-danger/20" : "text-warning bg-warning/10 border-warning/20";
-
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-4 pt-4 pb-24 max-w-lg mx-auto">
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
         <ArrowLeft className="w-4 h-4" /> {t("common.back")}
       </button>
 
-      {/* Header */}
       <div className="flex items-center gap-4 mb-6">
         <div className="w-14 h-14 rounded-2xl bg-secondary flex items-center justify-center text-2xl font-bold">
           {project.icon}
@@ -35,14 +29,9 @@ export default function ProjectDetailPage() {
         </div>
       </div>
 
-      {/* Tags */}
       <div className="flex gap-2 mb-6">
-        <span className={`text-xs px-3 py-1.5 rounded-full font-medium flex items-center gap-1.5 border ${halalColor(project.halalStatus)}`}>
-          <Shield className="w-3 h-3" />{t(`tag.${project.halalStatus}`)}
-        </span>
-        <span className={`text-xs px-3 py-1.5 rounded-full font-medium flex items-center gap-1.5 border ${safetyColor(project.safetyStatus)}`}>
-          <AlertTriangle className="w-3 h-3" />{t(`tag.${project.safetyStatus}`)}
-        </span>
+        <StatusTag type="halal" status={project.halalStatus} />
+        <StatusTag type="safety" status={project.safetyStatus} />
         <button
           onClick={() => navigate("/ai")}
           className="text-xs px-3 py-1.5 rounded-full font-medium flex items-center gap-1.5 border border-accent/30 bg-accent/10 text-accent"
@@ -51,7 +40,6 @@ export default function ProjectDetailPage() {
         </button>
       </div>
 
-      {/* Price */}
       <div className="bg-gradient-card rounded-2xl p-5 border border-border mb-4 glow-primary">
         <div className="flex items-center justify-between mb-3">
           <div>
@@ -78,7 +66,6 @@ export default function ProjectDetailPage() {
         </div>
       </div>
 
-      {/* Sections */}
       {[
         { title: language === "en" ? "What is it?" : "Qu'est-ce que c'est ?", content: project.description[language] },
         { title: language === "en" ? "Purpose" : "Objectif", content: project.purpose[language] },
@@ -91,7 +78,6 @@ export default function ProjectDetailPage() {
         </div>
       ))}
 
-      {/* Market cross-link */}
       <button
         onClick={() => navigate(`/market/${project.id}`)}
         className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors mb-3"

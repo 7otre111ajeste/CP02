@@ -3,7 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCoinDetail, useCoinChart, formatMarketCap } from "@/hooks/useCryptoMarket";
 import { cryptoProjects } from "@/data/mockData";
-import { ArrowLeft, TrendingUp, TrendingDown, BookOpen, Shield, AlertTriangle } from "lucide-react";
+import StatusTag from "@/components/StatusTag";
+import { ArrowLeft, TrendingUp, TrendingDown, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 
@@ -41,11 +42,6 @@ export default function CoinDetailPage() {
   const md = coin?.market_data;
   const positive = (md?.price_change_percentage_24h ?? 0) >= 0;
   const chartColor = positive ? "hsl(145, 65%, 45%)" : "hsl(0, 72%, 55%)";
-
-  const halalColor = (s: string) =>
-    s === "halal" ? "text-success bg-success/10 border-success/20" : s === "notHalal" ? "text-danger bg-danger/10 border-danger/20" : "text-warning bg-warning/10 border-warning/20";
-  const safetyColor = (s: string) =>
-    s === "safe" ? "text-success bg-success/10 border-success/20" : s === "scam" ? "text-danger bg-danger/10 border-danger/20" : "text-warning bg-warning/10 border-warning/20";
 
   if (isLoading) {
     return (
@@ -189,14 +185,9 @@ export default function CoinDetailPage() {
               </h2>
             </div>
 
-            {/* Halal & Safety tags */}
             <div className="flex gap-2 mb-3">
-              <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium flex items-center gap-1 border ${halalColor(learnProject.halalStatus)}`}>
-                <Shield className="w-3 h-3" />{t(`tag.${learnProject.halalStatus}`)}
-              </span>
-              <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium flex items-center gap-1 border ${safetyColor(learnProject.safetyStatus)}`}>
-                <AlertTriangle className="w-3 h-3" />{t(`tag.${learnProject.safetyStatus}`)}
-              </span>
+              <StatusTag type="halal" status={learnProject.halalStatus} />
+              <StatusTag type="safety" status={learnProject.safetyStatus} />
             </div>
 
             <p className="text-xs text-muted-foreground leading-relaxed mb-3">

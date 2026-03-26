@@ -1,4 +1,5 @@
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useUserProgress } from "@/hooks/useUserProgress";
 import { cryptoProjects } from "@/data/mockData";
 import { BookOpen, Brain, Sparkles, TrendingUp, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -17,11 +18,7 @@ const item = {
 export default function HomePage() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
-
-  const userLevel = 3;
-  const userExp = 145;
-  const nextLevelExp = 200;
-  const expPercent = (userExp / nextLevelExp) * 100;
+  const { level, exp, expInCurrentLevel, expToNextLevel, expPercent, completedLessons, completedQuizzes, readTerms } = useUserProgress();
 
   const quickActions = [
     { icon: BookOpen, label: t("home.continue"), path: "/learn", color: "bg-primary/15 text-primary" },
@@ -31,25 +28,26 @@ export default function HomePage() {
 
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="px-4 pt-6 pb-24 max-w-lg mx-auto space-y-6">
-      {/* Header */}
       <motion.div variants={item}>
         <p className="text-muted-foreground text-sm">{t("home.welcome")} 👋</p>
         <h1 className="text-2xl font-bold text-foreground">Cryptopedia</h1>
       </motion.div>
 
-      {/* Level card */}
       <motion.div variants={item} className="bg-gradient-card rounded-2xl p-5 border border-border glow-primary">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-bold text-lg">
-              {userLevel}
+              {level}
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">{t("home.level")} {userLevel}</p>
-              <p className="text-xs text-muted-foreground">{userExp} / {nextLevelExp} {t("home.exp")}</p>
+              <p className="text-sm text-muted-foreground">{t("home.level")} {level}</p>
+              <p className="text-xs text-muted-foreground">{expInCurrentLevel} / {expToNextLevel} {t("home.exp")}</p>
             </div>
           </div>
-          <TrendingUp className="w-5 h-5 text-primary animate-pulse-glow" />
+          <div className="text-right">
+            <p className="text-lg font-bold text-primary">{exp}</p>
+            <p className="text-[10px] text-muted-foreground">Total XP</p>
+          </div>
         </div>
         <div className="w-full h-2 bg-secondary rounded-full overflow-hidden">
           <motion.div
@@ -59,9 +57,13 @@ export default function HomePage() {
             transition={{ duration: 0.8, ease: "easeOut" }}
           />
         </div>
+        <div className="flex justify-between mt-3 text-[10px] text-muted-foreground">
+          <span>{completedLessons.length} {language === "en" ? "lessons" : "leçons"}</span>
+          <span>{completedQuizzes.length} {language === "en" ? "quizzes" : "quiz"}</span>
+          <span>{readTerms.length} {language === "en" ? "terms read" : "termes lus"}</span>
+        </div>
       </motion.div>
 
-      {/* Quick Actions */}
       <motion.div variants={item}>
         <h2 className="text-sm font-semibold text-muted-foreground mb-3">{t("home.quickActions")}</h2>
         <div className="grid grid-cols-3 gap-3">
@@ -80,7 +82,6 @@ export default function HomePage() {
         </div>
       </motion.div>
 
-      {/* Popular Projects */}
       <motion.div variants={item}>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-semibold text-muted-foreground">{t("home.popular")}</h2>

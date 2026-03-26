@@ -1,16 +1,31 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { trainingLessons } from "@/data/mockData";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { useUserProgress } from "@/hooks/useUserProgress";
+import { ArrowLeft, CheckCircle, Lock } from "lucide-react";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 export default function LessonPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t, language } = useLanguage();
+  const { completeLesson, isLessonCompleted } = useUserProgress();
 
   const lesson = trainingLessons.find((l) => l.id === id);
   if (!lesson) return <div className="p-4 text-foreground">Lesson not found</div>;
+
+  const completed = isLessonCompleted(lesson.id);
+
+  const handleComplete = () => {
+    if (completed) return;
+    completeLesson(lesson.id, lesson.expReward);
+    toast.success(
+      language === "en"
+        ? `+${lesson.expReward} XP earned!`
+        : `+${lesson.expReward} XP gagnés !`
+    );
+  };
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-4 pt-4 pb-24 max-w-lg mx-auto">
@@ -36,9 +51,26 @@ export default function LessonPage() {
         ))}
       </div>
 
-      <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-primary text-primary-foreground font-semibold text-sm transition-all hover:opacity-90">
-        <CheckCircle className="w-4 h-4" />
-        {language === "en" ? "Complete Lesson" : "Terminer la leçon"} (+{lesson.expReward} XP)
+      <button
+        onClick={handleComplete}
+        disabled={completed}
+        className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all ${
+          completed
+            ? "bg-success/15 text-success border border-success/20"
+            : "bg-gradient-primary text-primary-foreground hover:opacity-90"
+        }`}
+      >
+        {completed ? (
+          <>
+            <CheckCircle className="w-4 h-4" />
+            {language === "en" ? "Completed" : "Terminé"} ✓
+          </>
+        ) : (
+          <>
+            <CheckCircle className="w-4 h-4" />
+            {language === "en" ? "Complete Lesson" : "Terminer la leçon"} (+{lesson.expReward} XP)
+          </>
+        )}
       </button>
     </motion.div>
   );
