@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { trainingLessons } from "@/data/mockData";
 import { useUserProgress } from "@/hooks/useUserProgress";
+import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { ArrowLeft, CheckCircle, Lock } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
