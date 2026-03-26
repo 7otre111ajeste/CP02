@@ -68,6 +68,23 @@ export default function MarketPage() {
         />
       </div>
 
+      {/* Category filters */}
+      <div className="flex gap-1.5 mb-4 overflow-x-auto scrollbar-hide pb-1">
+        {MARKET_CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setCategory(cat)}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+              category === cat
+                ? "bg-primary text-primary-foreground"
+                : "bg-card border border-border text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
       {/* Table header */}
       <div className="flex items-center px-3 py-2 text-[10px] font-medium text-muted-foreground uppercase">
         <span className="w-8">#</span>
