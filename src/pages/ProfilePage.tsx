@@ -45,6 +45,8 @@ export default function ProfilePage() {
     registrationDate, daysSinceRegistration, claimedTimeBadges, claimTimeBadge,
   } = useUserProgress();
   const { streak } = useDailyQuests();
+  const { theme, toggleTheme } = useTheme();
+  const userTier: "free" | "premium" | "vip" = "free"; // Will be dynamic with auth
 
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState(username);
