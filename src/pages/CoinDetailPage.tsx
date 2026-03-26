@@ -5,7 +5,9 @@ import { useCoinDetail, useCoinChart, formatMarketCap } from "@/hooks/useCryptoM
 import { cryptoProjects } from "@/data/mockData";
 import StatusTag from "@/components/StatusTag";
 import ScoreBadge from "@/components/ScoreBadge";
-import { ArrowLeft, TrendingUp, TrendingDown, BookOpen } from "lucide-react";
+import DescriptionToggle from "@/components/DescriptionToggle";
+import TermHighlighter from "@/components/TermHighlighter";
+import { ArrowLeft, TrendingUp, TrendingDown, BookOpen, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 
@@ -34,7 +36,6 @@ export default function CoinDetailPage() {
   const { data: coin, isLoading, isError } = useCoinDetail(id ?? "");
   const { data: chart } = useCoinChart(id ?? "", days);
 
-  // Cross-link to Learn project
   const learnProject = cryptoProjects.find(
     (p) => p.id === id || p.symbol.toLowerCase() === coin?.symbol
   );
@@ -62,9 +63,7 @@ export default function CoinDetailPage() {
     return (
       <div className="px-4 pt-6 pb-24 max-w-lg mx-auto text-center">
         <p className="text-muted-foreground mb-4">Failed to load coin data</p>
-        <button onClick={() => navigate("/market")} className="text-primary underline text-sm">
-          Back to Market
-        </button>
+        <button onClick={() => navigate("/market")} className="text-primary underline text-sm">Back to Market</button>
       </div>
     );
   }
@@ -88,9 +87,15 @@ export default function CoinDetailPage() {
         </div>
 
         {learnProject && (
-          <div className="flex gap-2 mt-3">
+          <div className="flex flex-wrap gap-2 mt-3">
             <StatusTag type="halal" status={learnProject.halalStatus} />
             <StatusTag type="safety" status={learnProject.safetyStatus} />
+            <button
+              onClick={() => navigate("/ai")}
+              className="text-xs px-3 py-1.5 rounded-full font-medium flex items-center gap-1.5 border border-accent/30 bg-accent/10 text-accent"
+            >
+              <Sparkles className="w-3 h-3" /> AI Analysis
+            </button>
           </div>
         )}
 
@@ -114,9 +119,7 @@ export default function CoinDetailPage() {
                 key={r.days}
                 onClick={() => setDays(r.days)}
                 className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
-                  days === r.days
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
+                  days === r.days ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {r.label}
@@ -143,13 +146,7 @@ export default function CoinDetailPage() {
                 formatter={(value: number) => [`$${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}`, "Price"]}
                 labelFormatter={(label: number) => new Date(label).toLocaleDateString()}
               />
-              <Area
-                type="monotone"
-                dataKey="price"
-                stroke={chartColor}
-                strokeWidth={2}
-                fill="url(#chartGrad)"
-              />
+              <Area type="monotone" dataKey="price" stroke={chartColor} strokeWidth={2} fill="url(#chartGrad)" />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -164,21 +161,31 @@ export default function CoinDetailPage() {
         <StatCard label="24h Low" value={`$${md?.low_24h.usd.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} />
         <StatCard label="ATH" value={`$${md?.ath.usd.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} />
         <StatCard label="ATL" value={`$${md?.atl.usd.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} />
-        <StatCard
-          label="Circulating"
-          value={md?.circulating_supply ? `${(md.circulating_supply / 1e6).toFixed(1)}M` : "N/A"}
-        />
+        <StatCard label="Circulating" value={md?.circulating_supply ? `${(md.circulating_supply / 1e6).toFixed(1)}M` : "N/A"} />
       </motion.div>
 
-      {/* Description */}
-      {coin.description.en && (
+      {/* Pro/Bro Description */}
+      {learnProject && (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="bg-card border border-border rounded-xl p-4 mb-4">
+          <h2 className="text-sm font-semibold text-foreground mb-2">
+            {language === "en" ? `What is ${learnProject.name}?` : `Qu'est-ce que ${learnProject.name} ?`}
+          </h2>
+          <DescriptionToggle
+            proBro={{
+              pro: learnProject.descriptionPro[language],
+              bro: learnProject.descriptionBro[language],
+            }}
+          />
+        </motion.div>
+      )}
+
+      {/* CoinGecko description fallback */}
+      {!learnProject && coin.description.en && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="bg-card border border-border rounded-xl p-4 mb-4">
           <h2 className="text-sm font-semibold text-foreground mb-2">About {coin.name}</h2>
           <p
             className="text-xs text-muted-foreground leading-relaxed line-clamp-6"
-            dangerouslySetInnerHTML={{
-              __html: coin.description.en.replace(/<a /g, '<a class="text-primary underline" '),
-            }}
+            dangerouslySetInnerHTML={{ __html: coin.description.en.replace(/<a /g, '<a class="text-primary underline" ') }}
           />
         </motion.div>
       )}
@@ -186,30 +193,13 @@ export default function CoinDetailPage() {
       {/* Learn cross-link */}
       {learnProject && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
-          <div className="bg-card border border-border rounded-xl p-4 mb-3">
-            <div className="flex items-center gap-2 mb-3">
-              <BookOpen className="w-4 h-4 text-primary" />
-              <h2 className="text-sm font-semibold text-foreground">
-                {language === "en" ? "Learn about" : "En savoir plus sur"} {learnProject.name}
-              </h2>
-            </div>
-
-            <div className="flex gap-2 mb-3">
-              <StatusTag type="halal" status={learnProject.halalStatus} />
-              <StatusTag type="safety" status={learnProject.safetyStatus} />
-            </div>
-
-            <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-              {learnProject.description[language]}
-            </p>
-
-            <button
-              onClick={() => navigate(`/learn/project/${learnProject.id}`)}
-              className="w-full py-2.5 rounded-xl text-xs font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
-            >
-              {language === "en" ? "View Full Analysis" : "Voir l'analyse complète"} →
-            </button>
-          </div>
+          <button
+            onClick={() => navigate(`/learn/project/${learnProject.id}`)}
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors mb-3"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            {language === "en" ? "View Full Analysis" : "Voir l'analyse complète"} →
+          </button>
         </motion.div>
       )}
     </div>
