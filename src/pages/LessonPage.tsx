@@ -22,6 +22,7 @@ export default function LessonPage() {
   const handleComplete = () => {
     if (completed) return;
     completeLesson(lesson.id, lesson.expReward);
+    incrementQuest("lesson");
     toast.success(
       language === "en"
         ? `+${lesson.expReward} XP earned!`
