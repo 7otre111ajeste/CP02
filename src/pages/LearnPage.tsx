@@ -21,6 +21,11 @@ const PROJECT_SORT_FIELDS: { value: SortField; label: string }[] = [
   { value: "year", label: "Year" },
 ];
 
+const DICT_SORT_FIELDS: { value: SortField; label: string }[] = [
+  { value: "name", label: "A → Z" },
+  { value: "volume", label: "Category" },
+];
+
 export default function LearnPage() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
