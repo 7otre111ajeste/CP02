@@ -70,6 +70,18 @@ export default function PortfolioPage() {
   const [goalInput, setGoalInput] = useState("");
   const [goalType, setGoalType] = useState<"tokens" | "usd">("tokens");
   const [pnlPeriod, setPnlPeriod] = useState<"all" | "daily" | "weekly" | "monthly">("all");
+  const [showPnlChart, setShowPnlChart] = useState<string | null>(null);
+
+  // Match coin IDs to mockData projects for badges
+  const getProjectData = (coinId: string) => {
+    const nameMap: Record<string, string> = {
+      bitcoin: "Bitcoin", ethereum: "Ethereum", solana: "Solana", cardano: "Cardano",
+      "binancecoin": "BNB", ripple: "XRP", dogecoin: "Dogecoin", polkadot: "Polkadot",
+      avalanche: "Avalanche", chainlink: "Chainlink", tron: "TRON", litecoin: "Litecoin",
+    };
+    const name = nameMap[coinId];
+    return cryptoProjects.find(p => p.name === name || p.id === coinId || p.symbol.toLowerCase() === coinId);
+  };
 
   useEffect(() => {
     savePortfolio(portfolio);
