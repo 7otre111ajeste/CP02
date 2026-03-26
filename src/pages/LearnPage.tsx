@@ -36,6 +36,8 @@ export default function LearnPage() {
   const [expandedTerm, setExpandedTerm] = useState<string | null>(null);
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortDir, setSortDir] = useState<SortDirection>("asc");
+  const [dictSortField, setDictSortField] = useState<SortField>("name");
+  const [dictSortDir, setDictSortDir] = useState<SortDirection>("asc");
 
   const tabs = [
     { id: "dictionary" as Tab, label: t("learn.dictionary"), icon: BookOpen },
