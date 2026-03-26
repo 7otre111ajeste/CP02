@@ -1,11 +1,13 @@
+import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProgress } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { useWatchlist } from "@/hooks/useWatchlist";
+import { useCryptoMarket } from "@/hooks/useCryptoMarket";
 import { cryptoProjects } from "@/data/mockData";
-import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, Flame, CheckCircle, Circle, Gift, Star, Eye } from "lucide-react";
+import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, Flame, CheckCircle, Circle, Gift, Star, Eye, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
 const container = {
@@ -18,12 +20,23 @@ const item = {
   show: { opacity: 1, y: 0 },
 };
 
+// Map mockData project IDs to CoinGecko IDs
+const PROJECT_TO_COINGECKO: Record<string, string> = {
+  bitcoin: "bitcoin",
+  ethereum: "ethereum",
+  solana: "solana",
+  cardano: "cardano",
+  bnb: "binancecoin",
+};
+
 export default function HomePage() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
   const { level, exp, expInCurrentLevel, expToNextLevel, expPercent, completedLessons, completedQuizzes, readTerms } = useUserProgress();
   const { quests, progress, completed, streak, allCompleted, canClaimStreak, streakRequired, streakBonusExp, claimStreakBonus } = useDailyQuests();
   const { watchlist, toggleWatchlist, isWatching } = useWatchlist();
+  const { data: marketCoins } = useCryptoMarket();
+  const [hoveredQuest, setHoveredQuest] = useState<string | null>(null);
 
   const quickActions = [
     { icon: BookOpen, label: t("home.continue"), path: "/learn", color: "bg-primary/15 text-primary" },
@@ -33,9 +46,23 @@ export default function HomePage() {
     { icon: Calculator, label: language === "en" ? "Calculator" : "Calculatrice", path: "/calculator", color: "bg-success/15 text-success" },
   ];
 
+  // Merge live prices into projects
+  const getProjectWithLivePrice = (project: typeof cryptoProjects[0]) => {
+    const geckoId = PROJECT_TO_COINGECKO[project.id];
+    const liveCoin = marketCoins?.find((c) => c.id === geckoId);
+    if (liveCoin) {
+      return {
+        ...project,
+        price: liveCoin.current_price,
+        change24h: parseFloat(liveCoin.price_change_percentage_24h?.toFixed(2) || "0"),
+      };
+    }
+    return project;
+  };
+
   // Show watchlist projects first, then popular
-  const watchedProjects = cryptoProjects.filter((p) => watchlist.includes(p.id));
-  const otherProjects = cryptoProjects.filter((p) => !watchlist.includes(p.id));
+  const watchedProjects = cryptoProjects.filter((p) => watchlist.includes(p.id)).map(getProjectWithLivePrice);
+  const otherProjects = cryptoProjects.filter((p) => !watchlist.includes(p.id)).map(getProjectWithLivePrice);
   const displayProjects = [...watchedProjects, ...otherProjects].slice(0, 5);
 
   const handleClaimStreak = () => {
@@ -100,30 +127,54 @@ export default function HomePage() {
             const isDone = completed.includes(quest.id);
             const current = progress[quest.id] || 0;
             const pct = Math.min(100, (current / quest.target) * 100);
+            const isHovered = hoveredQuest === quest.id;
             return (
-              <div key={quest.id} className="flex items-center gap-3">
-                {isDone ? (
-                  <CheckCircle className="w-5 h-5 text-success flex-shrink-0" />
-                ) : (
-                  <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0" />
-                )}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-0.5">
-                    <p className={`text-xs font-medium ${isDone ? "text-success line-through" : "text-foreground"}`}>
-                      {quest.title[language]}
+              <div
+                key={quest.id}
+                className="relative"
+                onMouseEnter={() => setHoveredQuest(quest.id)}
+                onMouseLeave={() => setHoveredQuest(null)}
+                onClick={() => setHoveredQuest(isHovered ? null : quest.id)}
+              >
+                <div className="flex items-center gap-3">
+                  {isDone ? (
+                    <CheckCircle className="w-5 h-5 text-success flex-shrink-0" />
+                  ) : (
+                    <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-0.5">
+                      <p className={`text-xs font-medium flex items-center gap-1 ${isDone ? "text-success line-through" : "text-foreground"}`}>
+                        {quest.title[language]}
+                        <Info className="w-3 h-3 text-muted-foreground" />
+                      </p>
+                      <span className="text-[10px] text-primary font-semibold">+{quest.expReward} XP</span>
+                    </div>
+                    <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${isDone ? "bg-success" : "bg-primary"}`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                    <p className="text-[9px] text-muted-foreground mt-0.5">
+                      {Math.min(current, quest.target)}/{quest.target}
                     </p>
-                    <span className="text-[10px] text-primary font-semibold">+{quest.expReward} XP</span>
                   </div>
-                  <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all ${isDone ? "bg-success" : "bg-primary"}`}
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
-                  <p className="text-[9px] text-muted-foreground mt-0.5">
-                    {Math.min(current, quest.target)}/{quest.target}
-                  </p>
                 </div>
+
+                {/* Tooltip */}
+                <AnimatePresence>
+                  {isHovered && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      className="mt-1.5 ml-8 p-2.5 rounded-lg bg-secondary/80 border border-border"
+                    >
+                      <p className="text-[11px] text-foreground">{quest.description[language]}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             );
           })}
