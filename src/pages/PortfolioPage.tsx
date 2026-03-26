@@ -365,10 +365,16 @@ export default function PortfolioPage() {
                           <p className="text-[10px] text-muted-foreground">{language === "en" ? "Current Value" : "Valeur actuelle"}</p>
                           <p className="text-xs font-semibold text-foreground">{formatUsd(pnl.currentValue)}</p>
                         </div>
-                        <div className="bg-secondary/50 rounded-xl p-2.5">
-                          <p className="text-[10px] text-muted-foreground">PnL</p>
+                        <button
+                          onClick={() => setShowPnlChart(showPnlChart === e.coinId ? null : e.coinId)}
+                          className="bg-secondary/50 rounded-xl p-2.5 text-left hover:bg-secondary/70 transition-colors cursor-pointer ring-1 ring-primary/20"
+                        >
+                          <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+                            PnL <TrendingUp className="w-2.5 h-2.5 text-primary" />
+                            <span className="text-[8px] text-primary">{language === "en" ? "tap for chart" : "voir graphique"}</span>
+                          </p>
                           <p className={`text-xs font-semibold ${pnl.pnl >= 0 ? "text-success" : "text-danger"}`}>{formatUsd(pnl.pnl)}</p>
-                        </div>
+                        </button>
                         <div className="bg-secondary/50 rounded-xl p-2.5">
                           <p className="text-[10px] text-muted-foreground">{language === "en" ? "Live Price" : "Prix actuel"}</p>
                           <p className="text-xs font-semibold text-foreground">{formatUsd(pnl.livePrice)}</p>
