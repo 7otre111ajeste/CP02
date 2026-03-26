@@ -90,6 +90,14 @@ export default function ProjectDetailPage() {
           <p className="text-xs text-muted-foreground leading-relaxed">{section.content}</p>
         </div>
       ))}
+
+      {/* Market cross-link */}
+      <button
+        onClick={() => navigate(`/market/${project.id}`)}
+        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors mb-3"
+      >
+        <BarChart3 className="w-4 h-4" />
+        {language === "en" ? "View Live Market Data" : "Voir les données du marché"} →
+      </button>
     </motion.div>
-  );
 }
