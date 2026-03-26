@@ -209,6 +209,7 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "Vérification d'identité, chaîne d'approvisionnement, éducation, DeFi.",
     },
     icon: "₳",
+    logo: "https://assets.coingecko.com/coins/images/975/large/cardano.png",
     website: "https://cardano.org",
     whitepaper: "https://why.cardano.org/en/introduction/motivation/",
   },
