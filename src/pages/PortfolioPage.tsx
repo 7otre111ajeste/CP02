@@ -362,6 +362,7 @@ export default function PortfolioPage() {
                         <button
                           onClick={() => { setShowGoal(e.coinId); setGoalInput(e.goalAmount?.toString() ?? ""); }}
                           className="py-2 px-3 rounded-xl text-xs font-semibold bg-primary/15 text-primary border border-primary/20"
+                          title={language === "en" ? "Set Goal" : "Définir un objectif"}
                         >
                           <Target className="w-3.5 h-3.5" />
                         </button>
