@@ -25,8 +25,8 @@ export default function LessonPage() {
     incrementQuest("lesson");
     toast.success(
       language === "en"
-        ? `+${lesson.expReward} XP earned!`
-        : `+${lesson.expReward} XP gagnés !`
+        ? `+${lesson.expReward} XP & Points earned!`
+        : `+${lesson.expReward} XP & Points gagnés !`
     );
   };
 
