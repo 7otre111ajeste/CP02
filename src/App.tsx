@@ -14,6 +14,8 @@ import CoinDetailPage from "./pages/CoinDetailPage";
 import AIPage from "./pages/AIPage";
 import ProfilePage from "./pages/ProfilePage";
 import QuizPage from "./pages/QuizPage";
+import HalalMethodologyPage from "./pages/HalalMethodologyPage";
+import SafetyMethodologyPage from "./pages/SafetyMethodologyPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
