@@ -3,7 +3,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProgress, TIME_BADGES } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { useNavigate } from "react-router-dom";
-import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar } from "lucide-react";
+import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar, Sun, Moon, Shield } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
+import UserTierBadge from "@/components/UserTierBadge";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
