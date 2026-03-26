@@ -147,10 +147,11 @@ export default function ProfilePage() {
           </button>
         )}
 
-        <div className="flex items-center justify-center gap-2 mb-2">
+        <div className="flex items-center justify-center gap-2 mb-2 flex-wrap">
           <span className={`text-xs px-2.5 py-1 rounded-full border font-medium ${currentTier.color}`}>
             {currentTier.emoji} {currentTier.name[language]}
           </span>
+          <UserTierBadge tier={userTier} />
           <span className="text-xs text-muted-foreground flex items-center gap-1">
             <Flame className="w-3 h-3 text-danger" /> {streak}
           </span>
