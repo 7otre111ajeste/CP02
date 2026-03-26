@@ -13,6 +13,8 @@ export interface CryptoProject {
   safetyStatus: "safe" | "risky" | "scam";
   score: number; // 0-10 quality score
   description: { en: string; fr: string };
+  descriptionPro: { en: string; fr: string };
+  descriptionBro: { en: string; fr: string };
   purpose: { en: string; fr: string };
   howItWorks: { en: string; fr: string };
   useCases: { en: string; fr: string };
