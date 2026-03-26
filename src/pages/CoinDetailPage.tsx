@@ -185,14 +185,9 @@ export default function CoinDetailPage() {
               </h2>
             </div>
 
-            {/* Halal & Safety tags */}
             <div className="flex gap-2 mb-3">
-              <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium flex items-center gap-1 border ${halalColor(learnProject.halalStatus)}`}>
-                <Shield className="w-3 h-3" />{t(`tag.${learnProject.halalStatus}`)}
-              </span>
-              <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium flex items-center gap-1 border ${safetyColor(learnProject.safetyStatus)}`}>
-                <AlertTriangle className="w-3 h-3" />{t(`tag.${learnProject.safetyStatus}`)}
-              </span>
+              <StatusTag type="halal" status={learnProject.halalStatus} />
+              <StatusTag type="safety" status={learnProject.safetyStatus} />
             </div>
 
             <p className="text-xs text-muted-foreground leading-relaxed mb-3">
