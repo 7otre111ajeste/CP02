@@ -91,12 +91,12 @@ export default function QuizPage() {
 
   const handleNext = () => {
     if (currentQ + 1 >= questions.length) {
+      incrementQuest("quiz");
       if (mode === "exp") {
         const expEarned = score * 10;
         const quizId = `quiz-${Date.now()}`;
         completeQuiz(quizId, expEarned);
         incrementDailyQuiz();
-        incrementQuest("quiz");
         toast.success(
           language === "en" ? `+${expEarned} XP earned!` : `+${expEarned} XP gagnés !`
         );
