@@ -166,7 +166,7 @@ export function useUserProgress() {
   }, []);
 
   const setAvatarEmoji = useCallback((emoji: string): { success: boolean; reason?: string } => {
-    let result = { success: false, reason: "" };
+    let result: { success: boolean; reason?: string } = { success: false, reason: "" };
     setProgress((prev) => {
       if (!prev.unlimitedProfileChanges && !canChangeFree(prev.lastAvatarChange) && prev.avatarChangesThisPeriod >= 2) {
         result = { success: false, reason: "limit" };
