@@ -49,6 +49,7 @@ export const cryptoProjects: CryptoProject[] = [
     yearCreated: 2009,
     halalStatus: "halal",
     safetyStatus: "safe",
+    score: 9,
     description: {
       en: "Bitcoin is the first and most well-known cryptocurrency. It's digital money that works without any bank or government.",
       fr: "Bitcoin est la première et la plus connue des cryptomonnaies. C'est de l'argent numérique qui fonctionne sans banque ni gouvernement.",
