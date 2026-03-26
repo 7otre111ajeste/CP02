@@ -62,7 +62,7 @@ export default function StatusTag({ type, status }: StatusTagProps) {
         onClick={(e) => { e.stopPropagation(); setOpen(true); }}
         className={`text-[10px] px-2 py-0.5 rounded-full font-medium flex items-center gap-1 border transition-all hover:opacity-80 ${colorClass}`}
       >
-        <Icon className="w-3 h-3" />
+        <Icon className="w-2.5 h-2.5" />
         {label}
       </button>
 
