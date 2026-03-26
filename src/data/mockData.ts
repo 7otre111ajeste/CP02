@@ -80,6 +80,7 @@ export const cryptoProjects: CryptoProject[] = [
       fr: "Réserve de valeur, paiements pair-à-pair, protection contre l'inflation.",
     },
     icon: "₿",
+    logo: "https://assets.coingecko.com/coins/images/1/large/bitcoin.png",
     website: "https://bitcoin.org",
     whitepaper: "https://bitcoin.org/bitcoin.pdf",
   },
