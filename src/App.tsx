@@ -22,6 +22,7 @@ import SafetyMethodologyPage from "./pages/SafetyMethodologyPage";
 import AboutPage from "./pages/AboutPage";
 import ShopPage from "./pages/ShopPage";
 import PlatformsPage from "./pages/PlatformsPage";
+import PortfolioPage from "./pages/PortfolioPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const App = () => (
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/shop" element={<ShopPage />} />
                 <Route path="/platforms" element={<PlatformsPage />} />
+                <Route path="/portfolio" element={<PortfolioPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <BottomNav />
