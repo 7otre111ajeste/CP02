@@ -262,8 +262,14 @@ export default function HomePage() {
                   {project.icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm text-foreground">{project.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">{project.description[language]}</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="font-semibold text-sm text-foreground">{project.name}</p>
+                    <ScoreBadge score={project.score} />
+                  </div>
+                  <div className="flex items-center gap-1 mt-0.5">
+                    <StatusTag type="halal" status={project.halalStatus} />
+                    <StatusTag type="safety" status={project.safetyStatus} />
+                  </div>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-semibold text-foreground">${project.price.toLocaleString()}</p>
