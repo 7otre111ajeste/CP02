@@ -170,9 +170,7 @@ export default function LearnPage() {
                 className="w-full text-left p-4 bg-card rounded-xl border border-border hover:border-primary/30 transition-all"
               >
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-lg font-bold">
-                    {project.icon}
-                  </div>
+                  <img src={project.logo} alt={project.name} className="w-10 h-10 rounded-xl shrink-0" loading="lazy" />
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <h3 className="font-semibold text-sm text-foreground">{project.name}</h3>
