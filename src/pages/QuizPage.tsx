@@ -96,6 +96,7 @@ export default function QuizPage() {
         const quizId = `quiz-${Date.now()}`;
         completeQuiz(quizId, expEarned);
         incrementDailyQuiz();
+        incrementQuest("quiz");
         toast.success(
           language === "en" ? `+${expEarned} XP earned!` : `+${expEarned} XP gagnés !`
         );
