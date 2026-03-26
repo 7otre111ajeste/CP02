@@ -1,5 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 
+// Category mappings for well-known coins (CoinGecko IDs)
+const CATEGORY_MAP: Record<string, string> = {
+  bitcoin: "Layer 1", ethereum: "Layer 1", solana: "Layer 1", cardano: "Layer 1",
+  avalanche: "Layer 1", polkadot: "Layer 1", near: "Layer 1", sui: "Layer 1",
+  aptos: "Layer 1", cosmos: "Layer 1", algorand: "Layer 1", tron: "Layer 1",
+  tether: "Stablecoins", "usd-coin": "Stablecoins", dai: "Stablecoins",
+  "first-digital-usd": "Stablecoins", "true-usd": "Stablecoins", "ethena-usde": "Stablecoins",
+  uniswap: "DeFi", aave: "DeFi", "lido-dao": "DeFi", maker: "DeFi",
+  chainlink: "DeFi", jupiter: "DeFi", "the-graph": "DeFi", "pancakeswap-token": "DeFi",
+  dogecoin: "Meme", shiba: "Meme", pepe: "Meme", "floki-inu": "Meme",
+  bonk: "Meme", "dogwifcoin": "Meme", "brett-based": "Meme",
+};
+
+export type MarketCategory = "All" | "Layer 1" | "DeFi" | "Stablecoins" | "Meme";
+export const MARKET_CATEGORIES: MarketCategory[] = ["All", "Layer 1", "DeFi", "Stablecoins", "Meme"];
+
 export interface MarketCoin {
   id: string;
   symbol: string;
@@ -10,6 +26,7 @@ export interface MarketCoin {
   market_cap: number;
   market_cap_rank: number;
   sparkline_in_7d?: { price: number[] };
+  category?: string;
 }
 
 async function fetchMarketData(): Promise<MarketCoin[]> {
