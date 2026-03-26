@@ -358,68 +358,8 @@ export const trainingLessons: TrainingLesson[] = [
   },
 ];
 
-export const quizQuestions = [
-  {
-    id: "q1",
-    question: { en: "What is blockchain?", fr: "Qu'est-ce que la blockchain ?" },
-    options: {
-      en: ["A type of cryptocurrency", "A digital record book", "A wallet app", "A trading platform"],
-      fr: ["Un type de cryptomonnaie", "Un registre numérique", "Une application de portefeuille", "Une plateforme de trading"],
-    },
-    correctIndex: 1,
-    difficulty: 1,
-  },
-  {
-    id: "q2",
-    question: { en: "Who created Bitcoin?", fr: "Qui a créé le Bitcoin ?" },
-    options: {
-      en: ["Elon Musk", "Satoshi Nakamoto", "Vitalik Buterin", "Mark Zuckerberg"],
-      fr: ["Elon Musk", "Satoshi Nakamoto", "Vitalik Buterin", "Mark Zuckerberg"],
-    },
-    correctIndex: 1,
-    difficulty: 1,
-  },
-  {
-    id: "q3",
-    question: { en: "What does DeFi stand for?", fr: "Que signifie DeFi ?" },
-    options: {
-      en: ["Digital Finance", "Decentralized Finance", "Default Finance", "Defined Finance"],
-      fr: ["Finance Digitale", "Finance Décentralisée", "Finance par Défaut", "Finance Définie"],
-    },
-    correctIndex: 1,
-    difficulty: 1,
-  },
-  {
-    id: "q4",
-    question: { en: "What should you NEVER share?", fr: "Que ne devez-vous JAMAIS partager ?" },
-    options: {
-      en: ["Your public address", "Your recovery phrase", "Your username", "Your email"],
-      fr: ["Votre adresse publique", "Votre phrase de récupération", "Votre nom d'utilisateur", "Votre email"],
-    },
-    correctIndex: 1,
-    difficulty: 1,
-  },
-  {
-    id: "q5",
-    question: { en: "What is an NFT?", fr: "Qu'est-ce qu'un NFT ?" },
-    options: {
-      en: ["New Financial Token", "Non-Fungible Token", "Network Fee Token", "No-Fee Transaction"],
-      fr: ["Nouveau Jeton Financier", "Token Non Fongible", "Jeton de Frais Réseau", "Transaction Sans Frais"],
-    },
-    correctIndex: 1,
-    difficulty: 2,
-  },
-  {
-    id: "q6",
-    question: { en: "What is a gas fee?", fr: "Qu'est-ce qu'un frais de gas ?" },
-    options: {
-      en: ["Cost of fuel", "Transaction processing fee", "Wallet creation fee", "Exchange membership fee"],
-      fr: ["Coût du carburant", "Frais de traitement de transaction", "Frais de création de portefeuille", "Frais d'adhésion à un exchange"],
-    },
-    correctIndex: 1,
-    difficulty: 2,
-  },
-];
+// Quiz questions moved to src/data/quizQuestions.ts
+export { allQuizQuestions as quizQuestions } from "./quizQuestions";
 
 export const marketData = [
   { rank: 1, name: "Bitcoin", symbol: "BTC", price: 67542.30, change24h: 2.4, marketCap: "$1.3T", icon: "₿" },
