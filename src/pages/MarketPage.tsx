@@ -134,7 +134,7 @@ export default function MarketPage() {
         />
       </div>
 
-      <div className="flex items-center justify-between gap-2 mb-4">
+      <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-1 flex-1">
           {MARKET_CATEGORIES.map((cat) => (
             <button
@@ -150,13 +150,132 @@ export default function MarketPage() {
             </button>
           ))}
         </div>
-        <SortFilter
-          fields={SORT_FIELDS}
-          current={sortField}
-          direction={sortDir}
-          onChange={(f, d) => { setSortField(f); setSortDir(d); }}
-        />
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`relative flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-colors ${
+              showFilters || activeFilterCount > 0
+                ? "bg-primary/15 border border-primary/30 text-primary"
+                : "bg-card border border-border text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Filter className="w-3.5 h-3.5" />
+            {language === "fr" ? "Filtres" : "Filters"}
+            {activeFilterCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-primary text-primary-foreground text-[9px] flex items-center justify-center font-bold">
+                {activeFilterCount}
+              </span>
+            )}
+          </button>
+          <SortFilter
+            fields={SORT_FIELDS}
+            current={sortField}
+            direction={sortDir}
+            onChange={(f, d) => { setSortField(f); setSortDir(d); }}
+          />
+        </div>
       </div>
+
+      {/* Advanced Filters Panel */}
+      <AnimatePresence>
+        {showFilters && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden mb-4"
+          >
+            <div className="bg-card border border-border rounded-xl p-3 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-foreground">
+                  {language === "fr" ? "Filtres avancés" : "Advanced Filters"}
+                </span>
+                {activeFilterCount > 0 && (
+                  <button onClick={clearFilters} className="text-[10px] text-muted-foreground hover:text-foreground flex items-center gap-1">
+                    <X className="w-3 h-3" /> {language === "fr" ? "Réinitialiser" : "Clear all"}
+                  </button>
+                )}
+              </div>
+
+              {/* Halal Filter */}
+              <div>
+                <span className="text-[10px] font-medium text-muted-foreground uppercase mb-1.5 block">
+                  {language === "fr" ? "Statut Halal" : "Halal Status"}
+                </span>
+                <div className="flex gap-1.5 flex-wrap">
+                  {([
+                    { value: "all", label: language === "fr" ? "Tous" : "All" },
+                    { value: "halal", label: "Halal ✅" },
+                    { value: "uncertain", label: language === "fr" ? "Incertain ⚠️" : "Uncertain ⚠️" },
+                    { value: "notHalal", label: language === "fr" ? "Non Halal ❌" : "Not Halal ❌" },
+                  ] as { value: HalalFilter; label: string }[]).map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setHalalFilter(opt.value)}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-colors ${
+                        halalFilter === opt.value
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-secondary text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Safety Filter */}
+              <div>
+                <span className="text-[10px] font-medium text-muted-foreground uppercase mb-1.5 block">
+                  {language === "fr" ? "Statut Sécurité" : "Safety Status"}
+                </span>
+                <div className="flex gap-1.5 flex-wrap">
+                  {([
+                    { value: "all", label: language === "fr" ? "Tous" : "All" },
+                    { value: "safe", label: language === "fr" ? "Sûr ✅" : "Safe ✅" },
+                    { value: "risky", label: language === "fr" ? "Risqué ⚠️" : "Risky ⚠️" },
+                    { value: "scam", label: "Scam ❌" },
+                  ] as { value: SafetyFilter; label: string }[]).map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setSafetyFilter(opt.value)}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-colors ${
+                        safetyFilter === opt.value
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-secondary text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Score Filter */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] font-medium text-muted-foreground uppercase">
+                    Score
+                  </span>
+                  <span className="text-[11px] font-semibold text-foreground">
+                    {scoreRange[0]} — {scoreRange[1]}
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Slider
+                    min={0}
+                    max={10}
+                    step={1}
+                    value={scoreRange}
+                    onValueChange={(val) => setScoreRange(val as [number, number])}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="flex items-center px-3 py-2 text-[10px] font-medium text-muted-foreground uppercase">
         <span className="w-8">#</span>
