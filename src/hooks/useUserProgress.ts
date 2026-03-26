@@ -148,7 +148,7 @@ export function useUserProgress() {
   }, []);
 
   const setUsername = useCallback((name: string): { success: boolean; reason?: string } => {
-    let result = { success: false, reason: "" };
+    let result: { success: boolean; reason?: string } = { success: false, reason: "" };
     setProgress((prev) => {
       if (!prev.unlimitedProfileChanges && !canChangeFree(prev.lastUsernameChange) && prev.usernameChangesThisPeriod >= 2) {
         result = { success: false, reason: "limit" };
