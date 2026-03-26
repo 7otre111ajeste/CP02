@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCryptoMarket, formatMarketCap } from "@/hooks/useCryptoMarket";
 import { Search, TrendingUp, TrendingDown, RefreshCw } from "lucide-react";
