@@ -1,8 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { useUserProgress } from "@/hooks/useUserProgress";
-import { getQuizQuestions, QuizQuestion } from "@/data/quizQuestions";
+import { useDailyQuests } from "@/hooks/useDailyQuests";
+import { getQuizQuestions, ShuffledQuizQuestion } from "@/data/quizQuestions";
 import { ArrowLeft, CheckCircle, XCircle, Trophy, Zap, Dumbbell, Lock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
