@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCoinDetail, useCoinChart, formatMarketCap } from "@/hooks/useCryptoMarket";
+import { useWatchlist } from "@/hooks/useWatchlist";
 import { cryptoProjects } from "@/data/mockData";
 import StatusTag from "@/components/StatusTag";
 import ScoreBadge from "@/components/ScoreBadge";
 import DescriptionToggle from "@/components/DescriptionToggle";
 import TermHighlighter from "@/components/TermHighlighter";
-import { ArrowLeft, TrendingUp, TrendingDown, BookOpen, Sparkles } from "lucide-react";
+import { ArrowLeft, TrendingUp, TrendingDown, BookOpen, Sparkles, Star, ExternalLink, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, YAxis } from "recharts";
 
@@ -32,6 +33,7 @@ export default function CoinDetailPage() {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
   const [days, setDays] = useState(7);
+  const { toggleWatchlist, isWatching } = useWatchlist();
 
   const { data: coin, isLoading, isError } = useCoinDetail(id ?? "");
   const { data: chart } = useCoinChart(id ?? "", days);
@@ -39,6 +41,8 @@ export default function CoinDetailPage() {
   const learnProject = cryptoProjects.find(
     (p) => p.id === id || p.symbol.toLowerCase() === coin?.symbol
   );
+
+  const watchlistId = learnProject?.id || id || "";
 
   const chartData = (chart?.prices ?? []).map(([time, price]) => ({ time, price }));
   const md = coin?.market_data;
@@ -83,6 +87,9 @@ export default function CoinDetailPage() {
             <h1 className="text-xl font-bold text-foreground">{coin.name}</h1>
             <p className="text-xs text-muted-foreground uppercase">{coin.symbol} · #{coin.market_cap_rank}</p>
           </div>
+          <button onClick={() => toggleWatchlist(watchlistId)} className="p-2">
+            <Star className={`w-5 h-5 transition-colors ${isWatching(watchlistId) ? "text-warning fill-warning" : "text-muted-foreground"}`} />
+          </button>
           {learnProject && <ScoreBadge score={learnProject.score} />}
         </div>
 
@@ -91,7 +98,7 @@ export default function CoinDetailPage() {
             <StatusTag type="halal" status={learnProject.halalStatus} />
             <StatusTag type="safety" status={learnProject.safetyStatus} />
             <button
-              onClick={() => navigate("/ai")}
+              onClick={() => navigate("/ai", { state: { projectName: learnProject.name } })}
               className="text-xs px-3 py-1.5 rounded-full font-medium flex items-center gap-1.5 border border-accent/30 bg-accent/10 text-accent"
             >
               <Sparkles className="w-3 h-3" /> AI Analysis
@@ -163,6 +170,30 @@ export default function CoinDetailPage() {
         <StatCard label="ATL" value={`$${md?.atl.usd.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} />
         <StatCard label="Circulating" value={md?.circulating_supply ? `${(md.circulating_supply / 1e6).toFixed(1)}M` : "N/A"} />
       </motion.div>
+
+      {/* Official Links */}
+      {learnProject && (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }} className="flex gap-2 mb-4">
+          <a
+            href={learnProject.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-medium bg-card border border-border text-foreground hover:border-primary/30 transition-colors"
+          >
+            <ExternalLink className="w-3.5 h-3.5 text-primary" />
+            {language === "en" ? "Official Website" : "Site officiel"}
+          </a>
+          <a
+            href={learnProject.whitepaper}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-medium bg-card border border-border text-foreground hover:border-primary/30 transition-colors"
+          >
+            <FileText className="w-3.5 h-3.5 text-primary" />
+            Whitepaper
+          </a>
+        </motion.div>
+      )}
 
       {/* Pro/Bro Description */}
       {learnProject && (

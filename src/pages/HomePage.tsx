@@ -5,7 +5,7 @@ import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { useWatchlist } from "@/hooks/useWatchlist";
 import { useCryptoMarket } from "@/hooks/useCryptoMarket";
 import { cryptoProjects } from "@/data/mockData";
-import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, Flame, CheckCircle, Circle, Gift, Star, Eye, Info } from "lucide-react";
+import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, ChevronDown, Flame, CheckCircle, Circle, Gift, Star, Eye, Info } from "lucide-react";
 import MarketSentiment from "@/components/MarketSentiment";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,7 +21,6 @@ const item = {
   show: { opacity: 1, y: 0 },
 };
 
-// Map mockData project IDs to CoinGecko IDs
 const PROJECT_TO_COINGECKO: Record<string, string> = {
   bitcoin: "bitcoin",
   ethereum: "ethereum",
@@ -38,6 +37,7 @@ export default function HomePage() {
   const { watchlist, toggleWatchlist, isWatching } = useWatchlist();
   const { data: marketCoins } = useCryptoMarket();
   const [hoveredQuest, setHoveredQuest] = useState<string | null>(null);
+  const [showAllWatchlist, setShowAllWatchlist] = useState(false);
 
   const quickActions = [
     { icon: BookOpen, label: t("home.continue"), path: "/learn", color: "bg-primary/15 text-primary" },
@@ -47,7 +47,6 @@ export default function HomePage() {
     { icon: Calculator, label: language === "en" ? "Calculator" : "Calculatrice", path: "/calculator", color: "bg-success/15 text-success" },
   ];
 
-  // Merge live prices into projects
   const getProjectWithLivePrice = (project: typeof cryptoProjects[0]) => {
     const geckoId = PROJECT_TO_COINGECKO[project.id];
     const liveCoin = marketCoins?.find((c) => c.id === geckoId);
@@ -61,10 +60,13 @@ export default function HomePage() {
     return project;
   };
 
-  // Show watchlist projects first, then popular
   const watchedProjects = cryptoProjects.filter((p) => watchlist.includes(p.id)).map(getProjectWithLivePrice);
   const otherProjects = cryptoProjects.filter((p) => !watchlist.includes(p.id)).map(getProjectWithLivePrice);
-  const displayProjects = [...watchedProjects, ...otherProjects].slice(0, 5);
+
+  const hasWatchlist = watchedProjects.length > 0;
+  const displayProjects = hasWatchlist
+    ? (showAllWatchlist ? watchedProjects : watchedProjects.slice(0, 5))
+    : [...watchedProjects, ...otherProjects].slice(0, 5);
 
   const handleClaimStreak = () => {
     claimStreakBonus();
@@ -163,7 +165,6 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Tooltip */}
                 <AnimatePresence>
                   {isHovered && (
                     <motion.div
@@ -226,14 +227,16 @@ export default function HomePage() {
       <motion.div variants={item}>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-semibold text-muted-foreground flex items-center gap-1.5">
-            {watchedProjects.length > 0 && <Eye className="w-3.5 h-3.5 text-primary" />}
-            {watchedProjects.length > 0
+            {hasWatchlist && <Eye className="w-3.5 h-3.5 text-primary" />}
+            {hasWatchlist
               ? (language === "en" ? "My Watchlist" : "Ma Watchlist")
               : t("home.popular")}
           </h2>
-          <button onClick={() => navigate("/learn")} className="text-xs text-primary flex items-center gap-1">
-            {t("common.readMore")} <ChevronRight className="w-3 h-3" />
-          </button>
+          {!hasWatchlist && (
+            <button onClick={() => navigate("/learn")} className="text-xs text-primary flex items-center gap-1">
+              {t("common.readMore")} <ChevronRight className="w-3 h-3" />
+            </button>
+          )}
         </div>
         <div className="space-y-2">
           {displayProjects.map((project) => (
@@ -270,6 +273,19 @@ export default function HomePage() {
             </div>
           ))}
         </div>
+
+        {/* See more / See less for watchlist */}
+        {hasWatchlist && watchedProjects.length > 5 && (
+          <button
+            onClick={() => setShowAllWatchlist(!showAllWatchlist)}
+            className="w-full mt-2 flex items-center justify-center gap-1 py-2 rounded-xl text-xs font-medium text-primary bg-primary/5 border border-primary/20 hover:bg-primary/10 transition-colors"
+          >
+            {showAllWatchlist
+              ? (language === "en" ? "Show less" : "Voir moins")
+              : (language === "en" ? `See all (${watchedProjects.length})` : `Voir tout (${watchedProjects.length})`)}
+            <ChevronDown className={`w-3 h-3 transition-transform ${showAllWatchlist ? "rotate-180" : ""}`} />
+          </button>
+        )}
       </motion.div>
     </motion.div>
   );

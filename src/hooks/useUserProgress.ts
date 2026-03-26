@@ -16,11 +16,25 @@ interface UserProgress {
   avatarChangesThisPeriod: number;
   unlimitedProfileChanges: boolean;
   shopPurchases: string[];
+  registrationDate: string;
+  claimedTimeBadges: string[];
 }
 
 const EXP_PER_LEVEL = 200;
 const PROJECT_READ_EXP = 15;
 const PROJECT_READ_POINTS = 10;
+
+export const TIME_BADGES = [
+  { id: "1w", days: 7, label: { en: "1 Week", fr: "1 Semaine" }, emoji: "🌱", exp: 50, points: 25 },
+  { id: "1m", days: 30, label: { en: "1 Month", fr: "1 Mois" }, emoji: "🌿", exp: 100, points: 50 },
+  { id: "3m", days: 90, label: { en: "3 Months", fr: "3 Mois" }, emoji: "🌳", exp: 200, points: 100 },
+  { id: "6m", days: 180, label: { en: "6 Months", fr: "6 Mois" }, emoji: "⭐", exp: 300, points: 150 },
+  { id: "1y", days: 365, label: { en: "1 Year", fr: "1 An" }, emoji: "🏅", exp: 500, points: 250 },
+  { id: "2y", days: 730, label: { en: "2 Years", fr: "2 Ans" }, emoji: "🏆", exp: 750, points: 400 },
+  { id: "3y", days: 1095, label: { en: "3 Years", fr: "3 Ans" }, emoji: "💎", exp: 1000, points: 500 },
+  { id: "4y", days: 1460, label: { en: "4 Years", fr: "4 Ans" }, emoji: "👑", exp: 1250, points: 600 },
+  { id: "5y", days: 1825, label: { en: "5 Years", fr: "5 Ans" }, emoji: "🐐", exp: 1500, points: 750 },
+];
 
 function getInitialProgress(): UserProgress {
   try {
@@ -43,6 +57,8 @@ function getInitialProgress(): UserProgress {
         avatarChangesThisPeriod: parsed.avatarChangesThisPeriod || 0,
         unlimitedProfileChanges: parsed.unlimitedProfileChanges || false,
         shopPurchases: parsed.shopPurchases || [],
+        registrationDate: parsed.registrationDate || new Date().toISOString(),
+        claimedTimeBadges: parsed.claimedTimeBadges || [],
       };
     }
   } catch {}
@@ -53,6 +69,8 @@ function getInitialProgress(): UserProgress {
     lastUsernameChange: null, lastAvatarChange: null,
     usernameChangesThisPeriod: 0, avatarChangesThisPeriod: 0,
     unlimitedProfileChanges: false, shopPurchases: [],
+    registrationDate: new Date().toISOString(),
+    claimedTimeBadges: [],
   };
 }
 
@@ -200,6 +218,31 @@ export function useUserProgress() {
     return success;
   }, []);
 
+  const claimTimeBadge = useCallback((badgeId: string): boolean => {
+    const badge = TIME_BADGES.find((b) => b.id === badgeId);
+    if (!badge) return false;
+    let success = false;
+    setProgress((prev) => {
+      if (prev.claimedTimeBadges.includes(badgeId)) return prev;
+      const daysSinceReg = (Date.now() - new Date(prev.registrationDate).getTime()) / (1000 * 60 * 60 * 24);
+      if (daysSinceReg < badge.days) return prev;
+      success = true;
+      const newExp = prev.exp + badge.exp;
+      return {
+        ...prev,
+        exp: newExp,
+        level: calcLevel(newExp),
+        points: prev.points + badge.points,
+        claimedTimeBadges: [...prev.claimedTimeBadges, badgeId],
+      };
+    });
+    return success;
+  }, []);
+
+  const daysSinceRegistration = Math.floor(
+    (Date.now() - new Date(progress.registrationDate).getTime()) / (1000 * 60 * 60 * 24)
+  );
+
   const expInCurrentLevel = progress.exp % EXP_PER_LEVEL;
   const expPercent = (expInCurrentLevel / EXP_PER_LEVEL) * 100;
 
@@ -208,6 +251,7 @@ export function useUserProgress() {
     expInCurrentLevel,
     expToNextLevel: EXP_PER_LEVEL,
     expPercent,
+    daysSinceRegistration,
     addExp,
     addPoints,
     spendPoints,
@@ -218,6 +262,7 @@ export function useUserProgress() {
     setUsername,
     setAvatarEmoji,
     purchaseShopItem,
+    claimTimeBadge,
     isLessonCompleted: (id: string) => progress.completedLessons.includes(id),
     isTermRead: (id: string) => progress.readTerms.includes(id),
     isProjectRead: (id: string) => progress.readProjects.includes(id),

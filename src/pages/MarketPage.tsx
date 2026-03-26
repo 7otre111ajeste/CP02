@@ -2,8 +2,9 @@ import { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useCryptoMarket, MARKET_CATEGORIES, type MarketCategory } from "@/hooks/useCryptoMarket";
+import { useWatchlist } from "@/hooks/useWatchlist";
 import { cryptoProjects } from "@/data/mockData";
-import { Search, TrendingUp, TrendingDown, RefreshCw, Sparkles } from "lucide-react";
+import { Search, TrendingUp, TrendingDown, RefreshCw, Sparkles, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import StatusTag from "@/components/StatusTag";
 import ScoreBadge from "@/components/ScoreBadge";
@@ -51,6 +52,7 @@ export default function MarketPage() {
   const [sortField, setSortField] = useState<SortField>("rank");
   const [sortDir, setSortDir] = useState<SortDirection>("asc");
   const { data: coins, isLoading, isError, refetch, isFetching } = useCryptoMarket();
+  const { toggleWatchlist, isWatching } = useWatchlist();
 
   const filtered = useMemo(() => {
     let list = (coins ?? []).filter((c) => {
@@ -68,7 +70,7 @@ export default function MarketPage() {
         case "price": cmp = a.current_price - b.current_price; break;
         case "change": cmp = (a.price_change_percentage_24h ?? 0) - (b.price_change_percentage_24h ?? 0); break;
         case "marketCap": cmp = (a.market_cap ?? 0) - (b.market_cap ?? 0); break;
-        case "volume": cmp = 0; break; // volume not available in list endpoint
+        case "volume": cmp = 0; break;
         case "rank": cmp = (a.market_cap_rank ?? 999) - (b.market_cap_rank ?? 999); break;
         default: cmp = 0;
       }
@@ -91,7 +93,6 @@ export default function MarketPage() {
         </button>
       </div>
 
-      {/* Market Sentiment */}
       <div className="mb-4">
         <MarketSentiment />
       </div>
@@ -107,7 +108,6 @@ export default function MarketPage() {
         />
       </div>
 
-      {/* Category + Sort */}
       <div className="flex items-center justify-between gap-2 mb-4">
         <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-1 flex-1">
           {MARKET_CATEGORIES.map((cat) => (
@@ -132,7 +132,6 @@ export default function MarketPage() {
         />
       </div>
 
-      {/* Table header */}
       <div className="flex items-center px-3 py-2 text-[10px] font-medium text-muted-foreground uppercase">
         <span className="w-8">#</span>
         <span className="flex-1">Name</span>
@@ -196,20 +195,39 @@ export default function MarketPage() {
                 </div>
               </div>
 
-              {/* Badges row */}
-              {learnProject && (
-                <div className="flex items-center gap-1.5 px-3 pb-2.5 flex-wrap">
-                  <StatusTag type="halal" status={learnProject.halalStatus} />
-                  <StatusTag type="safety" status={learnProject.safetyStatus} />
-                  <ScoreBadge score={learnProject.score} />
-                  <button
-                    onClick={(e) => { e.stopPropagation(); navigate("/ai"); }}
-                    className="text-[10px] px-2 py-1 rounded-full font-medium flex items-center gap-1 border border-accent/30 bg-accent/10 text-accent"
-                  >
-                    <Sparkles className="w-2.5 h-2.5" /> AI
-                  </button>
-                </div>
-              )}
+              {/* Badges + Watchlist row */}
+              <div className="flex items-center gap-1.5 px-3 pb-2.5 flex-wrap">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const projectId = learnProject?.id || coin.id;
+                    toggleWatchlist(projectId);
+                  }}
+                  className="flex-shrink-0"
+                >
+                  <Star
+                    className={`w-4 h-4 transition-colors ${
+                      isWatching(learnProject?.id || coin.id) ? "text-warning fill-warning" : "text-muted-foreground"
+                    }`}
+                  />
+                </button>
+                {learnProject && (
+                  <>
+                    <StatusTag type="halal" status={learnProject.halalStatus} />
+                    <StatusTag type="safety" status={learnProject.safetyStatus} />
+                    <ScoreBadge score={learnProject.score} />
+                  </>
+                )}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/ai", { state: { projectName: learnProject?.name || coin.name } });
+                  }}
+                  className="text-[10px] px-2 py-1 rounded-full font-medium flex items-center gap-1 border border-accent/30 bg-accent/10 text-accent"
+                >
+                  <Sparkles className="w-2.5 h-2.5" /> AI
+                </button>
+              </div>
             </motion.div>
           );
         })}
