@@ -12,6 +12,7 @@ export default function LessonPage() {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
   const { completeLesson, isLessonCompleted } = useUserProgress();
+  const { incrementQuest } = useDailyQuests();
 
   const lesson = trainingLessons.find((l) => l.id === id);
   if (!lesson) return <div className="p-4 text-foreground">Lesson not found</div>;
