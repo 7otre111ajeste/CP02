@@ -56,6 +56,14 @@ export const cryptoProjects: CryptoProject[] = [
       en: "Bitcoin is the first and most well-known cryptocurrency. It's digital money that works without any bank or government.",
       fr: "Bitcoin est la première et la plus connue des cryptomonnaies. C'est de l'argent numérique qui fonctionne sans banque ni gouvernement.",
     },
+    descriptionPro: {
+      en: "Bitcoin is a decentralized peer-to-peer electronic cash system utilizing a SHA-256 Proof-of-Work consensus mechanism. It operates on a UTXO model with a fixed supply cap of 21 million coins, with block rewards halving approximately every 210,000 blocks.",
+      fr: "Bitcoin est un système de paiement électronique pair-à-pair décentralisé utilisant un mécanisme de consensus Proof-of-Work SHA-256. Il fonctionne sur un modèle UTXO avec une offre maximale fixe de 21 millions de coins.",
+    },
+    descriptionBro: {
+      en: "Imagine digital gold that lives on the internet. Nobody controls it — no bank, no government. You can send it to anyone, anywhere, like sending a text message but with money. There will only ever be 21 million Bitcoin, so it's rare like gold!",
+      fr: "Imagine de l'or numérique qui vit sur internet. Personne ne le contrôle — ni banque, ni gouvernement. Tu peux l'envoyer à n'importe qui, comme un SMS mais avec de l'argent. Il n'y aura jamais que 21 millions de Bitcoin, c'est rare comme de l'or !",
+    },
     purpose: {
       en: "To allow people to send money to each other directly, without needing a bank.",
       fr: "Permettre aux gens de s'envoyer de l'argent directement, sans avoir besoin d'une banque.",
