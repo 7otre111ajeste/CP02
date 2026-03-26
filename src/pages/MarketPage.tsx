@@ -4,12 +4,13 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useCryptoMarket, MARKET_CATEGORIES, type MarketCategory } from "@/hooks/useCryptoMarket";
 import { useWatchlist } from "@/hooks/useWatchlist";
 import { cryptoProjects } from "@/data/mockData";
-import { Search, TrendingUp, TrendingDown, RefreshCw, Sparkles, Star } from "lucide-react";
-import { motion } from "framer-motion";
+import { Search, TrendingUp, TrendingDown, RefreshCw, Sparkles, Star, Filter, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import StatusTag from "@/components/StatusTag";
 import ScoreBadge from "@/components/ScoreBadge";
 import SortFilter, { type SortField, type SortDirection } from "@/components/SortFilter";
 import MarketSentiment from "@/components/MarketSentiment";
+import { Slider } from "@/components/ui/slider";
 
 function MiniSparkline({ data, positive }: { data: number[]; positive: boolean }) {
   if (!data || data.length === 0) return null;
@@ -44,6 +45,9 @@ const SORT_FIELDS: { value: SortField; label: string }[] = [
   { value: "volume", label: "Volume" },
 ];
 
+type HalalFilter = "all" | "halal" | "uncertain" | "notHalal";
+type SafetyFilter = "all" | "safe" | "risky" | "scam";
+
 export default function MarketPage() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
@@ -51,8 +55,20 @@ export default function MarketPage() {
   const [category, setCategory] = useState<MarketCategory>("All");
   const [sortField, setSortField] = useState<SortField>("rank");
   const [sortDir, setSortDir] = useState<SortDirection>("asc");
+  const [showFilters, setShowFilters] = useState(false);
+  const [halalFilter, setHalalFilter] = useState<HalalFilter>("all");
+  const [safetyFilter, setSafetyFilter] = useState<SafetyFilter>("all");
+  const [scoreRange, setScoreRange] = useState<[number, number]>([0, 10]);
   const { data: coins, isLoading, isError, refetch, isFetching } = useCryptoMarket();
   const { toggleWatchlist, isWatching } = useWatchlist();
+
+  const activeFilterCount = (halalFilter !== "all" ? 1 : 0) + (safetyFilter !== "all" ? 1 : 0) + (scoreRange[0] > 0 || scoreRange[1] < 10 ? 1 : 0);
+
+  const clearFilters = () => {
+    setHalalFilter("all");
+    setSafetyFilter("all");
+    setScoreRange([0, 10]);
+  };
 
   const filtered = useMemo(() => {
     let list = (coins ?? []).filter((c) => {
@@ -60,7 +76,17 @@ export default function MarketPage() {
         c.name.toLowerCase().includes(search.toLowerCase()) ||
         c.symbol.toLowerCase().includes(search.toLowerCase());
       const matchesCategory = category === "All" || c.category === category;
-      return matchesSearch && matchesCategory;
+
+      // Halal & Safety & Score filters
+      const learnProject = cryptoProjects.find(
+        (p) => p.id === c.id || p.symbol.toLowerCase() === c.symbol.toLowerCase()
+      );
+
+      const matchesHalal = halalFilter === "all" || (learnProject && learnProject.halalStatus === halalFilter);
+      const matchesSafety = safetyFilter === "all" || (learnProject && learnProject.safetyStatus === safetyFilter);
+      const matchesScore = !learnProject || (learnProject.score >= scoreRange[0] && learnProject.score <= scoreRange[1]);
+
+      return matchesSearch && matchesCategory && matchesHalal && matchesSafety && matchesScore;
     });
 
     list.sort((a, b) => {
@@ -78,7 +104,7 @@ export default function MarketPage() {
     });
 
     return list;
-  }, [coins, search, category, sortField, sortDir]);
+  }, [coins, search, category, sortField, sortDir, halalFilter, safetyFilter, scoreRange]);
 
   return (
     <div className="px-4 pt-6 pb-24 max-w-lg mx-auto">
