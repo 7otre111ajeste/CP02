@@ -3,6 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { dictionaryTerms, cryptoProjects, trainingLessons } from "@/data/mockData";
 import { useUserProgress } from "@/hooks/useUserProgress";
+import { useDailyQuests } from "@/hooks/useDailyQuests";
 import StatusTag from "@/components/StatusTag";
 import { Search, BookOpen, Layers, GraduationCap, ChevronRight, CheckCircle, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
