@@ -68,7 +68,7 @@ export default function HomePage() {
 
       <motion.div variants={item}>
         <h2 className="text-sm font-semibold text-muted-foreground mb-3">{t("home.quickActions")}</h2>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
           {quickActions.map((action) => (
             <button
               key={action.path}
