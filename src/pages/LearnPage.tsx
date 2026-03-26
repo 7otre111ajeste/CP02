@@ -45,9 +45,21 @@ export default function LearnPage() {
     { id: "training" as Tab, label: t("learn.training"), icon: GraduationCap },
   ];
 
-  const filteredTerms = dictionaryTerms.filter((term) =>
-    term.term[language].toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredTerms = useMemo(() => {
+    let list = dictionaryTerms.filter((term) =>
+      term.term[language].toLowerCase().includes(search.toLowerCase())
+    );
+    list.sort((a, b) => {
+      let cmp = 0;
+      switch (dictSortField) {
+        case "name": cmp = a.term[language].localeCompare(b.term[language]); break;
+        case "volume": cmp = a.category.localeCompare(b.category); break;
+        default: cmp = 0;
+      }
+      return dictSortDir === "asc" ? cmp : -cmp;
+    });
+    return list;
+  }, [search, language, dictSortField, dictSortDir]);
 
   const filteredProjects = useMemo(() => {
     let list = cryptoProjects.filter((p) =>
