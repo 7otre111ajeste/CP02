@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProgress } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
-import { User, BookOpen, Brain, Settings, Globe, ChevronRight, LogIn, Award, Flame } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, Award, Flame, Coins, ShoppingBag, Info, Edit2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 interface LevelTier {
   name: { en: string; fr: string };
@@ -22,21 +25,59 @@ const LEVEL_TIERS: LevelTier[] = [
   { name: { en: "Legend", fr: "Légende" }, minLevel: 61, maxLevel: 999, emoji: "🏆", color: "bg-warning/15 text-warning border-warning/20" },
 ];
 
+const AVATAR_EMOJIS = ["👤", "🦊", "🐱", "🐶", "🦁", "🐻", "🐼", "🦉", "🐉", "🚀", "💎", "⚡", "🔥", "🌟", "👑", "🎯"];
+
 function getCurrentTier(level: number): LevelTier {
   return LEVEL_TIERS.find((t) => level >= t.minLevel && level <= t.maxLevel) || LEVEL_TIERS[0];
 }
 
-function getUnlockedTiers(level: number): LevelTier[] {
-  return LEVEL_TIERS.filter((t) => level >= t.minLevel);
-}
-
 export default function ProfilePage() {
   const { t, language, setLanguage } = useLanguage();
-  const { level, exp, expInCurrentLevel, expToNextLevel, expPercent, completedLessons, completedQuizzes, readTerms } = useUserProgress();
+  const navigate = useNavigate();
+  const {
+    level, exp, expInCurrentLevel, expToNextLevel, expPercent,
+    completedLessons, completedQuizzes, readTerms, readProjects,
+    points, username, avatarEmoji,
+    setUsername, setAvatarEmoji,
+    canChangeUsernameFree, canChangeAvatarFree, unlimitedProfileChanges,
+  } = useUserProgress();
   const { streak } = useDailyQuests();
 
+  const [editingName, setEditingName] = useState(false);
+  const [nameInput, setNameInput] = useState(username);
+  const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+
   const currentTier = getCurrentTier(level);
-  const unlockedTiers = getUnlockedTiers(level);
+  const en = language === "en";
+
+  const handleSaveName = () => {
+    if (!nameInput.trim()) return;
+    const canFree = canChangeUsernameFree || unlimitedProfileChanges;
+    if (!canFree) {
+      toast.error(en ? "Buy unlimited changes in the Shop!" : "Achetez les changements illimités dans la Boutique !");
+      return;
+    }
+    const result = setUsername(nameInput.trim());
+    if (result.success) {
+      toast.success(en ? "Username updated!" : "Pseudo mis à jour !");
+      setEditingName(false);
+    } else {
+      toast.error(en ? "Change limit reached. Buy unlimited in Shop!" : "Limite atteinte. Achetez l'illimité dans la Boutique !");
+    }
+  };
+
+  const handlePickAvatar = (emoji: string) => {
+    const canFree = canChangeAvatarFree || unlimitedProfileChanges;
+    if (!canFree) {
+      toast.error(en ? "Buy unlimited changes in the Shop!" : "Achetez les changements illimités dans la Boutique !");
+      return;
+    }
+    const result = setAvatarEmoji(emoji);
+    if (result.success) {
+      toast.success(en ? "Avatar updated!" : "Avatar mis à jour !");
+      setShowAvatarPicker(false);
+    }
+  };
 
   const stats = [
     { icon: BookOpen, label: t("profile.lessons"), value: String(completedLessons.length) },
@@ -44,17 +85,49 @@ export default function ProfilePage() {
   ];
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-4 pt-6 pb-24 max-w-lg mx-auto space-y-5">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-4 pt-6 pb-28 max-w-lg mx-auto space-y-5">
       <h1 className="text-2xl font-bold text-foreground">{t("profile.title")}</h1>
 
       {/* Profile Card */}
       <div className="bg-gradient-card rounded-2xl p-5 border border-border text-center glow-primary">
-        <div className="w-16 h-16 rounded-full bg-gradient-primary mx-auto flex items-center justify-center mb-3">
-          <User className="w-8 h-8 text-primary-foreground" />
-        </div>
-        <h2 className="text-lg font-bold text-foreground mb-1">
-          {language === "en" ? "Guest User" : "Utilisateur Invité"}
-        </h2>
+        <button onClick={() => setShowAvatarPicker(!showAvatarPicker)} className="relative mx-auto mb-3 group">
+          <div className="w-16 h-16 rounded-full bg-gradient-primary mx-auto flex items-center justify-center text-2xl">
+            {avatarEmoji}
+          </div>
+          <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-card border border-border flex items-center justify-center">
+            <Edit2 className="w-2.5 h-2.5 text-muted-foreground" />
+          </div>
+        </button>
+
+        {showAvatarPicker && (
+          <div className="grid grid-cols-8 gap-2 mb-3 bg-secondary/50 rounded-xl p-3">
+            {AVATAR_EMOJIS.map((e) => (
+              <button key={e} onClick={() => handlePickAvatar(e)} className={`text-xl p-1 rounded-lg hover:bg-primary/10 ${avatarEmoji === e ? "bg-primary/20 ring-1 ring-primary" : ""}`}>
+                {e}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {editingName ? (
+          <div className="flex items-center gap-2 justify-center mb-2">
+            <input
+              value={nameInput}
+              onChange={(e) => setNameInput(e.target.value)}
+              className="bg-secondary border border-border rounded-lg px-3 py-1 text-sm text-foreground text-center w-40 focus:outline-none focus:ring-1 focus:ring-primary"
+              maxLength={20}
+              autoFocus
+            />
+            <button onClick={handleSaveName} className="text-xs px-3 py-1 rounded-lg bg-primary text-primary-foreground font-medium">OK</button>
+            <button onClick={() => setEditingName(false)} className="text-xs px-2 py-1 text-muted-foreground">✕</button>
+          </div>
+        ) : (
+          <button onClick={() => { setNameInput(username); setEditingName(true); }} className="flex items-center gap-1 mx-auto mb-1">
+            <h2 className="text-lg font-bold text-foreground">{username}</h2>
+            <Edit2 className="w-3 h-3 text-muted-foreground" />
+          </button>
+        )}
+
         <div className="flex items-center justify-center gap-2 mb-2">
           <span className={`text-xs px-2.5 py-1 rounded-full border font-medium ${currentTier.color}`}>
             {currentTier.emoji} {currentTier.name[language]}
@@ -63,7 +136,12 @@ export default function ProfilePage() {
             <Flame className="w-3 h-3 text-danger" /> {streak}
           </span>
         </div>
-        <p className="text-xs text-muted-foreground mb-4">{t("home.level")} {level} • {exp} {t("home.exp")}</p>
+        <p className="text-xs text-muted-foreground mb-1">{t("home.level")} {level} • {exp} {t("home.exp")}</p>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <Coins className="w-3.5 h-3.5 text-warning" />
+          <span className="text-sm font-bold text-foreground">{points}</span>
+          <span className="text-xs text-muted-foreground">points</span>
+        </div>
         <div className="w-full h-2 bg-secondary rounded-full overflow-hidden mb-1">
           <div className="h-full bg-gradient-primary rounded-full transition-all" style={{ width: `${expPercent}%` }} />
         </div>
@@ -81,11 +159,24 @@ export default function ProfilePage() {
         ))}
       </div>
 
+      {/* Quick Links */}
+      <div className="grid grid-cols-2 gap-3">
+        <button onClick={() => navigate("/shop")} className="bg-card rounded-xl p-4 border border-border text-center hover:border-primary/30 transition-colors">
+          <ShoppingBag className="w-5 h-5 text-primary mx-auto mb-2" />
+          <p className="text-sm font-medium text-foreground">{en ? "Shop" : "Boutique"}</p>
+          <p className="text-[10px] text-muted-foreground">{points} pts</p>
+        </button>
+        <button onClick={() => navigate("/about")} className="bg-card rounded-xl p-4 border border-border text-center hover:border-primary/30 transition-colors">
+          <Info className="w-5 h-5 text-primary mx-auto mb-2" />
+          <p className="text-sm font-medium text-foreground">{en ? "About & Rules" : "À propos & Règles"}</p>
+        </button>
+      </div>
+
       {/* Badges */}
       <div>
         <h2 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-1.5">
           <Award className="w-4 h-4 text-primary" />
-          {language === "en" ? "Badges" : "Badges"}
+          {en ? "Badges" : "Badges"}
         </h2>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
           {LEVEL_TIERS.map((tier) => {
@@ -94,9 +185,7 @@ export default function ProfilePage() {
               <div
                 key={tier.minLevel}
                 className={`rounded-xl border p-3 text-center transition-all ${
-                  unlocked
-                    ? `bg-card ${tier.color}`
-                    : "bg-secondary/30 border-border opacity-40"
+                  unlocked ? `bg-card ${tier.color}` : "bg-secondary/30 border-border opacity-40"
                 }`}
               >
                 <p className="text-2xl mb-1">{unlocked ? tier.emoji : "🔒"}</p>

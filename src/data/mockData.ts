@@ -11,6 +11,7 @@ export interface CryptoProject {
   yearCreated: number;
   halalStatus: "halal" | "notHalal" | "uncertain";
   safetyStatus: "safe" | "risky" | "scam";
+  score: number; // 0-10 quality score
   description: { en: string; fr: string };
   purpose: { en: string; fr: string };
   howItWorks: { en: string; fr: string };
@@ -48,6 +49,7 @@ export const cryptoProjects: CryptoProject[] = [
     yearCreated: 2009,
     halalStatus: "halal",
     safetyStatus: "safe",
+    score: 9,
     description: {
       en: "Bitcoin is the first and most well-known cryptocurrency. It's digital money that works without any bank or government.",
       fr: "Bitcoin est la première et la plus connue des cryptomonnaies. C'est de l'argent numérique qui fonctionne sans banque ni gouvernement.",
@@ -79,6 +81,7 @@ export const cryptoProjects: CryptoProject[] = [
     yearCreated: 2015,
     halalStatus: "uncertain",
     safetyStatus: "safe",
+    score: 8,
     description: {
       en: "Ethereum is a platform that lets developers build apps (dApps) on the blockchain. It introduced smart contracts.",
       fr: "Ethereum est une plateforme qui permet aux développeurs de créer des applications (dApps) sur la blockchain. Elle a introduit les contrats intelligents.",
@@ -110,6 +113,7 @@ export const cryptoProjects: CryptoProject[] = [
     yearCreated: 2020,
     halalStatus: "uncertain",
     safetyStatus: "safe",
+    score: 7,
     description: {
       en: "Solana is a fast blockchain that can handle thousands of transactions per second at very low cost.",
       fr: "Solana est une blockchain rapide capable de traiter des milliers de transactions par seconde à très faible coût.",
@@ -141,6 +145,7 @@ export const cryptoProjects: CryptoProject[] = [
     yearCreated: 2017,
     halalStatus: "halal",
     safetyStatus: "safe",
+    score: 7,
     description: {
       en: "Cardano is a blockchain built on scientific research. It focuses on security and sustainability.",
       fr: "Cardano est une blockchain construite sur la recherche scientifique. Elle se concentre sur la sécurité et la durabilité.",
@@ -172,6 +177,7 @@ export const cryptoProjects: CryptoProject[] = [
     yearCreated: 2017,
     halalStatus: "uncertain",
     safetyStatus: "safe",
+    score: 6,
     description: {
       en: "BNB is the native token of the Binance ecosystem, one of the largest crypto exchanges in the world.",
       fr: "BNB est le jeton natif de l'écosystème Binance, l'une des plus grandes plateformes d'échange de crypto au monde.",
