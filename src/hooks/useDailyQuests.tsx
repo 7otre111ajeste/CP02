@@ -74,19 +74,46 @@ function getYesterday(): string {
   return d.toDateString();
 }
 
+function awardExp(expToAdd: number) {
+  if (expToAdd <= 0) return;
+
+  try {
+    const progress = JSON.parse(
+      localStorage.getItem("cryptopedia-progress") ||
+        '{"exp":0,"level":1,"completedLessons":[],"completedQuizzes":[],"readTerms":[]}'
+    );
+    progress.exp += expToAdd;
+    progress.level = Math.floor(progress.exp / 200) + 1;
+    localStorage.setItem("cryptopedia-progress", JSON.stringify(progress));
+  } catch {}
+}
+
 function loadQuestProgress(): QuestProgress {
   try {
     const saved = JSON.parse(localStorage.getItem("cryptopedia-quests") || "{}");
     const today = getToday();
-    if (saved.date === today) return saved;
+
+    if (saved.date === today) {
+      return {
+        date: today,
+        progress: saved.progress || {},
+        completed: saved.completed || [],
+        streak: saved.streak || 0,
+        lastStreakDate: saved.lastStreakDate || "",
+        streakBonusClaimed: Boolean(saved.streakBonusClaimed),
+      };
+    }
+
     const yesterday = getYesterday();
     const wasAllComplete = DAILY_QUESTS.every((q) => saved.completed?.includes(q.id));
+
     let streak = 0;
     if (saved.lastStreakDate === yesterday && wasAllComplete) {
       streak = (saved.streak || 0) + 1;
     } else if (saved.lastStreakDate === today) {
       streak = saved.streak || 0;
     }
+
     return {
       date: today,
       progress: {},
@@ -96,12 +123,19 @@ function loadQuestProgress(): QuestProgress {
       streakBonusClaimed: false,
     };
   } catch {
-    return { date: getToday(), progress: {}, completed: [], streak: 0, lastStreakDate: "", streakBonusClaimed: false };
+    return {
+      date: getToday(),
+      progress: {},
+      completed: [],
+      streak: 0,
+      lastStreakDate: "",
+      streakBonusClaimed: false,
+    };
   }
 }
 
-function saveQuestProgress(p: QuestProgress) {
-  localStorage.setItem("cryptopedia-quests", JSON.stringify(p));
+function saveQuestProgress(progress: QuestProgress) {
+  localStorage.setItem("cryptopedia-quests", JSON.stringify(progress));
 }
 
 interface DailyQuestsContextType {
@@ -117,21 +151,52 @@ interface DailyQuestsContextType {
   claimStreakBonus: () => void;
 }
 
-const DailyQuestsContext = createContext<DailyQuestsContextType | undefined>(undefined);
+function buildFallbackContext(): DailyQuestsContextType {
+  const questProgress = loadQuestProgress();
+
+  return {
+    quests: DAILY_QUESTS,
+    progress: questProgress.progress,
+    completed: questProgress.completed,
+    streak: questProgress.streak,
+    allCompleted: DAILY_QUESTS.every((q) => questProgress.completed.includes(q.id)),
+    canClaimStreak: questProgress.streak >= STREAK_REQUIRED && !questProgress.streakBonusClaimed,
+    streakRequired: STREAK_REQUIRED,
+    streakBonusExp: STREAK_BONUS_EXP,
+    incrementQuest: (type, amount = 1) => {
+      const current = loadQuestProgress();
+      const updated = { ...current, progress: { ...current.progress } };
+      const newCompleted = [...current.completed];
+      let expToAdd = 0;
+
+      DAILY_QUESTS.filter((q) => q.type === type).forEach((quest) => {
+        if (newCompleted.includes(quest.id)) return;
+        const nextValue = (updated.progress[quest.id] || 0) + amount;
+        updated.progress[quest.id] = nextValue;
+
+        if (nextValue >= quest.target) {
+          newCompleted.push(quest.id);
+          expToAdd += quest.expReward;
+        }
+      });
+
+      updated.completed = newCompleted;
+      saveQuestProgress(updated);
+      awardExp(expToAdd);
+    },
+    claimStreakBonus: () => {
+      const current = loadQuestProgress();
+      if (current.streakBonusClaimed || current.streak < STREAK_REQUIRED) return;
+      awardExp(STREAK_BONUS_EXP);
+      saveQuestProgress({ ...current, streakBonusClaimed: true, streak: 0 });
+    },
+  };
+}
+
+const DailyQuestsContext = createContext<DailyQuestsContextType>(buildFallbackContext());
 
 export function DailyQuestsProvider({ children }: { children: ReactNode }) {
   const [questProgress, setQuestProgress] = useState<QuestProgress>(loadQuestProgress);
-
-  // Auto-complete login quest on mount
-  useEffect(() => {
-    if (!questProgress.completed.includes("daily-login")) {
-      incrementQuest("login");
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    saveQuestProgress(questProgress);
-  }, [questProgress]);
 
   const incrementQuest = useCallback((type: DailyQuest["type"], amount = 1) => {
     setQuestProgress((prev) => {
@@ -143,6 +208,7 @@ export function DailyQuestsProvider({ children }: { children: ReactNode }) {
         if (newCompleted.includes(quest.id)) return;
         const current = (updated.progress[quest.id] || 0) + amount;
         updated.progress[quest.id] = current;
+
         if (current >= quest.target) {
           newCompleted.push(quest.id);
           expToAdd += quest.expReward;
@@ -157,15 +223,7 @@ export function DailyQuestsProvider({ children }: { children: ReactNode }) {
         updated.streak = (prev.streak || 0) + 1;
       }
 
-      if (expToAdd > 0) {
-        try {
-          const p = JSON.parse(localStorage.getItem("cryptopedia-progress") || '{"exp":0,"level":1,"completedLessons":[],"completedQuizzes":[],"readTerms":[]}');
-          p.exp += expToAdd;
-          p.level = Math.floor(p.exp / 200) + 1;
-          localStorage.setItem("cryptopedia-progress", JSON.stringify(p));
-        } catch {}
-      }
-
+      awardExp(expToAdd);
       return updated;
     });
   }, []);
@@ -173,41 +231,37 @@ export function DailyQuestsProvider({ children }: { children: ReactNode }) {
   const claimStreakBonus = useCallback(() => {
     setQuestProgress((prev) => {
       if (prev.streakBonusClaimed || prev.streak < STREAK_REQUIRED) return prev;
-      try {
-        const p = JSON.parse(localStorage.getItem("cryptopedia-progress") || '{"exp":0,"level":1,"completedLessons":[],"completedQuizzes":[],"readTerms":[]}');
-        p.exp += STREAK_BONUS_EXP;
-        p.level = Math.floor(p.exp / 200) + 1;
-        localStorage.setItem("cryptopedia-progress", JSON.stringify(p));
-      } catch {}
+      awardExp(STREAK_BONUS_EXP);
       return { ...prev, streakBonusClaimed: true, streak: 0 };
     });
   }, []);
 
-  const allCompleted = DAILY_QUESTS.every((q) => questProgress.completed.includes(q.id));
-  const canClaimStreak = questProgress.streak >= STREAK_REQUIRED && !questProgress.streakBonusClaimed;
+  useEffect(() => {
+    if (!questProgress.completed.includes("daily-login")) {
+      incrementQuest("login");
+    }
+  }, [incrementQuest, questProgress.completed]);
+
+  useEffect(() => {
+    saveQuestProgress(questProgress);
+  }, [questProgress]);
 
   const value: DailyQuestsContextType = {
     quests: DAILY_QUESTS,
     progress: questProgress.progress,
     completed: questProgress.completed,
     streak: questProgress.streak,
-    allCompleted,
-    canClaimStreak,
+    allCompleted: DAILY_QUESTS.every((q) => questProgress.completed.includes(q.id)),
+    canClaimStreak: questProgress.streak >= STREAK_REQUIRED && !questProgress.streakBonusClaimed,
     streakRequired: STREAK_REQUIRED,
     streakBonusExp: STREAK_BONUS_EXP,
     incrementQuest,
     claimStreakBonus,
   };
 
-  return (
-    <DailyQuestsContext.Provider value={value}>
-      {children}
-    </DailyQuestsContext.Provider>
-  );
+  return <DailyQuestsContext.Provider value={value}>{children}</DailyQuestsContext.Provider>;
 }
 
 export function useDailyQuests() {
-  const context = useContext(DailyQuestsContext);
-  if (!context) throw new Error("useDailyQuests must be used within DailyQuestsProvider");
-  return context;
+  return useContext(DailyQuestsContext);
 }
