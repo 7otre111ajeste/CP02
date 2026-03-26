@@ -19,6 +19,7 @@ export interface CryptoProject {
   howItWorks: { en: string; fr: string };
   useCases: { en: string; fr: string };
   icon: string;
+  logo: string;
   website: string;
   whitepaper: string;
 }
