@@ -96,6 +96,14 @@ export const cryptoProjects: CryptoProject[] = [
       en: "Ethereum is a platform that lets developers build apps (dApps) on the blockchain. It introduced smart contracts.",
       fr: "Ethereum est une plateforme qui permet aux développeurs de créer des applications (dApps) sur la blockchain. Elle a introduit les contrats intelligents.",
     },
+    descriptionPro: {
+      en: "Ethereum is a Turing-complete programmable blockchain utilizing an account-based model with EVM execution. Post-Merge, it operates on Proof-of-Stake (Casper FFG + LMD-GHOST). It supports ERC-20 tokens, ERC-721 NFTs, and complex DeFi protocols via Solidity smart contracts.",
+      fr: "Ethereum est une blockchain programmable Turing-complète utilisant un modèle basé sur les comptes avec exécution EVM. Après le Merge, elle fonctionne en Proof-of-Stake. Elle supporte les tokens ERC-20, les NFTs ERC-721 et les protocoles DeFi complexes.",
+    },
+    descriptionBro: {
+      en: "Think of Ethereum like a giant computer that everyone shares. People can build apps on it — games, banks, stores — but without any company owning them. It's like the app store, but nobody can shut it down or change the rules!",
+      fr: "Pense à Ethereum comme un ordinateur géant que tout le monde partage. Les gens peuvent y créer des apps — jeux, banques, boutiques — sans qu'aucune entreprise ne les contrôle. C'est comme l'App Store, mais personne ne peut le fermer !",
+    },
     purpose: {
       en: "To create a world computer where anyone can build decentralized applications.",
       fr: "Créer un ordinateur mondial où chacun peut construire des applications décentralisées.",
