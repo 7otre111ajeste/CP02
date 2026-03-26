@@ -42,6 +42,7 @@ export default function LearnPage() {
     setExpandedTerm(termId);
     if (!isTermRead(termId)) {
       readTerm(termId);
+      incrementQuest("term");
       toast.success(language === "en" ? "+5 XP earned!" : "+5 XP gagnés !");
     }
   };
