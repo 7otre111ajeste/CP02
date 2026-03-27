@@ -36,14 +36,7 @@ function MiniSparkline({ data, positive }: { data: number[]; positive: boolean }
   );
 }
 
-const SORT_FIELDS: { value: SortField; label: string }[] = [
-  { value: "rank", label: "Rank" },
-  { value: "name", label: "A → Z" },
-  { value: "price", label: "Price" },
-  { value: "change", label: "24h %" },
-  { value: "marketCap", label: "Market Cap" },
-  { value: "volume", label: "Volume" },
-];
+// Sort fields are defined inside the component to access language
 
 type HalalFilter = "all" | "halal" | "uncertain" | "notHalal";
 type SafetyFilter = "all" | "safe" | "risky" | "scam";
@@ -51,7 +44,17 @@ type SafetyFilter = "all" | "safe" | "risky" | "scam";
 export default function MarketPage() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
+  const en = language === "en";
   const [search, setSearch] = useState("");
+
+  const SORT_FIELDS: { value: SortField; label: string }[] = [
+    { value: "rank", label: "Rank" },
+    { value: "name", label: "A → Z" },
+    { value: "price", label: en ? "Price" : "Prix" },
+    { value: "change", label: "24h %" },
+    { value: "marketCap", label: en ? "Market Cap" : "Capitalisation" },
+    { value: "volume", label: "Volume" },
+  ];
   const [category, setCategory] = useState<MarketCategory>("All");
   const [sortField, setSortField] = useState<SortField>("rank");
   const [sortDir, setSortDir] = useState<SortDirection>("asc");
@@ -287,7 +290,7 @@ export default function MarketPage() {
 
       <div className="flex items-center px-3 py-2 text-[10px] font-medium text-muted-foreground uppercase">
         <span className="w-8">#</span>
-        <span className="flex-1">Name</span>
+        <span className="flex-1">{en ? "Name" : "Nom"}</span>
         <span className="w-[60px] text-center">7d</span>
         <span className="w-24 text-right">{t("market.price")}</span>
         <span className="w-16 text-right">{t("market.change")}</span>
@@ -303,8 +306,8 @@ export default function MarketPage() {
 
       {isError && (
         <div className="text-center py-12 text-muted-foreground">
-          <p className="mb-2">Failed to load market data</p>
-          <button onClick={() => refetch()} className="text-primary underline text-sm">Try again</button>
+          <p className="mb-2">{en ? "Failed to load market data" : "Échec du chargement des données"}</p>
+          <button onClick={() => refetch()} className="text-primary underline text-sm">{en ? "Try again" : "Réessayer"}</button>
         </div>
       )}
 
