@@ -114,13 +114,15 @@ export default function MarketPage() {
     <div className="px-4 pt-6 pb-24 max-w-lg mx-auto">
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold text-foreground">{t("market.title")}</h1>
-        <button
-          onClick={() => refetch()}
-          disabled={isFetching}
-          className="p-2 rounded-lg bg-card border border-border text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
-        >
-          <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => refetch()}
+            disabled={isFetching}
+            className="p-2 rounded-lg bg-card border border-border text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
+          >
+            <RefreshCw className={`w-4 h-4 ${isFetching ? "animate-spin" : ""}`} />
+          </button>
+        </div>
       </div>
 
       <div className="mb-4">
