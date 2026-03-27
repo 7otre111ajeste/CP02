@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useLocation } from "react-router-dom";
+import { useWatchlist } from "@/hooks/useWatchlist";
 import { supabase } from "@/integrations/supabase/client";
-import { Send, Shield, AlertTriangle, Sparkles, Bot, FileText } from "lucide-react";
+import { Send, Shield, AlertTriangle, Sparkles, Bot, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
