@@ -23,6 +23,7 @@ export default function AIPage() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [projectName, setProjectName] = useState("");
+  const { toggleWatchlist, isWatching } = useWatchlist();
 
   useEffect(() => {
     const state = location.state as { projectName?: string } | null;
