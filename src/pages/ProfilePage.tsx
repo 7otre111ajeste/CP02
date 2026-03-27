@@ -3,7 +3,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProgress, TIME_BADGES } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { useNavigate } from "react-router-dom";
-import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar, Sun, Moon, Shield } from "lucide-react";
+import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, LogOut, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar, Sun, Moon, Shield } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
 import UserTierBadge from "@/components/UserTierBadge";
 import { motion } from "framer-motion";
@@ -46,7 +47,8 @@ export default function ProfilePage() {
   } = useUserProgress();
   const { streak } = useDailyQuests();
   const { theme, toggleTheme } = useTheme();
-  const userTier: "free" | "premium" | "vip" = "free"; // Will be dynamic with auth
+  const { user, profile: authProfile, signOut } = useAuth();
+  const userTier: "free" | "premium" | "vip" = "free";
 
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState(username);
@@ -300,11 +302,24 @@ export default function ProfilePage() {
         </button>
       </div>
 
-      {/* Login CTA */}
-      <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-primary text-primary-foreground font-semibold text-sm">
-        <LogIn className="w-4 h-4" />
-        {t("profile.login")}
-      </button>
+      {/* Login / Logout CTA */}
+      {user ? (
+        <button
+          onClick={async () => { await signOut(); toast.success(en ? "Logged out" : "Déconnecté"); }}
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-danger/10 text-danger border border-danger/20 font-semibold text-sm"
+        >
+          <LogOut className="w-4 h-4" />
+          {en ? "Log Out" : "Se Déconnecter"}
+        </button>
+      ) : (
+        <button
+          onClick={() => navigate("/auth")}
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-primary text-primary-foreground font-semibold text-sm"
+        >
+          <LogIn className="w-4 h-4" />
+          {t("profile.login")}
+        </button>
+      )}
     </motion.div>
   );
 }
