@@ -133,6 +133,54 @@ export default function HomePage() {
         </motion.div>
       </LockedOverlay>
 
+      {/* Quick Actions */}
+      <motion.div variants={item}>
+        <h2 className="text-sm font-semibold text-muted-foreground mb-3">{t("home.quickActions")}</h2>
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
+          {quickActions.map((action) => (
+            <button
+              key={action.path}
+              onClick={() => action.locked ? navigate("/auth") : navigate(action.path)}
+              className={`relative flex flex-col items-center gap-2 p-4 rounded-xl bg-card border border-border transition-all ${
+                action.locked ? "opacity-50" : "hover:border-primary/30"
+              }`}
+            >
+              {action.locked && (
+                <Lock className="absolute top-1.5 right-1.5 w-3 h-3 text-muted-foreground" />
+              )}
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${action.color}`}>
+                <action.icon className="w-5 h-5" />
+              </div>
+              <span className="text-xs font-medium text-foreground text-center">{action.label}</span>
+            </button>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Quick Actions */}
+      <motion.div variants={item}>
+        <h2 className="text-sm font-semibold text-muted-foreground mb-3">{t("home.quickActions")}</h2>
+        <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
+          {quickActions.map((action) => (
+            <button
+              key={action.path}
+              onClick={() => action.locked ? navigate("/auth") : navigate(action.path)}
+              className={`relative flex flex-col items-center gap-2 p-4 rounded-xl bg-card border border-border transition-all ${
+                action.locked ? "opacity-50" : "hover:border-primary/30"
+              }`}
+            >
+              {action.locked && (
+                <Lock className="absolute top-1.5 right-1.5 w-3 h-3 text-muted-foreground" />
+              )}
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${action.color}`}>
+                <action.icon className="w-5 h-5" />
+              </div>
+              <span className="text-xs font-medium text-foreground text-center">{action.label}</span>
+            </button>
+          ))}
+        </div>
+      </motion.div>
+
       {/* Daily Quests */}
       <LockedOverlay locked={isGuest}>
         <motion.div variants={item}>
@@ -219,31 +267,6 @@ export default function HomePage() {
         </motion.div>
       </LockedOverlay>
 
-      {/* Quick Actions */}
-      <motion.div variants={item}>
-        <h2 className="text-sm font-semibold text-muted-foreground mb-3">{t("home.quickActions")}</h2>
-        <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
-          {quickActions.map((action) => (
-            <button
-              key={action.path}
-              onClick={() => action.locked ? navigate("/auth") : navigate(action.path)}
-              className={`relative flex flex-col items-center gap-2 p-4 rounded-xl bg-card border border-border transition-all ${
-                action.locked ? "opacity-50" : "hover:border-primary/30"
-              }`}
-            >
-              {action.locked && (
-                <Lock className="absolute top-1.5 right-1.5 w-3 h-3 text-muted-foreground" />
-              )}
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${action.color}`}>
-                <action.icon className="w-5 h-5" />
-              </div>
-              <span className="text-xs font-medium text-foreground text-center">{action.label}</span>
-            </button>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Market Sentiment */}
       <motion.div variants={item}>
         <MarketSentiment />
       </motion.div>

@@ -9,7 +9,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { DailyQuestsProvider } from "@/hooks/useDailyQuests";
 import BottomNav from "@/components/BottomNav";
 import SplashScreen from "@/components/SplashScreen";
-import FloatingLanguageToggle from "@/components/FloatingLanguageToggle";
+import PageToolbar from "@/components/PageToolbar";
 import HomePage from "./pages/HomePage";
 import LearnPage from "./pages/LearnPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
@@ -50,7 +50,7 @@ function AppContent() {
         {showSplash && <SplashScreen onDone={handleSplashDone} />}
         {!showSplash && (
           <div className="min-h-screen bg-background">
-            <FloatingLanguageToggle />
+            <PageToolbar />
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/learn" element={<LearnPage />} />
