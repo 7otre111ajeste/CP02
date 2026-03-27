@@ -36,14 +36,7 @@ function MiniSparkline({ data, positive }: { data: number[]; positive: boolean }
   );
 }
 
-const SORT_FIELDS: { value: SortField; label: string }[] = [
-  { value: "rank", label: "Rank" },
-  { value: "name", label: "A → Z" },
-  { value: "price", label: "Price" },
-  { value: "change", label: "24h %" },
-  { value: "marketCap", label: "Market Cap" },
-  { value: "volume", label: "Volume" },
-];
+// Sort fields are defined inside the component to access language
 
 type HalalFilter = "all" | "halal" | "uncertain" | "notHalal";
 type SafetyFilter = "all" | "safe" | "risky" | "scam";
