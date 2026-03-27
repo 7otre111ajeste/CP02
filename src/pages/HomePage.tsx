@@ -181,7 +181,92 @@ export default function HomePage() {
         </div>
       </motion.div>
 
-      {/* Market Sentiment */}
+      {/* Daily Quests */}
+      <LockedOverlay locked={isGuest}>
+        <motion.div variants={item}>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-sm font-semibold text-muted-foreground flex items-center gap-1.5">
+              <Flame className="w-4 h-4 text-warning" />
+              {en ? "Daily Quests" : "Quêtes quotidiennes"}
+            </h2>
+            <div className="flex items-center gap-1.5">
+              <Flame className="w-3.5 h-3.5 text-danger" />
+              <span className="text-xs font-bold text-foreground">{streak}</span>
+              <span className="text-[10px] text-muted-foreground">/ {streakRequired}</span>
+            </div>
+          </div>
+          <div className="bg-card rounded-2xl border border-border p-4 space-y-3">
+            {quests.map((quest) => {
+              const isDone = completed.includes(quest.id);
+              const current = progress[quest.id] || 0;
+              const pct = Math.min(100, (current / quest.target) * 100);
+              const isHovered = hoveredQuest === quest.id;
+              return (
+                <div
+                  key={quest.id}
+                  className="relative"
+                  onMouseEnter={() => setHoveredQuest(quest.id)}
+                  onMouseLeave={() => setHoveredQuest(null)}
+                  onClick={() => setHoveredQuest(isHovered ? null : quest.id)}
+                >
+                  <div className="flex items-center gap-3">
+                    {isDone ? (
+                      <CheckCircle className="w-5 h-5 text-success flex-shrink-0" />
+                    ) : (
+                      <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0" />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-0.5">
+                        <p className={`text-xs font-medium flex items-center gap-1 ${isDone ? "text-success line-through" : "text-foreground"}`}>
+                          {quest.title[language]}
+                          <Info className="w-3 h-3 text-muted-foreground" />
+                        </p>
+                        <span className="text-[10px] text-primary font-semibold">+{quest.expReward} XP</span>
+                      </div>
+                      <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all ${isDone ? "bg-success" : "bg-primary"}`}
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                      <p className="text-[9px] text-muted-foreground mt-0.5">
+                        {Math.min(current, quest.target)}/{quest.target}
+                      </p>
+                    </div>
+                  </div>
+                  <AnimatePresence>
+                    {isHovered && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        className="mt-1.5 ml-8 p-2.5 rounded-lg bg-secondary/80 border border-border"
+                      >
+                        <p className="text-[11px] text-foreground">{quest.description[language]}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+            {canClaimStreak && (
+              <button
+                onClick={handleClaimStreak}
+                className="w-full mt-2 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground font-semibold text-xs flex items-center justify-center gap-2"
+              >
+                <Gift className="w-4 h-4" />
+                {en ? `Claim ${streakBonusExp} XP Streak Bonus!` : `Réclamez ${streakBonusExp} XP Bonus de série !`}
+              </button>
+            )}
+            {allCompleted && !canClaimStreak && (
+              <p className="text-center text-xs text-success font-medium pt-1">
+                {en ? "✅ All quests completed today!" : "✅ Toutes les quêtes sont complétées !"}
+              </p>
+            )}
+          </div>
+        </motion.div>
+      </LockedOverlay>
+
       <motion.div variants={item}>
         <MarketSentiment />
       </motion.div>
