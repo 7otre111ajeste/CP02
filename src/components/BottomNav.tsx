@@ -17,6 +17,7 @@ export default function BottomNav() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { user } = useAuth();
+  const { language, setLanguage } = useLanguage();
   const isGuest = !user;
 
   const isActive = (path: string) => {
