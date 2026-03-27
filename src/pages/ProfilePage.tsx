@@ -47,7 +47,8 @@ export default function ProfilePage() {
   } = useUserProgress();
   const { streak } = useDailyQuests();
   const { theme, toggleTheme } = useTheme();
-  const userTier: "free" | "premium" | "vip" = "free"; // Will be dynamic with auth
+  const { user, profile: authProfile, signOut } = useAuth();
+  const userTier: "free" | "premium" | "vip" = "free";
 
   const [editingName, setEditingName] = useState(false);
   const [nameInput, setNameInput] = useState(username);
