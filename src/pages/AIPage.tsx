@@ -134,7 +134,12 @@ export default function AIPage() {
             className="bg-gradient-card rounded-2xl p-5 border border-border glow-primary space-y-4"
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-foreground capitalize">{projectName}</h2>
+              <div className="flex items-center gap-2">
+                <button onClick={() => toggleWatchlist(projectName.toLowerCase().replace(/\s+/g, "-"))}>
+                  <Star className={`w-5 h-5 transition-colors ${isWatching(projectName.toLowerCase().replace(/\s+/g, "-")) ? "text-warning fill-warning" : "text-muted-foreground"}`} />
+                </button>
+                <h2 className="text-lg font-bold text-foreground capitalize">{projectName}</h2>
+              </div>
               <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
                 <span className="text-sm font-bold text-primary">{result.score}</span>
                 <span className="text-xs text-muted-foreground">/10</span>

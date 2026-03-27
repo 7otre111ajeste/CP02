@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
-import { ArrowLeft, Calculator, TrendingUp, Percent, Hash, Delete } from "lucide-react";
+import { ArrowLeft, Calculator, TrendingUp, Delete } from "lucide-react";
 import { motion } from "framer-motion";
 
-type CalcMode = "standard" | "profit" | "percentage";
+type CalcMode = "standard" | "gain";
 
 export default function CalculatorPage() {
   const { language } = useLanguage();
@@ -20,14 +20,12 @@ export default function CalculatorPage() {
   const [waitingForOperand, setWaitingForOperand] = useState(false);
   const [calcUsed, setCalcUsed] = useState(false);
 
-  // Profit calculator
+  // Gain % calculator
   const [buyPrice, setBuyPrice] = useState("");
   const [sellPrice, setSellPrice] = useState("");
   const [quantity, setQuantity] = useState("");
 
-  // Percentage calculator
-  const [initialValue, setInitialValue] = useState("");
-  const [finalValue, setFinalValue] = useState("");
+  const en = language === "en";
 
   const handleDigit = (digit: string) => {
     if (waitingForOperand) {
@@ -109,31 +107,21 @@ export default function CalculatorPage() {
     setDisplay(String(val / 100));
   };
 
-  const profitResult = () => {
+  const gainResult = () => {
     const buy = parseFloat(buyPrice);
     const sell = parseFloat(sellPrice);
     const qty = parseFloat(quantity);
-    if (isNaN(buy) || isNaN(sell) || isNaN(qty) || buy === 0) return null;
-    const invested = buy * qty;
-    const current = sell * qty;
+    if (isNaN(buy) || isNaN(sell) || buy === 0) return null;
+    const hasQty = !isNaN(qty) && qty > 0;
+    const invested = buy * (hasQty ? qty : 1);
+    const current = sell * (hasQty ? qty : 1);
     const profit = current - invested;
     const percent = ((sell - buy) / buy) * 100;
     if (!calcUsed) { setCalcUsed(true); incrementQuest("calculator"); }
-    return { invested, current, profit, percent };
+    return { invested, current, profit, percent, hasQty };
   };
 
-  const percentResult = () => {
-    const init = parseFloat(initialValue);
-    const final_ = parseFloat(finalValue);
-    if (isNaN(init) || isNaN(final_) || init === 0) return null;
-    const change = final_ - init;
-    const percent = (change / init) * 100;
-    if (!calcUsed) { setCalcUsed(true); incrementQuest("calculator"); }
-    return { change, percent };
-  };
-
-  const pr = mode === "profit" ? profitResult() : null;
-  const pcr = mode === "percentage" ? percentResult() : null;
+  const gr = mode === "gain" ? gainResult() : null;
 
   const inputClass = "w-full bg-secondary/50 border border-border rounded-xl px-4 py-3 text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary/50";
 
@@ -154,42 +142,34 @@ export default function CalculatorPage() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="px-4 pt-4 pb-24 max-w-lg mx-auto">
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-        <ArrowLeft className="w-4 h-4" /> {language === "en" ? "Back" : "Retour"}
+        <ArrowLeft className="w-4 h-4" /> {en ? "Back" : "Retour"}
       </button>
 
       <h1 className="text-2xl font-bold text-foreground flex items-center gap-2 mb-6">
         <Calculator className="w-6 h-6 text-primary" />
-        {language === "en" ? "Calculator" : "Calculatrice"}
+        {en ? "Calculator" : "Calculatrice"}
       </h1>
 
-      {/* Mode tabs */}
+      {/* Mode tabs - 2 buttons */}
       <div className="flex gap-1 p-1 bg-card rounded-xl border border-border mb-6">
         <button
           onClick={() => setMode("standard")}
           className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-medium transition-all ${mode === "standard" ? "bg-gradient-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
-          <Hash className="w-3.5 h-3.5" />
-          Standard
+          <Calculator className="w-3.5 h-3.5" />
+          {en ? "Calculator" : "Calculatrice"}
         </button>
         <button
-          onClick={() => setMode("profit")}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-medium transition-all ${mode === "profit" ? "bg-gradient-primary text-primary-foreground" : "text-muted-foreground"}`}
+          onClick={() => setMode("gain")}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-medium transition-all ${mode === "gain" ? "bg-gradient-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           <TrendingUp className="w-3.5 h-3.5" />
-          {language === "en" ? "Profit" : "Gain"}
-        </button>
-        <button
-          onClick={() => setMode("percentage")}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-medium transition-all ${mode === "percentage" ? "bg-gradient-primary text-primary-foreground" : "text-muted-foreground"}`}
-        >
-          <Percent className="w-3.5 h-3.5" />
-          %
+          Gain %
         </button>
       </div>
 
       {mode === "standard" && (
         <motion.div key="standard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-          {/* Display */}
           <div className="bg-card rounded-2xl border border-border p-5 text-right">
             {operator && prevValue !== null && (
               <p className="text-xs text-muted-foreground mb-1">{prevValue} {operator}</p>
@@ -197,7 +177,6 @@ export default function CalculatorPage() {
             <p className="text-3xl font-bold text-foreground truncate">{display}</p>
           </div>
 
-          {/* Keypad */}
           <div className="grid grid-cols-4 gap-2">
             {calcBtn("C", handleClear, "special")}
             {calcBtn("±", handleToggleSign, "special")}
@@ -231,71 +210,47 @@ export default function CalculatorPage() {
         </motion.div>
       )}
 
-      {mode === "profit" && (
-        <motion.div key="profit" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+      {mode === "gain" && (
+        <motion.div key="gain" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">{language === "en" ? "Buy Price ($)" : "Prix d'achat ($)"}</label>
+            <label className="text-xs text-muted-foreground mb-1 block">{en ? "Buy Price ($)" : "Prix d'achat ($)"}</label>
             <input type="number" value={buyPrice} onChange={(e) => setBuyPrice(e.target.value)} placeholder="0.00" className={inputClass} />
           </div>
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">{language === "en" ? "Sell Price ($)" : "Prix de vente ($)"}</label>
+            <label className="text-xs text-muted-foreground mb-1 block">{en ? "Sell Price ($)" : "Prix de vente ($)"}</label>
             <input type="number" value={sellPrice} onChange={(e) => setSellPrice(e.target.value)} placeholder="0.00" className={inputClass} />
           </div>
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">{language === "en" ? "Quantity" : "Quantité"}</label>
-            <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="0" className={inputClass} />
+            <label className="text-xs text-muted-foreground mb-1 block">{en ? "Quantity (optional)" : "Quantité (optionnel)"}</label>
+            <input type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="1" className={inputClass} />
           </div>
 
-          {pr && (
+          {gr && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-card rounded-2xl border border-border p-5 space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">{language === "en" ? "Invested" : "Investi"}</span>
-                <span className="text-foreground font-medium">${pr.invested.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">{language === "en" ? "Current Value" : "Valeur actuelle"}</span>
-                <span className="text-foreground font-medium">${pr.current.toFixed(2)}</span>
-              </div>
-              <div className="border-t border-border pt-3 flex justify-between">
-                <span className="text-sm font-semibold text-foreground">{language === "en" ? "Profit / Loss" : "Gain / Perte"}</span>
+              {gr.hasQty && (
+                <>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">{en ? "Invested" : "Investi"}</span>
+                    <span className="text-foreground font-medium">${gr.invested.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">{en ? "Current Value" : "Valeur actuelle"}</span>
+                    <span className="text-foreground font-medium">${gr.current.toFixed(2)}</span>
+                  </div>
+                </>
+              )}
+              <div className={`${gr.hasQty ? "border-t border-border pt-3" : ""} flex justify-between`}>
+                <span className="text-sm font-semibold text-foreground">{en ? "Profit / Loss" : "Gain / Perte"}</span>
                 <div className="text-right">
-                  <p className={`font-bold ${pr.profit >= 0 ? "text-success" : "text-danger"}`}>
-                    {pr.profit >= 0 ? "+" : ""}${pr.profit.toFixed(2)}
-                  </p>
-                  <p className={`text-xs font-medium ${pr.percent >= 0 ? "text-success" : "text-danger"}`}>
-                    {pr.percent >= 0 ? "+" : ""}{pr.percent.toFixed(2)}%
+                  {gr.hasQty && (
+                    <p className={`font-bold ${gr.profit >= 0 ? "text-success" : "text-danger"}`}>
+                      {gr.profit >= 0 ? "+" : ""}${gr.profit.toFixed(2)}
+                    </p>
+                  )}
+                  <p className={`text-2xl font-bold ${gr.percent >= 0 ? "text-success" : "text-danger"}`}>
+                    {gr.percent >= 0 ? "+" : ""}{gr.percent.toFixed(2)}%
                   </p>
                 </div>
-              </div>
-            </motion.div>
-          )}
-        </motion.div>
-      )}
-
-      {mode === "percentage" && (
-        <motion.div key="percent" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-          <div>
-            <label className="text-xs text-muted-foreground mb-1 block">{language === "en" ? "Initial Value ($)" : "Valeur initiale ($)"}</label>
-            <input type="number" value={initialValue} onChange={(e) => setInitialValue(e.target.value)} placeholder="0.00" className={inputClass} />
-          </div>
-          <div>
-            <label className="text-xs text-muted-foreground mb-1 block">{language === "en" ? "Final Value ($)" : "Valeur finale ($)"}</label>
-            <input type="number" value={finalValue} onChange={(e) => setFinalValue(e.target.value)} placeholder="0.00" className={inputClass} />
-          </div>
-
-          {pcr && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-card rounded-2xl border border-border p-5 space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">{language === "en" ? "Change" : "Variation"}</span>
-                <span className={`font-bold ${pcr.change >= 0 ? "text-success" : "text-danger"}`}>
-                  {pcr.change >= 0 ? "+" : ""}${pcr.change.toFixed(2)}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm font-semibold text-foreground">{language === "en" ? "Percentage" : "Pourcentage"}</span>
-                <span className={`text-2xl font-bold ${pcr.percent >= 0 ? "text-success" : "text-danger"}`}>
-                  {pcr.percent >= 0 ? "+" : ""}{pcr.percent.toFixed(2)}%
-                </span>
               </div>
             </motion.div>
           )}
