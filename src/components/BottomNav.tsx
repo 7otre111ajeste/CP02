@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, BookOpen, BarChart3, Bot, User, Lock, Globe } from "lucide-react";
+import { Home, BookOpen, BarChart3, Bot, User, Lock } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
@@ -17,7 +17,6 @@ export default function BottomNav() {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { user } = useAuth();
-  const { language, setLanguage } = useLanguage();
   const isGuest = !user;
 
   const isActive = (path: string) => {
@@ -35,17 +34,7 @@ export default function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 glass border-t border-border safe-bottom">
-      <div className="flex items-center justify-around px-1 py-2 max-w-lg mx-auto">
-        {/* Language toggle for guests */}
-        {isGuest && (
-          <button
-            onClick={() => setLanguage(language === "en" ? "fr" : "en")}
-            className="flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-colors"
-          >
-            <Globe className="w-5 h-5 text-muted-foreground" />
-            <span className="text-[10px] font-medium text-muted-foreground">{language === "en" ? "FR" : "EN"}</span>
-          </button>
-        )}
+      <div className="flex items-center justify-around px-2 py-2 max-w-lg mx-auto">
         {navItems.map((item) => {
           const active = isActive(item.path);
           const locked = isGuest && !item.guestAllowed;
