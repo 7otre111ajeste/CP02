@@ -188,43 +188,6 @@ export default function ProfilePage() {
         ))}
       </div>
 
-      {/* Time Badges */}
-      <div>
-        <h2 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-1.5">
-          <Clock className="w-4 h-4 text-primary" />
-          {en ? "Loyalty Badges" : "Badges de fidélité"}
-        </h2>
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-          {TIME_BADGES.map((badge) => {
-            const unlocked = daysSinceRegistration >= badge.days;
-            const claimed = claimedTimeBadges.includes(badge.id);
-            return (
-              <button
-                key={badge.id}
-                onClick={() => unlocked && !claimed && handleClaimTimeBadge(badge.id)}
-                disabled={!unlocked || claimed}
-                className={`rounded-xl border p-3 text-center transition-all ${
-                  claimed
-                    ? "bg-success/10 border-success/20 text-success"
-                    : unlocked
-                    ? "bg-primary/10 border-primary/20 text-primary animate-pulse"
-                    : "bg-secondary/30 border-border opacity-40"
-                }`}
-              >
-                <p className="text-2xl mb-1">{unlocked ? badge.emoji : "🔒"}</p>
-                <p className="text-[10px] font-medium text-foreground">{badge.label[language]}</p>
-                {unlocked && !claimed && (
-                  <p className="text-[9px] text-primary font-semibold mt-0.5">+{badge.exp} XP</p>
-                )}
-                {claimed && (
-                  <p className="text-[9px] text-success font-semibold mt-0.5">✓</p>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Quick Links */}
       <div className="grid grid-cols-2 gap-3">
         <button onClick={() => navigate("/shop")} className="bg-card rounded-xl p-4 border border-border text-center hover:border-primary/30 transition-colors">
@@ -236,33 +199,6 @@ export default function ProfilePage() {
           <Info className="w-5 h-5 text-primary mx-auto mb-2" />
           <p className="text-sm font-medium text-foreground">{en ? "About & Rules" : "À propos & Règles"}</p>
         </button>
-      </div>
-
-      {/* Level Badges */}
-      <div>
-        <h2 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-1.5">
-          <Award className="w-4 h-4 text-primary" />
-          {en ? "Level Badges" : "Badges de niveau"}
-        </h2>
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-          {LEVEL_TIERS.map((tier) => {
-            const unlocked = level >= tier.minLevel;
-            return (
-              <div
-                key={tier.minLevel}
-                className={`rounded-xl border p-3 text-center transition-all ${
-                  unlocked ? `bg-card ${tier.color}` : "bg-secondary/30 border-border opacity-40"
-                }`}
-              >
-                <p className="text-2xl mb-1">{unlocked ? tier.emoji : "🔒"}</p>
-                <p className="text-[10px] font-medium text-foreground">{tier.name[language]}</p>
-                <p className="text-[9px] text-muted-foreground">
-                  Lv. {tier.minLevel}-{tier.maxLevel > 100 ? "∞" : tier.maxLevel}
-                </p>
-              </div>
-            );
-          })}
-        </div>
       </div>
 
       {/* Settings */}
@@ -300,6 +236,70 @@ export default function ProfilePage() {
           </div>
           <ChevronRight className="w-4 h-4 text-muted-foreground" />
         </button>
+      </div>
+
+      {/* Time Badges */}
+      <div>
+        <h2 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-1.5">
+          <Clock className="w-4 h-4 text-primary" />
+          {en ? "Loyalty Badges" : "Badges de fidélité"}
+        </h2>
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+          {TIME_BADGES.map((badge) => {
+            const unlocked = daysSinceRegistration >= badge.days;
+            const claimed = claimedTimeBadges.includes(badge.id);
+            return (
+              <button
+                key={badge.id}
+                onClick={() => unlocked && !claimed && handleClaimTimeBadge(badge.id)}
+                disabled={!unlocked || claimed}
+                className={`rounded-xl border p-3 text-center transition-all ${
+                  claimed
+                    ? "bg-success/10 border-success/20 text-success"
+                    : unlocked
+                    ? "bg-primary/10 border-primary/20 text-primary animate-pulse"
+                    : "bg-secondary/30 border-border opacity-40"
+                }`}
+              >
+                <p className="text-2xl mb-1">{unlocked ? badge.emoji : "🔒"}</p>
+                <p className="text-[10px] font-medium text-foreground">{badge.label[language]}</p>
+                {unlocked && !claimed && (
+                  <p className="text-[9px] text-primary font-semibold mt-0.5">+{badge.exp} XP</p>
+                )}
+                {claimed && (
+                  <p className="text-[9px] text-success font-semibold mt-0.5">✓</p>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Level Badges */}
+      <div>
+        <h2 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-1.5">
+          <Award className="w-4 h-4 text-primary" />
+          {en ? "Level Badges" : "Badges de niveau"}
+        </h2>
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+          {LEVEL_TIERS.map((tier) => {
+            const unlocked = level >= tier.minLevel;
+            return (
+              <div
+                key={tier.minLevel}
+                className={`rounded-xl border p-3 text-center transition-all ${
+                  unlocked ? `bg-card ${tier.color}` : "bg-secondary/30 border-border opacity-40"
+                }`}
+              >
+                <p className="text-2xl mb-1">{unlocked ? tier.emoji : "🔒"}</p>
+                <p className="text-[10px] font-medium text-foreground">{tier.name[language]}</p>
+                <p className="text-[9px] text-muted-foreground">
+                  Lv. {tier.minLevel}-{tier.maxLevel > 100 ? "∞" : tier.maxLevel}
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Login / Logout CTA */}
