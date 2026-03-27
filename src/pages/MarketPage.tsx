@@ -306,8 +306,8 @@ export default function MarketPage() {
 
       {isError && (
         <div className="text-center py-12 text-muted-foreground">
-          <p className="mb-2">Failed to load market data</p>
-          <button onClick={() => refetch()} className="text-primary underline text-sm">Try again</button>
+          <p className="mb-2">{en ? "Failed to load market data" : "Échec du chargement des données"}</p>
+          <button onClick={() => refetch()} className="text-primary underline text-sm">{en ? "Try again" : "Réessayer"}</button>
         </div>
       )}
 

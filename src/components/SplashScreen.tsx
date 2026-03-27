@@ -108,6 +108,14 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
                 <Eye className="w-4 h-4" />
                 {en ? "Continue as Guest" : "Continuer en tant qu'invité"}
               </button>
+
+              <button
+                onClick={() => setLanguage(language === "en" ? "fr" : "en")}
+                className="mx-auto mt-2 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                {language === "en" ? "Français" : "English"}
+              </button>
             </div>
           </motion.div>
         )}
