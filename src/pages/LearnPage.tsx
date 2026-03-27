@@ -15,16 +15,7 @@ import { toast } from "sonner";
 
 type Tab = "dictionary" | "projects" | "training";
 
-const PROJECT_SORT_FIELDS: { value: SortField; label: string }[] = [
-  { value: "name", label: "A → Z" },
-  { value: "price", label: "Price" },
-  { value: "year", label: "Year" },
-];
-
-const DICT_SORT_FIELDS: { value: SortField; label: string }[] = [
-  { value: "name", label: "A → Z" },
-  { value: "volume", label: "Category" },
-];
+// Sort fields defined inside component for i18n
 
 export default function LearnPage() {
   const { t, language } = useLanguage();
