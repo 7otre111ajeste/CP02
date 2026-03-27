@@ -50,6 +50,7 @@ function AppContent() {
         {showSplash && <SplashScreen onDone={handleSplashDone} />}
         {!showSplash && (
           <div className="min-h-screen bg-background">
+            <FloatingLanguageToggle />
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/learn" element={<LearnPage />} />
