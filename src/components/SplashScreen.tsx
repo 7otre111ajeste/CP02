@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { LogIn, UserPlus, Eye } from "lucide-react";
+import { LogIn, UserPlus, Eye, Globe } from "lucide-react";
 
 export default function SplashScreen({ onDone }: { onDone: () => void }) {
   const { language } = useLanguage();
