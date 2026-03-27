@@ -15,7 +15,7 @@ export default function LessonPage() {
   const { incrementQuest } = useDailyQuests();
 
   const lesson = trainingLessons.find((l) => l.id === id);
-  if (!lesson) return <div className="p-4 text-foreground">Lesson not found</div>;
+  if (!lesson) return <div className="p-4 text-foreground">{language === "en" ? "Lesson not found" : "Leçon introuvable"}</div>;
 
   const completed = isLessonCompleted(lesson.id);
 
