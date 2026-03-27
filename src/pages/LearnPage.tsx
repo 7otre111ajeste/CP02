@@ -19,7 +19,19 @@ type Tab = "dictionary" | "projects" | "training";
 
 export default function LearnPage() {
   const { t, language } = useLanguage();
+  const en = language === "en";
   const navigate = useNavigate();
+
+  const PROJECT_SORT_FIELDS: { value: SortField; label: string }[] = [
+    { value: "name", label: "A → Z" },
+    { value: "price", label: en ? "Price" : "Prix" },
+    { value: "year", label: en ? "Year" : "Année" },
+  ];
+
+  const DICT_SORT_FIELDS: { value: SortField; label: string }[] = [
+    { value: "name", label: "A → Z" },
+    { value: "volume", label: en ? "Category" : "Catégorie" },
+  ];
   const { readTerm, isTermRead, isLessonCompleted } = useUserProgress();
   const { incrementQuest } = useDailyQuests();
   const [activeTab, setActiveTab] = useState<Tab>("dictionary");
