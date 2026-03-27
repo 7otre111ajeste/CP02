@@ -320,5 +320,6 @@ export default function ProfilePage() {
           {t("profile.login")}
         </button>
       )}
+    </motion.div>
   );
 }
