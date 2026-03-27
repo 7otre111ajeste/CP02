@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, BookOpen, BarChart3, Bot, User, Lock } from "lucide-react";
+import { Home, BookOpen, BarChart3, Bot, User, Lock, Globe } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
