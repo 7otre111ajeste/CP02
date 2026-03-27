@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { LogIn, UserPlus, Eye, Globe } from "lucide-react";
 
 export default function SplashScreen({ onDone }: { onDone: () => void }) {
-  const { language } = useLanguage();
+  const { language, setLanguage } = useLanguage();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const en = language === "en";
