@@ -44,7 +44,17 @@ type SafetyFilter = "all" | "safe" | "risky" | "scam";
 export default function MarketPage() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
+  const en = language === "en";
   const [search, setSearch] = useState("");
+
+  const SORT_FIELDS: { value: SortField; label: string }[] = [
+    { value: "rank", label: "Rank" },
+    { value: "name", label: "A → Z" },
+    { value: "price", label: en ? "Price" : "Prix" },
+    { value: "change", label: "24h %" },
+    { value: "marketCap", label: en ? "Market Cap" : "Capitalisation" },
+    { value: "volume", label: "Volume" },
+  ];
   const [category, setCategory] = useState<MarketCategory>("All");
   const [sortField, setSortField] = useState<SortField>("rank");
   const [sortDir, setSortDir] = useState<SortDirection>("asc");
