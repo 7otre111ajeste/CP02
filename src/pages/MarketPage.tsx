@@ -290,7 +290,7 @@ export default function MarketPage() {
 
       <div className="flex items-center px-3 py-2 text-[10px] font-medium text-muted-foreground uppercase">
         <span className="w-8">#</span>
-        <span className="flex-1">Name</span>
+        <span className="flex-1">{en ? "Name" : "Nom"}</span>
         <span className="w-[60px] text-center">7d</span>
         <span className="w-24 text-right">{t("market.price")}</span>
         <span className="w-16 text-right">{t("market.change")}</span>
