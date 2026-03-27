@@ -302,11 +302,23 @@ export default function ProfilePage() {
         </button>
       </div>
 
-      {/* Login CTA */}
-      <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-primary text-primary-foreground font-semibold text-sm">
-        <LogIn className="w-4 h-4" />
-        {t("profile.login")}
-      </button>
-    </motion.div>
+      {/* Login / Logout CTA */}
+      {user ? (
+        <button
+          onClick={async () => { await signOut(); toast.success(en ? "Logged out" : "Déconnecté"); }}
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-danger/10 text-danger border border-danger/20 font-semibold text-sm"
+        >
+          <LogOut className="w-4 h-4" />
+          {en ? "Log Out" : "Se Déconnecter"}
+        </button>
+      ) : (
+        <button
+          onClick={() => navigate("/auth")}
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-primary text-primary-foreground font-semibold text-sm"
+        >
+          <LogIn className="w-4 h-4" />
+          {t("profile.login")}
+        </button>
+      )}
   );
 }
