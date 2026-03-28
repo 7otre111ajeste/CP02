@@ -28,6 +28,7 @@ import AboutPage from "./pages/AboutPage";
 import ShopPage from "./pages/ShopPage";
 import PlatformsPage from "./pages/PlatformsPage";
 import PortfolioPage from "./pages/PortfolioPage";
+import PracticePage from "./pages/PracticePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
