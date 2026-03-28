@@ -243,6 +243,18 @@ export default function PortfolioPage() {
         </div>
       )}
 
+      {/* Interactive Portfolio Chart */}
+      {portfolio.entries.length > 0 && (() => {
+        const allTx = portfolio.entries.flatMap((e) => e.transactions);
+        return (
+          <PortfolioChart
+            transactions={allTx}
+            currentValue={totalPortfolioPnl.totalVal}
+            totalInvested={totalPortfolioPnl.totalInv}
+          />
+        );
+      })()}
+
       {/* Entries list */}
       <div className="space-y-3 mb-4">
         {portfolio.entries.map((e) => {
