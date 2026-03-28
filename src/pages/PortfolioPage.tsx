@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import ScoreBadge from "@/components/ScoreBadge";
 import StatusTag from "@/components/StatusTag";
 import { cryptoProjects } from "@/data/mockData";
+import PortfolioChart from "@/components/PortfolioChart";
 
 interface Transaction {
   id: string;
@@ -241,6 +242,18 @@ export default function PortfolioPage() {
           </div>
         </div>
       )}
+
+      {/* Interactive Portfolio Chart */}
+      {portfolio.entries.length > 0 && (() => {
+        const allTx = portfolio.entries.flatMap((e) => e.transactions);
+        return (
+          <PortfolioChart
+            transactions={allTx}
+            currentValue={totalPortfolioPnl.totalVal}
+            totalInvested={totalPortfolioPnl.totalInv}
+          />
+        );
+      })()}
 
       {/* Entries list */}
       <div className="space-y-3 mb-4">

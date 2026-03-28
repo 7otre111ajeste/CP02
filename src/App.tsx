@@ -28,6 +28,7 @@ import AboutPage from "./pages/AboutPage";
 import ShopPage from "./pages/ShopPage";
 import PlatformsPage from "./pages/PlatformsPage";
 import PortfolioPage from "./pages/PortfolioPage";
+import PracticePage from "./pages/PracticePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -70,6 +71,7 @@ function AppContent() {
               <Route path="/shop" element={<ShopPage />} />
               <Route path="/platforms" element={<PlatformsPage />} />
               <Route path="/portfolio" element={<PortfolioPage />} />
+              <Route path="/practice" element={<PracticePage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />

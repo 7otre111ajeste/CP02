@@ -6,7 +6,7 @@ import { useWatchlist } from "@/hooks/useWatchlist";
 import { useCryptoMarket } from "@/hooks/useCryptoMarket";
 import { useAuth } from "@/contexts/AuthContext";
 import { cryptoProjects } from "@/data/mockData";
-import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, ChevronDown, Flame, CheckCircle, Circle, Gift, Star, Eye, Info, Shield, PieChart, Lock } from "lucide-react";
+import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, ChevronDown, Flame, CheckCircle, Circle, Gift, Star, Eye, Info, Shield, PieChart, Lock, Gamepad2 } from "lucide-react";
 import StatusTag from "@/components/StatusTag";
 import ScoreBadge from "@/components/ScoreBadge";
 import MarketSentiment from "@/components/MarketSentiment";
@@ -55,6 +55,7 @@ export default function HomePage() {
     { icon: Calculator, label: en ? "Calculator" : "Calculatrice", path: "/calculator", color: "bg-success/15 text-success", locked: isGuest },
     { icon: Shield, label: en ? "Platforms" : "Plateformes", path: "/platforms", color: "bg-accent/15 text-accent", locked: isGuest },
     { icon: PieChart, label: "Portfolio", path: "/portfolio", color: "bg-primary/15 text-primary", locked: isGuest },
+    { icon: Gamepad2, label: en ? "Practice" : "Pratique", path: "/practice", color: "bg-warning/15 text-warning", locked: isGuest },
   ];
 
   const getProjectWithLivePrice = (project: typeof cryptoProjects[0]) => {
