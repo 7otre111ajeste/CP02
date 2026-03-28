@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import ScoreBadge from "@/components/ScoreBadge";
 import StatusTag from "@/components/StatusTag";
 import { cryptoProjects } from "@/data/mockData";
+import PortfolioChart from "@/components/PortfolioChart";
 
 interface Transaction {
   id: string;
