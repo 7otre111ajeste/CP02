@@ -96,6 +96,7 @@ const App = () => (
       <AuthProvider>
         <DailyQuestsProvider>
           <TooltipProvider>
+            <ProgressSyncer />
             <AppContent />
           </TooltipProvider>
         </DailyQuestsProvider>
