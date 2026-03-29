@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProgress, TIME_BADGES } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
+import { useProfileSettings } from "@/hooks/useProfileSettings";
 import { useNavigate } from "react-router-dom";
-import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, LogOut, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar, Sun, Moon, Shield } from "lucide-react";
+import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, LogOut, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar, Sun, Moon, Shield, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
 import UserTierBadge from "@/components/UserTierBadge";
+import { Switch } from "@/components/ui/switch";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
