@@ -31,6 +31,8 @@ import PlatformsPage from "./pages/PlatformsPage";
 import PortfolioPage from "./pages/PortfolioPage";
 import PracticePage from "./pages/PracticePage";
 import LeaderboardPage from "./pages/LeaderboardPage";
+import ExchangeWalletPage from "./pages/ExchangeWalletPage";
+import NewsPage from "./pages/NewsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
