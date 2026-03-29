@@ -9,11 +9,11 @@ import ScoreBadge from "@/components/ScoreBadge";
 import SortFilter, { type SortField, type SortDirection } from "@/components/SortFilter";
 import DescriptionToggle from "@/components/DescriptionToggle";
 import TermHighlighter from "@/components/TermHighlighter";
-import { Search, BookOpen, Layers, GraduationCap, ChevronRight, CheckCircle, Sparkles } from "lucide-react";
+import { Search, BookOpen, Layers, GraduationCap, ChevronRight, CheckCircle, Sparkles, Wallet } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
-type Tab = "dictionary" | "projects" | "training";
+type Tab = "dictionary" | "projects" | "training" | "exchanges";
 
 // Sort fields defined inside component for i18n
 
@@ -46,6 +46,7 @@ export default function LearnPage() {
     { id: "dictionary" as Tab, label: t("learn.dictionary"), icon: BookOpen },
     { id: "projects" as Tab, label: t("learn.projects"), icon: Layers },
     { id: "training" as Tab, label: t("learn.training"), icon: GraduationCap },
+    { id: "exchanges" as Tab, label: en ? "Exchanges" : "Exchanges", icon: Wallet },
   ];
 
   const filteredTerms = useMemo(() => {
@@ -102,7 +103,10 @@ export default function LearnPage() {
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => { setActiveTab(tab.id); setSearch(""); setExpandedTerm(null); }}
+            onClick={() => {
+              if (tab.id === "exchanges") { navigate("/learn/exchanges-wallets"); return; }
+              setActiveTab(tab.id); setSearch(""); setExpandedTerm(null);
+            }}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === tab.id ? "bg-gradient-primary text-primary-foreground" : "text-muted-foreground"
             }`}
