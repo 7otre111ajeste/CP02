@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      profile_settings: {
+        Row: {
+          bio: string
+          created_at: string
+          displayed_badges: string[]
+          id: string
+          is_public: boolean
+          top_cryptos: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bio?: string
+          created_at?: string
+          displayed_badges?: string[]
+          id?: string
+          is_public?: boolean
+          top_cryptos?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bio?: string
+          created_at?: string
+          displayed_badges?: string[]
+          id?: string
+          is_public?: boolean
+          top_cryptos?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_emoji: string | null
@@ -38,6 +71,54 @@ export type Database = {
           updated_at?: string
           user_id?: string
           username?: string
+        }
+        Relationships: []
+      }
+      user_progress: {
+        Row: {
+          badges_count: number
+          completed_lessons: number
+          completed_quizzes: number
+          created_at: string
+          exp: number
+          id: string
+          level: number
+          points: number
+          quizzes_passed: number
+          read_projects: number
+          read_terms: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          badges_count?: number
+          completed_lessons?: number
+          completed_quizzes?: number
+          created_at?: string
+          exp?: number
+          id?: string
+          level?: number
+          points?: number
+          quizzes_passed?: number
+          read_projects?: number
+          read_terms?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          badges_count?: number
+          completed_lessons?: number
+          completed_quizzes?: number
+          created_at?: string
+          exp?: number
+          id?: string
+          level?: number
+          points?: number
+          quizzes_passed?: number
+          read_projects?: number
+          read_terms?: number
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
