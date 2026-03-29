@@ -46,6 +46,7 @@ export default function LearnPage() {
     { id: "dictionary" as Tab, label: t("learn.dictionary"), icon: BookOpen },
     { id: "projects" as Tab, label: t("learn.projects"), icon: Layers },
     { id: "training" as Tab, label: t("learn.training"), icon: GraduationCap },
+    { id: "exchanges" as Tab, label: en ? "Exchanges" : "Exchanges", icon: Wallet },
   ];
 
   const filteredTerms = useMemo(() => {
