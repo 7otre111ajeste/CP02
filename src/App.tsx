@@ -35,6 +35,11 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+function ProgressSyncer() {
+  useProgressSync();
+  return null;
+}
+
 function AppContent() {
   const [showSplash, setShowSplash] = useState(() => {
     return !sessionStorage.getItem("cryptopedia-splash-seen");
