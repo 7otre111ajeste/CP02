@@ -73,6 +73,7 @@ function AppContent() {
               <Route path="/platforms" element={<PlatformsPage />} />
               <Route path="/portfolio" element={<PortfolioPage />} />
               <Route path="/practice" element={<PracticePage />} />
+              <Route path="/leaderboard" element={<LeaderboardPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
