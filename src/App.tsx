@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { DailyQuestsProvider } from "@/hooks/useDailyQuests";
+import { useProgressSync } from "@/hooks/useProgressSync";
 import BottomNav from "@/components/BottomNav";
 import SplashScreen from "@/components/SplashScreen";
 import PageToolbar from "@/components/PageToolbar";
