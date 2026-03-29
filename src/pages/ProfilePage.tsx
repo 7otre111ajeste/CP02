@@ -50,6 +50,7 @@ export default function ProfilePage() {
   const { streak } = useDailyQuests();
   const { theme, toggleTheme } = useTheme();
   const { user, profile: authProfile, signOut } = useAuth();
+  const { settings, updateSettings } = useProfileSettings();
   const userTier: "free" | "premium" | "vip" = "free";
 
   const [editingName, setEditingName] = useState(false);
