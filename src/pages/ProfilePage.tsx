@@ -206,6 +206,24 @@ export default function ProfilePage() {
 
       {/* Settings */}
       <div className="bg-card rounded-xl border border-border overflow-hidden divide-y divide-border">
+        {/* Public/Private Toggle */}
+        {user && (
+          <div className="w-full flex items-center gap-3 p-4">
+            {settings.is_public ? <Eye className="w-5 h-5 text-success" /> : <EyeOff className="w-5 h-5 text-muted-foreground" />}
+            <div className="flex-1 text-left">
+              <p className="text-sm font-medium text-foreground">{en ? "Public Profile" : "Profil public"}</p>
+              <p className="text-xs text-muted-foreground">
+                {settings.is_public
+                  ? (en ? "Visible on leaderboard with details" : "Visible sur le classement avec détails")
+                  : (en ? "Hidden on leaderboard" : "Caché sur le classement")}
+              </p>
+            </div>
+            <Switch
+              checked={settings.is_public}
+              onCheckedChange={(checked) => updateSettings({ is_public: checked })}
+            />
+          </div>
+        )}
         <button
           onClick={() => setLanguage(language === "en" ? "fr" : "en")}
           className="w-full flex items-center gap-3 p-4"
