@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserProgress, TIME_BADGES } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
+import { useProfileSettings } from "@/hooks/useProfileSettings";
 import { useNavigate } from "react-router-dom";
-import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, LogOut, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar, Sun, Moon, Shield } from "lucide-react";
+import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, LogOut, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar, Sun, Moon, Shield, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
 import UserTierBadge from "@/components/UserTierBadge";
+import { Switch } from "@/components/ui/switch";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
@@ -48,6 +50,7 @@ export default function ProfilePage() {
   const { streak } = useDailyQuests();
   const { theme, toggleTheme } = useTheme();
   const { user, profile: authProfile, signOut } = useAuth();
+  const { settings, updateSettings } = useProfileSettings();
   const userTier: "free" | "premium" | "vip" = "free";
 
   const [editingName, setEditingName] = useState(false);
@@ -203,6 +206,24 @@ export default function ProfilePage() {
 
       {/* Settings */}
       <div className="bg-card rounded-xl border border-border overflow-hidden divide-y divide-border">
+        {/* Public/Private Toggle */}
+        {user && (
+          <div className="w-full flex items-center gap-3 p-4">
+            {settings.is_public ? <Eye className="w-5 h-5 text-success" /> : <EyeOff className="w-5 h-5 text-muted-foreground" />}
+            <div className="flex-1 text-left">
+              <p className="text-sm font-medium text-foreground">{en ? "Public Profile" : "Profil public"}</p>
+              <p className="text-xs text-muted-foreground">
+                {settings.is_public
+                  ? (en ? "Visible on leaderboard with details" : "Visible sur le classement avec détails")
+                  : (en ? "Hidden on leaderboard" : "Caché sur le classement")}
+              </p>
+            </div>
+            <Switch
+              checked={settings.is_public}
+              onCheckedChange={(checked) => updateSettings({ is_public: checked })}
+            />
+          </div>
+        )}
         <button
           onClick={() => setLanguage(language === "en" ? "fr" : "en")}
           className="w-full flex items-center gap-3 p-4"

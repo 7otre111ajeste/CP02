@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { DailyQuestsProvider } from "@/hooks/useDailyQuests";
+import { useProgressSync } from "@/hooks/useProgressSync";
 import BottomNav from "@/components/BottomNav";
 import SplashScreen from "@/components/SplashScreen";
 import PageToolbar from "@/components/PageToolbar";
@@ -29,9 +30,15 @@ import ShopPage from "./pages/ShopPage";
 import PlatformsPage from "./pages/PlatformsPage";
 import PortfolioPage from "./pages/PortfolioPage";
 import PracticePage from "./pages/PracticePage";
+import LeaderboardPage from "./pages/LeaderboardPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
+
+function ProgressSyncer() {
+  useProgressSync();
+  return null;
+}
 
 function AppContent() {
   const [showSplash, setShowSplash] = useState(() => {
@@ -72,6 +79,7 @@ function AppContent() {
               <Route path="/platforms" element={<PlatformsPage />} />
               <Route path="/portfolio" element={<PortfolioPage />} />
               <Route path="/practice" element={<PracticePage />} />
+              <Route path="/leaderboard" element={<LeaderboardPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
@@ -88,6 +96,7 @@ const App = () => (
       <AuthProvider>
         <DailyQuestsProvider>
           <TooltipProvider>
+            <ProgressSyncer />
             <AppContent />
           </TooltipProvider>
         </DailyQuestsProvider>
