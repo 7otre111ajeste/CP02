@@ -103,7 +103,10 @@ export default function LearnPage() {
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => { setActiveTab(tab.id); setSearch(""); setExpandedTerm(null); }}
+            onClick={() => {
+              if (tab.id === "exchanges") { navigate("/learn/exchanges-wallets"); return; }
+              setActiveTab(tab.id); setSearch(""); setExpandedTerm(null);
+            }}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-medium transition-all ${
               activeTab === tab.id ? "bg-gradient-primary text-primary-foreground" : "text-muted-foreground"
             }`}
