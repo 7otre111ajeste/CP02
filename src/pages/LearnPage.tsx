@@ -9,7 +9,7 @@ import ScoreBadge from "@/components/ScoreBadge";
 import SortFilter, { type SortField, type SortDirection } from "@/components/SortFilter";
 import DescriptionToggle from "@/components/DescriptionToggle";
 import TermHighlighter from "@/components/TermHighlighter";
-import { Search, BookOpen, Layers, GraduationCap, ChevronRight, CheckCircle, Sparkles } from "lucide-react";
+import { Search, BookOpen, Layers, GraduationCap, ChevronRight, CheckCircle, Sparkles, Wallet } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
