@@ -57,6 +57,8 @@ export default function HomePage() {
     { icon: PieChart, label: "Portfolio", path: "/portfolio", color: "bg-primary/15 text-primary", locked: isGuest },
     { icon: Trophy, label: en ? "Leaderboard" : "Classement", path: "/leaderboard", color: "bg-warning/15 text-warning", locked: false },
     { icon: Gamepad2, label: en ? "Practice" : "Pratique", path: "/practice", color: "bg-accent/15 text-accent", locked: isGuest },
+    { icon: Wallet, label: en ? "Exchanges" : "Exchanges", path: "/learn/exchanges-wallets", color: "bg-success/15 text-success", locked: isGuest },
+    { icon: Newspaper, label: en ? "News" : "Actualités", path: "/news", color: "bg-danger/15 text-danger", locked: false },
   ];
 
   const getProjectWithLivePrice = (project: typeof cryptoProjects[0]) => {
