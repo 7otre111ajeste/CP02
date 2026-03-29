@@ -13,7 +13,7 @@ import { Search, BookOpen, Layers, GraduationCap, ChevronRight, CheckCircle, Spa
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
-type Tab = "dictionary" | "projects" | "training";
+type Tab = "dictionary" | "projects" | "training" | "exchanges";
 
 // Sort fields defined inside component for i18n
 
