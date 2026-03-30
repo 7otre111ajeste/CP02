@@ -84,8 +84,9 @@ serve(async (req) => {
 
   try {
     const { query, language } = await req.json();
-    const SYSTEM_PROMPT = language === "fr" ? SYSTEM_PROMPT_FR : SYSTEM_PROMPT_EN;
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
+    const SYSTEM_PROMPT = language === "fr" ? SYSTEM_PROMPT_FR : SYSTEM_PROMPT_EN;
 
     const userPrompt = language === "fr"
       ? `Analyse le projet crypto suivant selon les principes de la finance islamique : "${query}". Réponds en français.`
