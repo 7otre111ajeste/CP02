@@ -51,13 +51,12 @@ export default function HomePage() {
     { icon: BookOpen, label: t("home.continue"), path: "/learn", color: "bg-primary/15 text-primary", locked: isGuest },
     { icon: Brain, label: t("home.quiz"), path: "/quiz", color: "bg-accent/15 text-accent", locked: isGuest },
     { icon: Sparkles, label: t("home.scanner"), path: "/ai", color: "bg-warning/15 text-warning", locked: false },
-    { icon: StickyNote, label: en ? "Notes" : "Notes", path: "/notes", color: "bg-secondary text-foreground", locked: isGuest },
     { icon: Calculator, label: en ? "Calculator" : "Calculatrice", path: "/calculator", color: "bg-success/15 text-success", locked: isGuest },
-    { icon: Shield, label: en ? "Platforms" : "Plateformes", path: "/platforms", color: "bg-accent/15 text-accent", locked: isGuest },
     { icon: PieChart, label: "Portfolio", path: "/portfolio", color: "bg-primary/15 text-primary", locked: isGuest },
     { icon: Trophy, label: en ? "Leaderboard" : "Classement", path: "/leaderboard", color: "bg-warning/15 text-warning", locked: false },
     { icon: Gamepad2, label: en ? "Practice" : "Pratique", path: "/practice", color: "bg-accent/15 text-accent", locked: isGuest },
     { icon: Wallet, label: en ? "Exchanges" : "Exchanges", path: "/learn/exchanges-wallets", color: "bg-success/15 text-success", locked: isGuest },
+    { icon: Shield, label: en ? "Platforms" : "Plateformes", path: "/platforms", color: "bg-accent/15 text-accent", locked: isGuest },
     { icon: Newspaper, label: en ? "News" : "Actualités", path: "/news", color: "bg-danger/15 text-danger", locked: false },
   ];
 
