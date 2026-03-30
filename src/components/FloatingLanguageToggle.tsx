@@ -1,17 +1,41 @@
 import { Globe } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
+const languages = [
+  { value: "en", label: "EN" },
+  { value: "fr", label: "FR" },
+] as const;
+
 export default function FloatingLanguageToggle() {
   const { language, setLanguage } = useLanguage();
 
   return (
-    <button
-      onClick={() => setLanguage(language === "en" ? "fr" : "en")}
-      className="flex items-center gap-1 px-2 py-1 rounded-lg bg-card/80 backdrop-blur-sm border border-border text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors"
-      title={language === "en" ? "Switch to French" : "Passer en anglais"}
+    <div
+      className="flex items-center gap-1 rounded-lg border border-border bg-card/80 p-1 backdrop-blur-sm"
+      role="group"
+      aria-label="Floating language selector"
     >
-      <Globe className="w-3 h-3" />
-      {language === "en" ? "FR" : "EN"}
-    </button>
+      <Globe className="ml-1 h-3 w-3 text-muted-foreground" />
+      {languages.map((option) => {
+        const isActive = language === option.value;
+
+        return (
+          <button
+            key={option.value}
+            type="button"
+            onClick={() => setLanguage(option.value)}
+            aria-pressed={isActive}
+            className={`rounded-md px-2 py-1 text-[11px] font-medium transition-colors ${
+              isActive
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground"
+            }`}
+            title={option.value === "en" ? "English" : "Français"}
+          >
+            {option.label}
+          </button>
+        );
+      })}
+    </div>
   );
 }
