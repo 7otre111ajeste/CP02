@@ -6,7 +6,7 @@ import { useWatchlist } from "@/hooks/useWatchlist";
 import { useCryptoMarket } from "@/hooks/useCryptoMarket";
 import { useAuth } from "@/contexts/AuthContext";
 import { cryptoProjects } from "@/data/mockData";
-import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, ChevronDown, Flame, CheckCircle, Circle, Gift, Star, Eye, Info, Shield, PieChart, Lock, Gamepad2, Trophy, Newspaper, Wallet } from "lucide-react";
+import { BookOpen, Brain, Sparkles, Calculator, ChevronRight, ChevronDown, Flame, CheckCircle, Circle, Gift, Star, Eye, Info, Shield, PieChart, Lock, Gamepad2, Trophy, Newspaper, Wallet } from "lucide-react";
 import StatusTag from "@/components/StatusTag";
 import ScoreBadge from "@/components/ScoreBadge";
 import MarketSentiment from "@/components/MarketSentiment";
@@ -51,13 +51,12 @@ export default function HomePage() {
     { icon: BookOpen, label: t("home.continue"), path: "/learn", color: "bg-primary/15 text-primary", locked: isGuest },
     { icon: Brain, label: t("home.quiz"), path: "/quiz", color: "bg-accent/15 text-accent", locked: isGuest },
     { icon: Sparkles, label: t("home.scanner"), path: "/ai", color: "bg-warning/15 text-warning", locked: false },
-    { icon: StickyNote, label: en ? "Notes" : "Notes", path: "/notes", color: "bg-secondary text-foreground", locked: isGuest },
     { icon: Calculator, label: en ? "Calculator" : "Calculatrice", path: "/calculator", color: "bg-success/15 text-success", locked: isGuest },
-    { icon: Shield, label: en ? "Platforms" : "Plateformes", path: "/platforms", color: "bg-accent/15 text-accent", locked: isGuest },
     { icon: PieChart, label: "Portfolio", path: "/portfolio", color: "bg-primary/15 text-primary", locked: isGuest },
     { icon: Trophy, label: en ? "Leaderboard" : "Classement", path: "/leaderboard", color: "bg-warning/15 text-warning", locked: false },
     { icon: Gamepad2, label: en ? "Practice" : "Pratique", path: "/practice", color: "bg-accent/15 text-accent", locked: isGuest },
     { icon: Wallet, label: en ? "Exchanges" : "Exchanges", path: "/learn/exchanges-wallets", color: "bg-success/15 text-success", locked: isGuest },
+    { icon: Shield, label: en ? "Platforms" : "Plateformes", path: "/platforms", color: "bg-accent/15 text-accent", locked: isGuest },
     { icon: Newspaper, label: en ? "News" : "Actualités", path: "/news", color: "bg-danger/15 text-danger", locked: false },
   ];
 
