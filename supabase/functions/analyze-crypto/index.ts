@@ -89,8 +89,12 @@ serve(async (req) => {
     const SYSTEM_PROMPT = language === "fr" ? SYSTEM_PROMPT_FR : SYSTEM_PROMPT_EN;
 
     const userPrompt = language === "fr"
-      ? `Analyse le projet crypto suivant selon les principes de la finance islamique : "${query}". Réponds en français.`
-      : `Analyze the following crypto project according to Islamic finance principles: "${query}". Reply in English.`;
+      ? `Analyse le projet crypto suivant selon les principes de la finance islamique : "${query}". IMPORTANT : Tu DOIS rédiger TOUS les champs (explanation, risks, conclusion) entièrement en français. Aucun mot en anglais.`
+      : `Analyze the following crypto project according to Islamic finance principles: "${query}". Reply entirely in English.`;
+
+    const langNote = language === "fr" 
+      ? " (IMPORTANT: ALL values MUST be written entirely in French, no English whatsoever)"
+      : " (ALL values MUST be written entirely in English)";
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -109,16 +113,16 @@ serve(async (req) => {
             type: "function",
             function: {
               name: "crypto_analysis",
-              description: "Return structured crypto halal analysis",
+              description: `Return structured crypto halal analysis${langNote}`,
               parameters: {
                 type: "object",
                 properties: {
                   status: { type: "string", enum: ["halal", "haram", "douteux"] },
                   safetyStatus: { type: "string", enum: ["safe", "risky", "scam"] },
                   score: { type: "number", minimum: 0, maximum: 10 },
-                  explanation: { type: "string" },
-                  risks: { type: "string" },
-                  conclusion: { type: "string" },
+                  explanation: { type: "string", description: language === "fr" ? "Explication claire et concise, entièrement en français" : "Clear and concise explanation in English" },
+                  risks: { type: "string", description: language === "fr" ? "Risques potentiels, entièrement en français" : "Potential risks in English" },
+                  conclusion: { type: "string", description: language === "fr" ? "Conclusion concise, entièrement en français" : "Concise conclusion in English" },
                 },
                 required: ["status", "safetyStatus", "score", "explanation", "risks", "conclusion"],
                 additionalProperties: false,
