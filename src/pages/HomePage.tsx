@@ -6,7 +6,7 @@ import { useWatchlist } from "@/hooks/useWatchlist";
 import { useCryptoMarket } from "@/hooks/useCryptoMarket";
 import { useAuth } from "@/contexts/AuthContext";
 import { cryptoProjects } from "@/data/mockData";
-import { BookOpen, Brain, Sparkles, StickyNote, Calculator, ChevronRight, ChevronDown, Flame, CheckCircle, Circle, Gift, Star, Eye, Info, Shield, PieChart, Lock, Gamepad2, Trophy, Newspaper, Wallet } from "lucide-react";
+import { BookOpen, Brain, Sparkles, Calculator, ChevronRight, ChevronDown, Flame, CheckCircle, Circle, Gift, Star, Eye, Info, Shield, PieChart, Lock, Gamepad2, Trophy, Newspaper, Wallet } from "lucide-react";
 import StatusTag from "@/components/StatusTag";
 import ScoreBadge from "@/components/ScoreBadge";
 import MarketSentiment from "@/components/MarketSentiment";
