@@ -59,6 +59,17 @@ const SHOP_ITEMS: ShopItem[] = [
     emoji: "🎫",
     oneTime: false,
   },
+  {
+    id: "create-clan",
+    name: { en: "Create a Clan", fr: "Créer un Clan" },
+    description: {
+      en: "Start your own clan with 5 member slots. Recruit allies!",
+      fr: "Créez votre propre clan avec 5 places. Recrutez des alliés !",
+    },
+    cost: 200,
+    emoji: "⚔️",
+    oneTime: true,
+  },
 ];
 
 export default function ShopPage() {

@@ -4,7 +4,7 @@ import { useUserProgress, TIME_BADGES } from "@/hooks/useUserProgress";
 import { useDailyQuests } from "@/hooks/useDailyQuests";
 import { useProfileSettings } from "@/hooks/useProfileSettings";
 import { useNavigate } from "react-router-dom";
-import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, LogOut, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar, Sun, Moon, Shield, Eye, EyeOff } from "lucide-react";
+import { User, BookOpen, Brain, Globe, ChevronRight, LogIn, LogOut, Award, Flame, Coins, ShoppingBag, Info, Edit2, Clock, Calendar, Sun, Moon, Shield, Eye, EyeOff, Search, Heart, Users } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/hooks/useTheme";
 import UserTierBadge from "@/components/UserTierBadge";
@@ -189,6 +189,24 @@ export default function ProfilePage() {
             <p className="text-[10px] text-muted-foreground">{stat.label}</p>
           </div>
         ))}
+      </div>
+
+      {/* Social Links */}
+      <div className="grid grid-cols-3 gap-3">
+        <button onClick={() => navigate("/users")} className="bg-card rounded-xl p-4 border border-border text-center hover:border-primary/30 transition-colors">
+          <Search className="w-5 h-5 text-primary mx-auto mb-2" />
+          <p className="text-xs font-medium text-foreground">{en ? "Find Users" : "Trouver"}</p>
+        </button>
+        <button onClick={() => navigate("/clans")} className="bg-card rounded-xl p-4 border border-border text-center hover:border-primary/30 transition-colors">
+          <Users className="w-5 h-5 text-primary mx-auto mb-2" />
+          <p className="text-xs font-medium text-foreground">Clans</p>
+        </button>
+        {user && (
+          <button onClick={() => navigate(`/user/${user.id}`)} className="bg-card rounded-xl p-4 border border-border text-center hover:border-primary/30 transition-colors">
+            <Heart className="w-5 h-5 text-danger mx-auto mb-2" />
+            <p className="text-xs font-medium text-foreground">{en ? "My Public" : "Mon Profil"}</p>
+          </button>
+        )}
       </div>
 
       {/* Quick Links */}

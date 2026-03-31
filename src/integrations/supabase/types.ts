@@ -14,6 +14,98 @@ export type Database = {
   }
   public: {
     Tables: {
+      clan_members: {
+        Row: {
+          clan_id: string
+          id: string
+          joined_at: string
+          points_contributed: number
+          role: string
+          user_id: string
+        }
+        Insert: {
+          clan_id: string
+          id?: string
+          joined_at?: string
+          points_contributed?: number
+          role?: string
+          user_id: string
+        }
+        Update: {
+          clan_id?: string
+          id?: string
+          joined_at?: string
+          points_contributed?: number
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clan_members_clan_id_fkey"
+            columns: ["clan_id"]
+            isOneToOne: false
+            referencedRelation: "clans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clans: {
+        Row: {
+          created_at: string
+          description: string
+          emoji: string
+          id: string
+          leader_id: string
+          max_members: number
+          name: string
+          treasury_points: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          emoji?: string
+          id?: string
+          leader_id: string
+          max_members?: number
+          name: string
+          treasury_points?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          emoji?: string
+          id?: string
+          leader_id?: string
+          max_members?: number
+          name?: string
+          treasury_points?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profile_likes: {
+        Row: {
+          created_at: string
+          id: string
+          liked_user_id: string
+          liker_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          liked_user_id: string
+          liker_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          liked_user_id?: string
+          liker_id?: string
+        }
+        Relationships: []
+      }
       profile_settings: {
         Row: {
           bio: string
@@ -83,6 +175,7 @@ export type Database = {
           exp: number
           id: string
           level: number
+          likes_count: number
           points: number
           quizzes_passed: number
           read_projects: number
@@ -98,6 +191,7 @@ export type Database = {
           exp?: number
           id?: string
           level?: number
+          likes_count?: number
           points?: number
           quizzes_passed?: number
           read_projects?: number
@@ -113,6 +207,7 @@ export type Database = {
           exp?: number
           id?: string
           level?: number
+          likes_count?: number
           points?: number
           quizzes_passed?: number
           read_projects?: number

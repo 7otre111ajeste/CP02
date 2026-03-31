@@ -1,16 +1,18 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
-import { Trophy, Medal, Award, Crown, RefreshCw, Lock, Eye, EyeOff } from "lucide-react";
+import { Trophy, Medal, Award, Crown, RefreshCw, Lock, Eye, EyeOff, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 
-type Tab = "exp" | "badges_count" | "completed_quizzes";
+type Tab = "exp" | "badges_count" | "completed_quizzes" | "likes_count";
 
 const TABS: { key: Tab; label: { en: string; fr: string }; icon: typeof Trophy }[] = [
   { key: "exp", label: { en: "Top XP", fr: "Top XP" }, icon: Trophy },
-  { key: "badges_count", label: { en: "Top Badges", fr: "Top Badges" }, icon: Award },
-  { key: "completed_quizzes", label: { en: "Top Quiz", fr: "Top Quiz" }, icon: Medal },
+  { key: "likes_count", label: { en: "Top Likes", fr: "Top Likes" }, icon: Heart },
+  { key: "badges_count", label: { en: "Badges", fr: "Badges" }, icon: Award },
+  { key: "completed_quizzes", label: { en: "Quiz", fr: "Quiz" }, icon: Medal },
 ];
 
 function getRankIcon(rank: number) {
@@ -30,13 +32,15 @@ function getRankBg(rank: number) {
 export default function LeaderboardPage() {
   const { language } = useLanguage();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [tab, setTab] = useState<Tab>("exp");
   const { data: entries, isLoading, refetch } = useLeaderboard(tab);
   const en = language === "en";
 
-  const getValueForTab = (entry: typeof entries extends (infer T)[] ? T : never) => {
+  const getValueForTab = (entry: any) => {
     if (tab === "exp") return `${entry.exp} XP`;
     if (tab === "badges_count") return `${entry.badges_count} 🏅`;
+    if (tab === "likes_count") return `${entry.likes_count} ❤️`;
     return `${entry.completed_quizzes} ✅`;
   };
 
@@ -97,7 +101,8 @@ export default function LeaderboardPage() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.03 }}
-                className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${getRankBg(rank)} ${
+                onClick={() => navigate(`/user/${entry.user_id}`)}
+                className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${getRankBg(rank)} ${
                   isMe ? "ring-2 ring-primary/40" : ""
                 }`}
               >

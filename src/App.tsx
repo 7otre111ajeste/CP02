@@ -34,6 +34,9 @@ import LeaderboardPage from "./pages/LeaderboardPage";
 import ExchangeWalletPage from "./pages/ExchangeWalletPage";
 import NewsPage from "./pages/NewsPage";
 import QuestJournalPage from "./pages/QuestJournalPage";
+import UserSearchPage from "./pages/UserSearchPage";
+import PublicProfilePage from "./pages/PublicProfilePage";
+import ClansPage from "./pages/ClansPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -86,6 +89,9 @@ function AppContent() {
               <Route path="/learn/exchanges-wallets" element={<ExchangeWalletPage />} />
               <Route path="/news" element={<NewsPage />} />
               <Route path="/quests" element={<QuestJournalPage />} />
+              <Route path="/users" element={<UserSearchPage />} />
+              <Route path="/user/:userId" element={<PublicProfilePage />} />
+              <Route path="/clans" element={<ClansPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
