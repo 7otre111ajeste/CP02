@@ -101,7 +101,8 @@ export default function LeaderboardPage() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.03 }}
-                className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${getRankBg(rank)} ${
+                onClick={() => navigate(`/user/${entry.user_id}`)}
+                className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${getRankBg(rank)} ${
                   isMe ? "ring-2 ring-primary/40" : ""
                 }`}
               >
