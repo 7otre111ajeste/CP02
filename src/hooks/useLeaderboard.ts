@@ -11,10 +11,11 @@ export interface LeaderboardEntry {
   completed_quizzes: number;
   quizzes_passed: number;
   badges_count: number;
+  likes_count: number;
   is_public: boolean;
 }
 
-type SortKey = "exp" | "badges_count" | "completed_quizzes";
+type SortKey = "exp" | "badges_count" | "completed_quizzes" | "likes_count";
 
 export function useLeaderboard(sortBy: SortKey = "exp") {
   return useQuery({
