@@ -24,7 +24,7 @@ export function useLeaderboard(sortBy: SortKey = "exp") {
       // Fetch progress
       const { data: progressData, error: pErr } = await supabase
         .from("user_progress")
-        .select("user_id, exp, level, completed_lessons, completed_quizzes, quizzes_passed, badges_count")
+        .select("user_id, exp, level, completed_lessons, completed_quizzes, quizzes_passed, badges_count, likes_count")
         .order(sortBy, { ascending: false })
         .limit(100);
 
