@@ -85,6 +85,7 @@ function AppContent() {
               <Route path="/leaderboard" element={<LeaderboardPage />} />
               <Route path="/learn/exchanges-wallets" element={<ExchangeWalletPage />} />
               <Route path="/news" element={<NewsPage />} />
+              <Route path="/quests" element={<QuestJournalPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
