@@ -191,6 +191,24 @@ export default function ProfilePage() {
         ))}
       </div>
 
+      {/* Social Links */}
+      <div className="grid grid-cols-3 gap-3">
+        <button onClick={() => navigate("/users")} className="bg-card rounded-xl p-4 border border-border text-center hover:border-primary/30 transition-colors">
+          <Search className="w-5 h-5 text-primary mx-auto mb-2" />
+          <p className="text-xs font-medium text-foreground">{en ? "Find Users" : "Trouver"}</p>
+        </button>
+        <button onClick={() => navigate("/clans")} className="bg-card rounded-xl p-4 border border-border text-center hover:border-primary/30 transition-colors">
+          <Users className="w-5 h-5 text-primary mx-auto mb-2" />
+          <p className="text-xs font-medium text-foreground">Clans</p>
+        </button>
+        {user && (
+          <button onClick={() => navigate(`/user/${user.id}`)} className="bg-card rounded-xl p-4 border border-border text-center hover:border-primary/30 transition-colors">
+            <Heart className="w-5 h-5 text-danger mx-auto mb-2" />
+            <p className="text-xs font-medium text-foreground">{en ? "My Public" : "Mon Profil"}</p>
+          </button>
+        )}
+      </div>
+
       {/* Quick Links */}
       <div className="grid grid-cols-2 gap-3">
         <button onClick={() => navigate("/shop")} className="bg-card rounded-xl p-4 border border-border text-center hover:border-primary/30 transition-colors">
