@@ -89,6 +89,9 @@ function AppContent() {
               <Route path="/learn/exchanges-wallets" element={<ExchangeWalletPage />} />
               <Route path="/news" element={<NewsPage />} />
               <Route path="/quests" element={<QuestJournalPage />} />
+              <Route path="/users" element={<UserSearchPage />} />
+              <Route path="/user/:userId" element={<PublicProfilePage />} />
+              <Route path="/clans" element={<ClansPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
