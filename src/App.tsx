@@ -33,6 +33,7 @@ import PracticePage from "./pages/PracticePage";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import ExchangeWalletPage from "./pages/ExchangeWalletPage";
 import NewsPage from "./pages/NewsPage";
+import QuestJournalPage from "./pages/QuestJournalPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -84,6 +85,7 @@ function AppContent() {
               <Route path="/leaderboard" element={<LeaderboardPage />} />
               <Route path="/learn/exchanges-wallets" element={<ExchangeWalletPage />} />
               <Route path="/news" element={<NewsPage />} />
+              <Route path="/quests" element={<QuestJournalPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
