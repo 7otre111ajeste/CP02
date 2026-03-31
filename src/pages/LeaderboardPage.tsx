@@ -32,6 +32,7 @@ function getRankBg(rank: number) {
 export default function LeaderboardPage() {
   const { language } = useLanguage();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [tab, setTab] = useState<Tab>("exp");
   const { data: entries, isLoading, refetch } = useLeaderboard(tab);
   const en = language === "en";
