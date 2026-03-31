@@ -1,16 +1,18 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLeaderboard } from "@/hooks/useLeaderboard";
-import { Trophy, Medal, Award, Crown, RefreshCw, Lock, Eye, EyeOff } from "lucide-react";
+import { Trophy, Medal, Award, Crown, RefreshCw, Lock, Eye, EyeOff, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 
-type Tab = "exp" | "badges_count" | "completed_quizzes";
+type Tab = "exp" | "badges_count" | "completed_quizzes" | "likes_count";
 
 const TABS: { key: Tab; label: { en: string; fr: string }; icon: typeof Trophy }[] = [
   { key: "exp", label: { en: "Top XP", fr: "Top XP" }, icon: Trophy },
-  { key: "badges_count", label: { en: "Top Badges", fr: "Top Badges" }, icon: Award },
-  { key: "completed_quizzes", label: { en: "Top Quiz", fr: "Top Quiz" }, icon: Medal },
+  { key: "likes_count", label: { en: "Top Likes", fr: "Top Likes" }, icon: Heart },
+  { key: "badges_count", label: { en: "Badges", fr: "Badges" }, icon: Award },
+  { key: "completed_quizzes", label: { en: "Quiz", fr: "Quiz" }, icon: Medal },
 ];
 
 function getRankIcon(rank: number) {
