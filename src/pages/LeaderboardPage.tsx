@@ -37,9 +37,10 @@ export default function LeaderboardPage() {
   const { data: entries, isLoading, refetch } = useLeaderboard(tab);
   const en = language === "en";
 
-  const getValueForTab = (entry: typeof entries extends (infer T)[] ? T : never) => {
+  const getValueForTab = (entry: any) => {
     if (tab === "exp") return `${entry.exp} XP`;
     if (tab === "badges_count") return `${entry.badges_count} 🏅`;
+    if (tab === "likes_count") return `${entry.likes_count} ❤️`;
     return `${entry.completed_quizzes} ✅`;
   };
 
