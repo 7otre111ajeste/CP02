@@ -85,6 +85,51 @@ export type Database = {
         }
         Relationships: []
       }
+      duels: {
+        Row: {
+          challenger_answers: Json | null
+          challenger_id: string
+          challenger_score: number
+          completed_at: string | null
+          created_at: string
+          id: string
+          opponent_answers: Json | null
+          opponent_id: string | null
+          opponent_score: number
+          questions: Json
+          status: string
+          winner_id: string | null
+        }
+        Insert: {
+          challenger_answers?: Json | null
+          challenger_id: string
+          challenger_score?: number
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          opponent_answers?: Json | null
+          opponent_id?: string | null
+          opponent_score?: number
+          questions?: Json
+          status?: string
+          winner_id?: string | null
+        }
+        Update: {
+          challenger_answers?: Json | null
+          challenger_id?: string
+          challenger_score?: number
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          opponent_answers?: Json | null
+          opponent_id?: string | null
+          opponent_score?: number
+          questions?: Json
+          status?: string
+          winner_id?: string | null
+        }
+        Relationships: []
+      }
       profile_likes: {
         Row: {
           created_at: string

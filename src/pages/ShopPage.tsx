@@ -60,6 +60,17 @@ const SHOP_ITEMS: ShopItem[] = [
     oneTime: false,
   },
   {
+    id: "extra-challenges",
+    name: { en: "Extra Duel Challenges", fr: "Défis de Duel Supplémentaires" },
+    description: {
+      en: "Get 2 extra duel challenges per day, permanently!",
+      fr: "Obtenez 2 défis de duel supplémentaires par jour, pour toujours !",
+    },
+    cost: 300,
+    emoji: "⚔️",
+    oneTime: true,
+  },
+  {
     id: "create-clan",
     name: { en: "Create a Clan", fr: "Créer un Clan" },
     description: {

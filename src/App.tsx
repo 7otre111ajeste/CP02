@@ -37,6 +37,7 @@ import QuestJournalPage from "./pages/QuestJournalPage";
 import UserSearchPage from "./pages/UserSearchPage";
 import PublicProfilePage from "./pages/PublicProfilePage";
 import ClansPage from "./pages/ClansPage";
+import DuelPage from "./pages/DuelPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -92,6 +93,7 @@ function AppContent() {
               <Route path="/users" element={<UserSearchPage />} />
               <Route path="/user/:userId" element={<PublicProfilePage />} />
               <Route path="/clans" element={<ClansPage />} />
+              <Route path="/duel" element={<DuelPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
