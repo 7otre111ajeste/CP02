@@ -259,7 +259,9 @@ export default function ClansPage() {
       {showCreate && (
         <div className="bg-card border border-border rounded-2xl p-4 mb-5 space-y-3">
           <h3 className="text-sm font-semibold text-foreground">{en ? "Create a Clan" : "Créer un Clan"}</h3>
-          <p className="text-[10px] text-muted-foreground">{en ? `Cost: ${CLAN_COST} points` : `Coût : ${CLAN_COST} points`}</p>
+          <p className="text-[10px] text-muted-foreground">
+            {hasClanPass ? (en ? "Free (Shop pass owned)" : "Gratuit (Pass boutique)") : (en ? `Cost: ${CLAN_COST} points` : `Coût : ${CLAN_COST} points`)}
+          </p>
           <div className="flex gap-2">
             {CLAN_EMOJIS.map((e) => (
               <button key={e} onClick={() => setNewEmoji(e)} className={`text-xl p-1 rounded-lg ${newEmoji === e ? "bg-primary/20 ring-1 ring-primary" : "hover:bg-secondary"}`}>{e}</button>
@@ -267,8 +269,8 @@ export default function ClansPage() {
           </div>
           <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder={en ? "Clan name" : "Nom du clan"} className="w-full px-3 py-2.5 rounded-xl bg-secondary border border-border text-sm text-foreground" maxLength={30} />
           <input value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder={en ? "Description (optional)" : "Description (optionnel)"} className="w-full px-3 py-2.5 rounded-xl bg-secondary border border-border text-sm text-foreground" maxLength={100} />
-          <button onClick={handleCreateClan} className="w-full py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-xs font-semibold">
-            {en ? `Create (${CLAN_COST} pts)` : `Créer (${CLAN_COST} pts)`}
+          <button onClick={handleCreateClan} disabled={creating} className="w-full py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-xs font-semibold disabled:opacity-50">
+            {creating ? (en ? "Creating..." : "Création...") : hasClanPass ? (en ? "Create (Free)" : "Créer (Gratuit)") : (en ? `Create (${CLAN_COST} pts)` : `Créer (${CLAN_COST} pts)`)}
           </button>
         </div>
       )}
