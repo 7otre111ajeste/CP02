@@ -96,34 +96,44 @@ export default function ClansPage() {
 
   useEffect(() => { fetchClans(); }, [fetchClans]);
 
+  const hasClanPass = shopPurchases.includes("create-clan");
+  const createCost = hasClanPass ? 0 : CLAN_COST;
+
   const handleCreateClan = async () => {
-    if (!user) return;
+    if (!user || creating) return;
     if (!newName.trim()) { toast.error(en ? "Enter a clan name" : "Entrez un nom de clan"); return; }
-    if (points < CLAN_COST) { toast.error(en ? `Need ${CLAN_COST} points` : `Il faut ${CLAN_COST} points`); return; }
-    
-    const success = spendPoints(CLAN_COST);
-    if (!success) return;
+    if (createCost > 0 && points < createCost) { toast.error(en ? `Need ${createCost} points` : `Il faut ${createCost} points`); return; }
 
-    const { data: clan, error } = await supabase.from("clans").insert({
-      name: newName.trim(),
-      description: newDesc.trim(),
-      emoji: newEmoji,
-      leader_id: user.id,
-    }).select().single();
+    setCreating(true);
+    try {
+      if (createCost > 0) {
+        const success = spendPoints(createCost);
+        if (!success) { setCreating(false); return; }
+      }
 
-    if (error || !clan) { toast.error(en ? "Failed to create clan" : "Erreur de création"); return; }
+      const { data: clan, error } = await supabase.from("clans").insert({
+        name: newName.trim(),
+        description: newDesc.trim(),
+        emoji: newEmoji,
+        leader_id: user.id,
+      }).select().single();
 
-    await supabase.from("clan_members").insert({
-      clan_id: clan.id,
-      user_id: user.id,
-      role: "leader",
-    });
+      if (error || !clan) { toast.error(en ? "Failed to create clan" : "Erreur de création"); setCreating(false); return; }
 
-    toast.success(en ? "Clan created! 🎉" : "Clan créé ! 🎉");
-    setShowCreate(false);
-    setNewName("");
-    setNewDesc("");
-    fetchClans();
+      await supabase.from("clan_members").insert({
+        clan_id: clan.id,
+        user_id: user.id,
+        role: "leader",
+      });
+
+      toast.success(en ? "Clan created! 🎉" : "Clan créé ! 🎉");
+      setShowCreate(false);
+      setNewName("");
+      setNewDesc("");
+      fetchClans();
+    } finally {
+      setCreating(false);
+    }
   };
 
   const handleJoinClan = async (clanId: string) => {
