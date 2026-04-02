@@ -46,6 +46,7 @@ export default function ClansPage() {
   const [myClan, setMyClan] = useState<Clan | null>(null);
   const [myMembership, setMyMembership] = useState<ClanMember | null>(null);
   const [loading, setLoading] = useState(true);
+  const [creating, setCreating] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [newName, setNewName] = useState("");
   const [newDesc, setNewDesc] = useState("");
