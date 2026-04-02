@@ -93,6 +93,7 @@ function AppContent() {
               <Route path="/users" element={<UserSearchPage />} />
               <Route path="/user/:userId" element={<PublicProfilePage />} />
               <Route path="/clans" element={<ClansPage />} />
+              <Route path="/duel" element={<DuelPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <BottomNav />
