@@ -39,7 +39,7 @@ export default function ClansPage() {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { points, spendPoints } = useUserProgress();
+  const { points, spendPoints, shopPurchases } = useUserProgress();
   const en = language === "en";
 
   const [clans, setClans] = useState<Clan[]>([]);
