@@ -37,6 +37,7 @@ import QuestJournalPage from "./pages/QuestJournalPage";
 import UserSearchPage from "./pages/UserSearchPage";
 import PublicProfilePage from "./pages/PublicProfilePage";
 import ClansPage from "./pages/ClansPage";
+import DuelPage from "./pages/DuelPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
