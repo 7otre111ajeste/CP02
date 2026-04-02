@@ -39,13 +39,14 @@ export default function ClansPage() {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { points, spendPoints } = useUserProgress();
+  const { points, spendPoints, shopPurchases } = useUserProgress();
   const en = language === "en";
 
   const [clans, setClans] = useState<Clan[]>([]);
   const [myClan, setMyClan] = useState<Clan | null>(null);
   const [myMembership, setMyMembership] = useState<ClanMember | null>(null);
   const [loading, setLoading] = useState(true);
+  const [creating, setCreating] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [newName, setNewName] = useState("");
   const [newDesc, setNewDesc] = useState("");
@@ -95,34 +96,44 @@ export default function ClansPage() {
 
   useEffect(() => { fetchClans(); }, [fetchClans]);
 
+  const hasClanPass = shopPurchases.includes("create-clan");
+  const createCost = hasClanPass ? 0 : CLAN_COST;
+
   const handleCreateClan = async () => {
-    if (!user) return;
+    if (!user || creating) return;
     if (!newName.trim()) { toast.error(en ? "Enter a clan name" : "Entrez un nom de clan"); return; }
-    if (points < CLAN_COST) { toast.error(en ? `Need ${CLAN_COST} points` : `Il faut ${CLAN_COST} points`); return; }
-    
-    const success = spendPoints(CLAN_COST);
-    if (!success) return;
+    if (createCost > 0 && points < createCost) { toast.error(en ? `Need ${createCost} points` : `Il faut ${createCost} points`); return; }
 
-    const { data: clan, error } = await supabase.from("clans").insert({
-      name: newName.trim(),
-      description: newDesc.trim(),
-      emoji: newEmoji,
-      leader_id: user.id,
-    }).select().single();
+    setCreating(true);
+    try {
+      if (createCost > 0) {
+        const success = spendPoints(createCost);
+        if (!success) { setCreating(false); return; }
+      }
 
-    if (error || !clan) { toast.error(en ? "Failed to create clan" : "Erreur de création"); return; }
+      const { data: clan, error } = await supabase.from("clans").insert({
+        name: newName.trim(),
+        description: newDesc.trim(),
+        emoji: newEmoji,
+        leader_id: user.id,
+      }).select().single();
 
-    await supabase.from("clan_members").insert({
-      clan_id: clan.id,
-      user_id: user.id,
-      role: "leader",
-    });
+      if (error || !clan) { toast.error(en ? "Failed to create clan" : "Erreur de création"); setCreating(false); return; }
 
-    toast.success(en ? "Clan created! 🎉" : "Clan créé ! 🎉");
-    setShowCreate(false);
-    setNewName("");
-    setNewDesc("");
-    fetchClans();
+      await supabase.from("clan_members").insert({
+        clan_id: clan.id,
+        user_id: user.id,
+        role: "leader",
+      });
+
+      toast.success(en ? "Clan created! 🎉" : "Clan créé ! 🎉");
+      setShowCreate(false);
+      setNewName("");
+      setNewDesc("");
+      fetchClans();
+    } finally {
+      setCreating(false);
+    }
   };
 
   const handleJoinClan = async (clanId: string) => {
@@ -248,7 +259,9 @@ export default function ClansPage() {
       {showCreate && (
         <div className="bg-card border border-border rounded-2xl p-4 mb-5 space-y-3">
           <h3 className="text-sm font-semibold text-foreground">{en ? "Create a Clan" : "Créer un Clan"}</h3>
-          <p className="text-[10px] text-muted-foreground">{en ? `Cost: ${CLAN_COST} points` : `Coût : ${CLAN_COST} points`}</p>
+          <p className="text-[10px] text-muted-foreground">
+            {hasClanPass ? (en ? "Free (Shop pass owned)" : "Gratuit (Pass boutique)") : (en ? `Cost: ${CLAN_COST} points` : `Coût : ${CLAN_COST} points`)}
+          </p>
           <div className="flex gap-2">
             {CLAN_EMOJIS.map((e) => (
               <button key={e} onClick={() => setNewEmoji(e)} className={`text-xl p-1 rounded-lg ${newEmoji === e ? "bg-primary/20 ring-1 ring-primary" : "hover:bg-secondary"}`}>{e}</button>
@@ -256,8 +269,8 @@ export default function ClansPage() {
           </div>
           <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder={en ? "Clan name" : "Nom du clan"} className="w-full px-3 py-2.5 rounded-xl bg-secondary border border-border text-sm text-foreground" maxLength={30} />
           <input value={newDesc} onChange={(e) => setNewDesc(e.target.value)} placeholder={en ? "Description (optional)" : "Description (optionnel)"} className="w-full px-3 py-2.5 rounded-xl bg-secondary border border-border text-sm text-foreground" maxLength={100} />
-          <button onClick={handleCreateClan} className="w-full py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-xs font-semibold">
-            {en ? `Create (${CLAN_COST} pts)` : `Créer (${CLAN_COST} pts)`}
+          <button onClick={handleCreateClan} disabled={creating} className="w-full py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-xs font-semibold disabled:opacity-50">
+            {creating ? (en ? "Creating..." : "Création...") : hasClanPass ? (en ? "Create (Free)" : "Créer (Gratuit)") : (en ? `Create (${CLAN_COST} pts)` : `Créer (${CLAN_COST} pts)`)}
           </button>
         </div>
       )}
