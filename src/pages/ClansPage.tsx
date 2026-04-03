@@ -167,7 +167,7 @@ export default function ClansPage() {
   };
 
   const handleDeposit = async () => {
-    if (!user || !myClan) return;
+    if (!user || !myClan || !myMembership) return;
     const amount = parseInt(depositAmount);
     if (!amount || amount <= 0) return;
     if (points < amount) { toast.error(en ? "Not enough points" : "Pas assez de points"); return; }
@@ -183,12 +183,18 @@ export default function ClansPage() {
       localStorage.setItem("cryptopedia-progress", JSON.stringify(progress));
     } catch {}
 
-    await supabase.from("clans").update({ treasury_points: myClan.treasury_points + amount }).eq("id", myClan.id);
-    await supabase.from("clan_members").update({ points_contributed: (myMembership?.points_contributed || 0) + amount }).eq("user_id", user.id);
+    const newTreasury = myClan.treasury_points + amount;
+    const newContributed = (myMembership.points_contributed || 0) + amount;
+
+    await supabase.from("clans").update({ treasury_points: newTreasury }).eq("id", myClan.id);
+    await supabase.from("clan_members").update({ points_contributed: newContributed }).eq("user_id", user.id);
+
+    // Update local state immediately so UI reflects the change
+    setMyClan(prev => prev ? { ...prev, treasury_points: newTreasury } : prev);
+    setMyMembership(prev => prev ? { ...prev, points_contributed: newContributed } : prev);
 
     toast.success(en ? `+${amount} points deposited! +${Math.floor(amount / 2)} XP earned` : `+${amount} points déposés ! +${Math.floor(amount / 2)} XP gagné`);
     setDepositAmount("");
-    fetchClans();
   };
 
   const handleBuySlots = async () => {

@@ -56,7 +56,6 @@ export default function HomePage() {
     { icon: Trophy, label: en ? "Leaderboard" : "Classement", path: "/leaderboard", color: "bg-warning/15 text-warning", locked: false },
     { icon: Gamepad2, label: en ? "Practice" : "Pratique", path: "/practice", color: "bg-accent/15 text-accent", locked: isGuest },
     { icon: Wallet, label: en ? "Exchanges" : "Exchanges", path: "/learn/exchanges-wallets", color: "bg-success/15 text-success", locked: isGuest },
-    { icon: Shield, label: en ? "Platforms" : "Plateformes", path: "/platforms", color: "bg-accent/15 text-accent", locked: isGuest },
     { icon: ScrollText, label: en ? "Quests" : "Quêtes", path: "/quests", color: "bg-primary/15 text-primary", locked: isGuest },
     { icon: Swords, label: en ? "Duel 1v1" : "Duel 1v1", path: "/duel", color: "bg-destructive/15 text-destructive", locked: isGuest },
     { icon: Newspaper, label: en ? "News" : "Actualités", path: "/news", color: "bg-danger/15 text-danger", locked: false },
