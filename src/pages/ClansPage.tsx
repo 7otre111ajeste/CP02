@@ -167,7 +167,7 @@ export default function ClansPage() {
   };
 
   const handleDeposit = async () => {
-    if (!user || !myClan) return;
+    if (!user || !myClan || !myMembership) return;
     const amount = parseInt(depositAmount);
     if (!amount || amount <= 0) return;
     if (points < amount) { toast.error(en ? "Not enough points" : "Pas assez de points"); return; }
@@ -183,25 +183,34 @@ export default function ClansPage() {
       localStorage.setItem("cryptopedia-progress", JSON.stringify(progress));
     } catch {}
 
-    await supabase.from("clans").update({ treasury_points: myClan.treasury_points + amount }).eq("id", myClan.id);
-    await supabase.from("clan_members").update({ points_contributed: (myMembership?.points_contributed || 0) + amount }).eq("user_id", user.id);
+    const newTreasury = myClan.treasury_points + amount;
+    const newContributed = (myMembership.points_contributed || 0) + amount;
+
+    await supabase.from("clans").update({ treasury_points: newTreasury }).eq("id", myClan.id);
+    await supabase.from("clan_members").update({ points_contributed: newContributed }).eq("user_id", user.id);
+
+    // Update local state immediately so UI reflects the change
+    setMyClan(prev => prev ? { ...prev, treasury_points: newTreasury } : prev);
+    setMyMembership(prev => prev ? { ...prev, points_contributed: newContributed } : prev);
 
     toast.success(en ? `+${amount} points deposited! +${Math.floor(amount / 2)} XP earned` : `+${amount} points déposés ! +${Math.floor(amount / 2)} XP gagné`);
     setDepositAmount("");
-    fetchClans();
   };
 
   const handleBuySlots = async () => {
     if (!user || !myClan || myClan.leader_id !== user.id) return;
     if (myClan.treasury_points < SLOT_COST) { toast.error(en ? `Need ${SLOT_COST} treasury points` : `Il faut ${SLOT_COST} points de trésor`); return; }
 
+    const newTreasury = myClan.treasury_points - SLOT_COST;
+    const newMax = myClan.max_members + 5;
+
     await supabase.from("clans").update({
-      treasury_points: myClan.treasury_points - SLOT_COST,
-      max_members: myClan.max_members + 5,
+      treasury_points: newTreasury,
+      max_members: newMax,
     }).eq("id", myClan.id);
 
+    setMyClan(prev => prev ? { ...prev, treasury_points: newTreasury, max_members: newMax } : prev);
     toast.success(en ? "+5 slots added!" : "+5 places ajoutées !");
-    fetchClans();
   };
 
   if (loading) {

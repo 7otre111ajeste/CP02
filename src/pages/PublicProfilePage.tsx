@@ -96,13 +96,15 @@ export default function PublicProfilePage() {
       await supabase.from("profile_likes").delete().eq("liker_id", user.id).eq("liked_user_id", userId);
       setHasLiked(false);
       setLikesCount((c) => Math.max(0, c - 1));
-      // Update liked user's likes_count
-      await supabase.from("user_progress").update({ likes_count: Math.max(0, likesCount - 1) }).eq("user_id", userId);
+      // Use RPC-style: fetch current count from profile_likes
+      const { count } = await supabase.from("profile_likes").select("id", { count: "exact", head: true }).eq("liked_user_id", userId);
+      await supabase.from("user_progress").update({ likes_count: count ?? 0 }).eq("user_id", userId);
     } else {
       await supabase.from("profile_likes").insert({ liker_id: user.id, liked_user_id: userId });
       setHasLiked(true);
       setLikesCount((c) => c + 1);
-      await supabase.from("user_progress").update({ likes_count: likesCount + 1 }).eq("user_id", userId);
+      const { count } = await supabase.from("profile_likes").select("id", { count: "exact", head: true }).eq("liked_user_id", userId);
+      await supabase.from("user_progress").update({ likes_count: count ?? 0 }).eq("user_id", userId);
       toast.success(en ? "Liked! ❤️" : "Liké ! ❤️");
     }
     setLikeLoading(false);
