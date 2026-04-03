@@ -201,13 +201,16 @@ export default function ClansPage() {
     if (!user || !myClan || myClan.leader_id !== user.id) return;
     if (myClan.treasury_points < SLOT_COST) { toast.error(en ? `Need ${SLOT_COST} treasury points` : `Il faut ${SLOT_COST} points de trésor`); return; }
 
+    const newTreasury = myClan.treasury_points - SLOT_COST;
+    const newMax = myClan.max_members + 5;
+
     await supabase.from("clans").update({
-      treasury_points: myClan.treasury_points - SLOT_COST,
-      max_members: myClan.max_members + 5,
+      treasury_points: newTreasury,
+      max_members: newMax,
     }).eq("id", myClan.id);
 
+    setMyClan(prev => prev ? { ...prev, treasury_points: newTreasury, max_members: newMax } : prev);
     toast.success(en ? "+5 slots added!" : "+5 places ajoutées !");
-    fetchClans();
   };
 
   if (loading) {
