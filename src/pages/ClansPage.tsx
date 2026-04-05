@@ -337,7 +337,13 @@ export default function ClansPage() {
             </div>
           )}
 
-          {/* Members */}
+          {/* Deposit History */}
+          <ClanDepositHistory clanId={myClan.id} />
+
+          {/* Chat */}
+          <ClanChat clanId={myClan.id} />
+
+
           <div>
             <h3 className="text-sm font-semibold text-muted-foreground mb-2 flex items-center gap-1.5">
               <Users className="w-4 h-4 text-primary" />
