@@ -183,11 +183,14 @@ export default function ClansPage() {
       localStorage.setItem("cryptopedia-progress", JSON.stringify(progress));
     } catch {}
 
+    const { error } = await supabase.rpc("deposit_to_clan_treasury", {
+      p_clan_id: myClan.id,
+      p_amount: amount,
+    });
+    if (error) { toast.error(en ? "Deposit failed" : "Échec du dépôt"); return; }
+
     const newTreasury = myClan.treasury_points + amount;
     const newContributed = (myMembership.points_contributed || 0) + amount;
-
-    await supabase.from("clans").update({ treasury_points: newTreasury }).eq("id", myClan.id);
-    await supabase.from("clan_members").update({ points_contributed: newContributed }).eq("user_id", user.id);
 
     // Update local state immediately so UI reflects the change
     setMyClan(prev => prev ? { ...prev, treasury_points: newTreasury } : prev);
