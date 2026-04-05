@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      clan_deposits: {
+        Row: {
+          amount: number
+          clan_id: string
+          deposited_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          clan_id: string
+          deposited_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          clan_id?: string
+          deposited_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       clan_members: {
         Row: {
           clan_id: string
@@ -48,6 +72,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      clan_messages: {
+        Row: {
+          clan_id: string
+          id: string
+          message: string
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          clan_id: string
+          id?: string
+          message: string
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          clan_id?: string
+          id?: string
+          message?: string
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       clans: {
         Row: {
