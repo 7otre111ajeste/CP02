@@ -171,11 +171,22 @@ export default function ClansPage() {
   const handleDeposit = async () => {
     if (!user || !myClan || !myMembership) return;
     const amount = parseInt(depositAmount);
-    if (!amount || amount <= 0) return;
+    if (!amount || amount <= 0) { toast.error(en ? "Enter a valid amount" : "Entrez un montant valide"); return; }
     if (points < amount) { toast.error(en ? "Not enough points" : "Pas assez de points"); return; }
 
-    const success = spendPoints(amount);
-    if (!success) return;
+    // Call RPC first to update DB
+    const { error } = await supabase.rpc("deposit_to_clan_treasury", {
+      p_clan_id: myClan.id,
+      p_amount: amount,
+    });
+    if (error) { 
+      console.error("Deposit RPC error:", error);
+      toast.error(en ? "Deposit failed" : "Échec du dépôt"); 
+      return; 
+    }
+
+    // Only deduct points locally after DB success
+    spendPoints(amount);
 
     // Add XP for contributing (1 XP per 2 points deposited)
     try {
@@ -185,21 +196,11 @@ export default function ClansPage() {
       localStorage.setItem("cryptopedia-progress", JSON.stringify(progress));
     } catch {}
 
-    const { error } = await supabase.rpc("deposit_to_clan_treasury", {
-      p_clan_id: myClan.id,
-      p_amount: amount,
-    });
-    if (error) { toast.error(en ? "Deposit failed" : "Échec du dépôt"); return; }
-
-    const newTreasury = myClan.treasury_points + amount;
-    const newContributed = (myMembership.points_contributed || 0) + amount;
-
-    // Update local state immediately so UI reflects the change
-    setMyClan(prev => prev ? { ...prev, treasury_points: newTreasury } : prev);
-    setMyMembership(prev => prev ? { ...prev, points_contributed: newContributed } : prev);
-
     toast.success(en ? `+${amount} points deposited! +${Math.floor(amount / 2)} XP earned` : `+${amount} points déposés ! +${Math.floor(amount / 2)} XP gagné`);
     setDepositAmount("");
+    
+    // Re-fetch from DB to ensure UI matches reality
+    fetchClans();
   };
 
   const handleBuySlots = async () => {
