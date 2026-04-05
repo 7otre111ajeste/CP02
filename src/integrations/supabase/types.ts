@@ -267,7 +267,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      deposit_to_clan_treasury: {
+        Args: { p_amount: number; p_clan_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
