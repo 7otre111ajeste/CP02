@@ -6,6 +6,8 @@ import { useUserProgress } from "@/hooks/useUserProgress";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Plus, Users, Crown, Coins, LogOut, UserPlus, ChevronRight, Shield } from "lucide-react";
 import { motion } from "framer-motion";
+import ClanDepositHistory from "@/components/ClanDepositHistory";
+import ClanChat from "@/components/ClanChat";
 import { toast } from "sonner";
 
 interface Clan {
